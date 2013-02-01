@@ -15,11 +15,9 @@ try chinese
 
 ##code
 
-{% sh [:c] %}
 #include <stdio.h>
 int main()
 {
 	printf("Hello world\n");
 	return 0;
 }
-{% endsh %}
