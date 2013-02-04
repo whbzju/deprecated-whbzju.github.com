@@ -1,11 +1,10 @@
 ---
 layout: post
-title: "octopress peizhi"
+title: "Ubuntu 12.04配置Octopress在Github上搭建blog"
 date: 2013-02-02 11:04
 comments: true
-categories: 
+categories: octopress 
 ---
-#Ubuntu 12.04配置Octopress在Github上搭建blog
   至从看到同学在Github上搭建的blog，深以为这才是我想要的blog，简洁漂亮，静态页面，离线编辑，markdown文档写作格式，git版本控制。所以当论文的事情告一段落，终于有时间来折腾它。起初，我在window平台上搭建，参考该[文献](http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/)配置，其中最大的问题是中文字符支持的问题。
 
 ##内容概述
@@ -27,7 +26,7 @@ Bundler 基于gem的更高级管理工具，bundler相对于gem就好比apt-get�
 Rvm Ruby Version Manager，用来安装各种版本的ruby，问题是ubuntu有apt-get，这个不大派上用场。
 Rbenv Simple Ruby Version Management，也是用来安装各种版本的ruby。
 Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakefile
-
+<!--more-->
 ###配置安装环境
 ubuntu在默认环境下是没有octorpess的依赖环境，同时也缺少git工具。所以首先：
 	sudo apt-get install bash curl git-core -y
@@ -114,6 +113,28 @@ google了下发现，可以通过安装vim-octopress和vim-instant-markdown插�
 ###vim-instant-markdown插件配置
   该插件的功能是让你在撰写markdown文档时能立即看到成文效果，在安装完毕后，使用vim时自动启动浏览器，实时的展现你撰写的内容。安装步骤见项目的github[主页](https://github.com/suan/vim-instant-markdown)。我在安装该插件的时候遇到一些问题，还在解决中，希望能尽快使用它。
 
-##总结
+##总结&展望
   在折腾这个blog，分别在windows上和linux上都安装成功过，window上的中文字符集解决方法比较麻烦。linux下只要将语言设置到.bashrc即可。整个过程遇到多个ssh key管理问题，最后在github的help上找到ssh agent切换管理解决方案。ruby version不对，原因是ubuntu默认ruby版本为1.8.7，需要设置。在修改octopress中的其他文件，在git push时，需要用git add/rm 来处理这些文件后push。Github在build pages失败时，会有邮件提示错误原因，需要仔细看。
   总之，遇到问题先思考，有了思路后再针对性的查阅资料，尝试解决方案。
+###接下来要解决的：
+* 评论机制
+* 代码高亮
+* 主题修改
+* 配置修改，config.yml文件等
+
+##参考
+
+[Octopress installation in Ubuntu 12.04 with rsync - Lennu.net](http://www.lennu.net/2012/05/11/octopress-installation-in-ubuntu-12-dot-04-with-rsync/)
+
+[为已存在的Octopress配置环境](http://xingfuqiu.com/blog/ubuntu-update-to-1204/)
+
+http://fancyoung.com/blog/octopress-study/
+
+http://netwjx.github.com/blog/2012/03/18/octopress-note/
+
+http://BeiYuu.com
+
+[配置 Git 和 SSH 密钥连接 Github - CSSer](http://www.csser.com/board/4f53875c55bdcb545c000d05)
+
+[解决cygwin下的“Could not open a connection to your authentication agent.”](http://www.cnblogs.com/cheche/archive/2011/01/07/1918825.html)
+
