@@ -3,7 +3,7 @@ layout: post
 title: "Orange's一个操作系统的实现---心得与体会"
 date: 2013-02-23 15:57
 comments: true
-categories: 一个操作系统的实现 
+categories: TryOS
 ---
 
 #前言

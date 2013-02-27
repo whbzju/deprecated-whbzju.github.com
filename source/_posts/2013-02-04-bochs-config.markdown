@@ -3,7 +3,7 @@ layout: post
 title: "ubuntu 12.04安装bochs 2.3.5"
 date: 2013-02-04 23:37
 comments: true
-categories: 自己动手写操作系统 
+categories: TryOS 
 ---
 
 一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。
