@@ -7,12 +7,14 @@ categories: octopress
 ---
 #概述
 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：
+
 * 导航栏
 * 个人介绍页面
 * 分类Categories
 * sina微薄分享
 * 评论
-等等。好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：
+
+好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：
 ```
 # Disqus Comments
 disqus_short_name: 
