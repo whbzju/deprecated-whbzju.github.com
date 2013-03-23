@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Orange's一个操作系统的实现---心得与体会 - 知行录</title>
+  <meta name="author" content="阿波">
+
+  
+  <meta name="description" content="前言 本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="知行录" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-16146431-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">知行录</a></h1>
+  
+    <h2>rethinking</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:whbzju.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博客主页</a></li>
+  <li><a href="/blog/archives">文章列表</a></li>
+  <li><a href="/about">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Orange's一个操作系统的实现---心得与体会</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-23T15:57:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>前言</h1>
+
+<p>本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天，马上要毕业了从把此书匆匆过了一遍。
+不得不说，佩服作者的功力和心态，作者像是一个小孩，认真的为大家讲述他心爱的玩具是如何搭建的。在如今，实现一个这样的操作系统，并没有什么使用价值，只能作为学习的demo。为了搭建这个玩具，作者需要去了解x86架构的运行原理，内存的分页分段实现机制，8259A中断控制的部分原理和使用方法，还有文件系统、硬盘等等，我想当当是阅读这些设备组件的文档，就要耗去许多功夫，更别说调试的功夫。故在这种没有外界事物驱动的项目，若非有极大的热忱，是无论如何也坚持不下去。而我却连读完这本书这件事情都拖了3年，想来真是惭愧。</p>
+
+<h1>内容概述</h1>
+
+<p>整本书分为上下两篇，上篇的内容更为底层一些，因为本书是真正实现一个系统，所以上篇中有很多内容是有关硬件细节的，需要一定的汇编基础。下篇的内容则和我们平时接触的操作系统书籍有些类似，像IPC、文件系统、内存管理等更高级的话题，以C语言实现为主，也有部分汇编代码。内容大致分为：
+* 环境搭建&#8212;bochs、linux
+* cpu相关&#8212;引导扇区、保护模式
+* 内核相关&#8212;内核雏形、进程、输入输出
+* 进程通信IPC
+* 文件系统&#8212;硬盘驱动和简单的文件系统
+* 内存管理&#8212;fork、MM的简单实现
+* 让OS能够部署到真正的机器中
+本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。</p>
+
+<hr />
+
+<h2>环境搭建</h2>
+
+<p>网上对bochs的环境配置有很多资料，作者使用的bochsrc在ubuntu下需要做些简单的修改。具体的配置过程也可以参照我的另一篇blog：<a href="http://whbzju.github.com/blog/2013/02/04/bochs-config/">Ubuntu 12.04安装bochs 2.3.5</a>.</p>
+
+<h2>cpu相关</h2>
+
+<p>第三章保护模式的内容是整本书的基础。后续章节讨论的内容都需要以此章的知识为基础。若你想深入了解操作系统实现的细节，本章是必须掌握的内容，当然如果你在本章遇到了困难，也可以先看后续章节，通过后续章节的知识来反馈本章的内容，也是一条可行之路，譬如博主就是这样做的。知识需要时间的沉淀，可能当时你很难理解的内容，过了一阵子，在其他知识的帮助下，你可以很顺利的理解它。然而，本章的内容你是无法糊弄过去，否则将会成为你理解是后续章节内容的傍脚石。
+其中，保护模式的概念理解是一个坎，去网上了解下cpu发展的历史和相应的保护模式介绍内容将有助于你了解它。在理解概念后，书中所讲的只是如何通过汇编来使cpu进入保护模式而已，没有其他障碍。接着是整个操作系统运行原理的基石，分别为特权集的变化(特别是在变换时栈的变化)、中断的原理（8259A芯片的操作）和GDT、LDT、页式存储等一些重要的概念。</p>
+
+<h2>内核相关</h2>
+
+<p>在前面的章节中，我们写的程序是直接在引导程序中，而一个操作系统必然是要运行其他程序的，那么，自然要实现我们自己的内核。而一个操作系统从开机到运行。</p>
+
+<blockquote><p>大致经历“引导&#8212;>加载内核入内存&#8212;>跳入保护模式&#8212;>开始执行内核”。</p></blockquote>
+
+<p>这样看来引导区扇的512字节很可能不够，所以有必要实现一个loader来加载内核。第四章重点介绍了FAT12和loader的实现。第五章开始讲述内核的实现，其中一个重要的概念是ELF，类似于一种标准，告诉loader怎么加载程序。该章最后在内核中加入中断，这样一个内核雏形就完成了。第六章的讲述的是进程，操作系统中最重要的概念。在实现进程，除了我们已经了解的进程表的设置和进程调度算法外，本章提到的进程切换的特权集变换和栈空间的变换值得学习。当然，本章还实现了多线程，利用cpu时钟中断的机制实现。最后是系统调用，这里面涉及到讨论宏内核和微内核的内容，作者的选择是微内核。第七章是输入输出的内容，我兴趣不大，一带而过了。</p>
+
+<h2>进程通信IPC</h2>
+
+<p>本章节的内容没什么好说的，由于作者采用微内核，故在实现IPC时，需要有类似与MM的系统调用。</p>
+
+<h2>文件系统</h2>
+
+<p>一开始是对硬盘的介绍，目的是要实现一个硬盘的驱动程序。接着对文件系统的核心数据结构进行设计，见代码。</p>
+
+<h2>内存管理</h2>
+
+<p>内存管理本来是我十分感兴趣的一章，但是本书对该部分的内容算是浅尝而至，没有达到我对他的期望。不过，关于内存分配的细节还是能通过本章的例子了解不少。不过，本章的最后实现了一个简单的shell，算是一个补偿。</p>
+
+<h2>尾声</h2>
+
+<p>在书本的最后，作者将自己的操作系统安装到真正的机器中，作为本书的结尾。</p>
+
+<h1>总结</h1>
+
+<p>整本书读下来，虽然有不少知识点我不感兴趣，囫囵吞枣般的过去了，还是有不少收获。特别是对中断、栈空间、进程的理解有了进一步，下一步阅读有关操作系统方面经典的书籍应该会有不一样的体会，而且为我后面了解linux内核和android系统源码应该有不少帮助，这样我的目的也就达到了。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">阿波</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-23T15:57:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/tryos/'>TryOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/04/bochs-config/" title="Previous Post: ubuntu 12.04安装bochs 2.3.5">&laquo; ubuntu 12.04安装bochs 2.3.5</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/01/octopress-custom-config/" title="Next Post: octopress custom-configuration 个性化配置">octopress custom-configuration 个性化配置 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>ZJU CS小硕 爱读书 爱代码 相信移动互联网</p>
+</section>
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe 
+        width="100%" 
+        height="550" 
+        class="share_self" 
+        frameborder="0" 
+        scrolling="no" 
+        src="http://widget.weibo.com/weiboshow/index.php?width=0&height=550&ptype=1&speed=0&skin=&isTitle=0&noborder=1&isWeibo=1&isFans=&uid=1911447995&verifier=4e804b1d">
+      </iframe>
+    </li>
+  </ul>
+</section>
+
+<section>
+	<h1>Categories</h1>
+    	<ul id="categories">
+	        <li class='category'><a href='/blog/categories/tryos/'>TryOS (2)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+
+	</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/24/mac-test/">mac test</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/01/octopress-custom-config/">octopress custom-configuration 个性化配置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/23/tryos-xindetihui/">Orange's一个操作系统的实现---心得与体会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/04/bochs-config/">ubuntu 12.04安装bochs 2.3.5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/octopress-peizhi/">Ubuntu 12.04配置Octopress在Github上搭建blog</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 阿波 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hbwu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

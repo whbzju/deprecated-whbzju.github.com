@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>octopress custom-configuration 个性化配置 - 知行录</title>
+  <meta name="author" content="阿波">
+
+  
+  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
+个人介绍页面
+分类Categories
+sina微薄分享
+评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="知行录" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-16146431-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">知行录</a></h1>
+  
+    <h2>rethinking</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:whbzju.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博客主页</a></li>
+  <li><a href="/blog/archives">文章列表</a></li>
+  <li><a href="/about">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress Custom-configuration 个性化配置</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>概述</h1>
+
+<p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
+
+<ul>
+<li>导航栏</li>
+<li>个人介绍页面</li>
+<li>分类Categories</li>
+<li>sina微薄分享</li>
+<li>评论</li>
+</ul>
+
+
+<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
+</span><span class='line'>disqus_short_name: 
+</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
+</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
+</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
+</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
+</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>配置方法</h1>
+
+<p>博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
+
+<ul>
+<li>octopress navigation设置</li>
+<li>about页面，需要用rake new_page[&#8220;about&#8221;]，先生成页面。</li>
+<li>octopress 侧边栏设置</li>
+<li>个人介绍</li>
+<li>sina微博分享</li>
+<li>categories</li>
+<li>google analysis</li>
+</ul>
+
+
+<h1>参考文献</h1>
+
+<p><a href="http://yanping.me/cn/blog/2012/01/07/theming-and-customization/">ctopress修改主题和自定义样式</a></p>
+
+<p><a href="http://linyi.herokuapp.com/blog/config-octopress.html">octopress的个性化配置</a></p>
+
+<p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">为octopress添加分类(category)列表</a></p>
+
+<p><a href="http://programus.github.com/blog/2012/03/03/add-weibo-sidebar-into-octopress/">为Octopress博客追加新浪微博侧栏</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">阿波</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/02/23/tryos-xindetihui/" title="Previous Post: Orange's一个操作系统的实现---心得与体会">&laquo; Orange's一个操作系统的实现---心得与体会</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/24/mac-test/" title="Next Post: mac test">mac test &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>ZJU CS小硕 爱读书 爱代码 相信移动互联网</p>
+</section>
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe 
+        width="100%" 
+        height="550" 
+        class="share_self" 
+        frameborder="0" 
+        scrolling="no" 
+        src="http://widget.weibo.com/weiboshow/index.php?width=0&height=550&ptype=1&speed=0&skin=&isTitle=0&noborder=1&isWeibo=1&isFans=&uid=1911447995&verifier=4e804b1d">
+      </iframe>
+    </li>
+  </ul>
+</section>
+
+<section>
+	<h1>Categories</h1>
+    	<ul id="categories">
+	        <li class='category'><a href='/blog/categories/tryos/'>TryOS (2)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>octopress (2)</a></li>
+
+	</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/03/24/mac-test/">mac test</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/03/01/octopress-custom-config/">octopress custom-configuration 个性化配置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/23/tryos-xindetihui/">Orange's一个操作系统的实现---心得与体会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/04/bochs-config/">ubuntu 12.04安装bochs 2.3.5</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/02/octopress-peizhi/">Ubuntu 12.04配置Octopress在Github上搭建blog</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - 阿波 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hbwu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
