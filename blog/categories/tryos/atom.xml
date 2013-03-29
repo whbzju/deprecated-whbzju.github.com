@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TryOS | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/tryos/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-03-28T10:32:16+08:00</updated>
+  <updated>2013-03-29T14:31:42+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -36,6 +36,9 @@
 本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。</p>
 
 <hr />
+
+<!--more-->
+
 
 <h2>环境搭建</h2>
 
@@ -105,8 +108,12 @@ sudo apt-get install xorg-dev //GUI界面
 sudo apt-get install bison
 </code></pre>
 
-<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em>
-采用解决办法：</p>
+<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em></p>
+
+<!--more-->
+
+
+<p>采用解决办法：</p>
 
 <blockquote><p>只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉</p>
 

@@ -1,10 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://whbzju.github.com/blog/2013/01/30/hello-octopress/</loc>
-        <lastmod>2013-03-24T00:28:39+08:00</lastmod>
-    </url>
-    <url>
         <loc>http://whbzju.github.com/blog/2013/01/30/codehighlight/</loc>
         <lastmod>2013-03-24T00:28:39+08:00</lastmod>
     </url>
@@ -14,19 +10,23 @@
     </url>
     <url>
         <loc>http://whbzju.github.com/blog/2013/02/04/bochs-config/</loc>
-        <lastmod>2013-03-24T00:28:39+08:00</lastmod>
+        <lastmod>2013-03-29T14:28:10+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui/</loc>
-        <lastmod>2013-03-24T00:28:39+08:00</lastmod>
+        <lastmod>2013-03-29T14:26:03+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/</loc>
-        <lastmod>2013-03-24T00:28:39+08:00</lastmod>
+        <lastmod>2013-03-29T14:27:29+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/blog/2013/03/24/mac-test/</loc>
-        <lastmod>2013-03-28T10:32:14+08:00</lastmod>
+        <lastmod>2013-03-29T14:29:01+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://whbzju.github.com/blog/2013/03/29/lianjiatingsanbuqu/</loc>
+        <lastmod>2013-03-29T14:15:58+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/404.html</loc>
@@ -38,11 +38,11 @@
     </url>
     <url>
         <loc>http://whbzju.github.com/blog/archives/</loc>
-        <lastmod>2013-03-28T10:32:14+08:00</lastmod>
+        <lastmod>2013-03-29T14:29:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/</loc>
-        <lastmod>2013-03-28T10:32:14+08:00</lastmod>
+        <lastmod>2013-03-29T14:29:01+08:00</lastmod>
     </url>
     <url>
         <loc>http://whbzju.github.com/robots.txt</loc>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-03-28T10:32:16+08:00</updated>
+  <updated>2013-03-29T14:31:42+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -55,6 +55,9 @@ disqus_show_comment_count:
   <p>A little something about me.</p>
 </section>
 ```</p>
+
+<!--more-->
+
 
 <h1>配置方法</h1>
 
