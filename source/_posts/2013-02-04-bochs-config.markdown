@@ -24,6 +24,7 @@ bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等�
 	sudo apt-get install bison
 
 在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示*ERROR: X windows gui was selected, but X windows libraries were not found*
+<!--more-->
 采用解决办法：
 > 只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉
     echo ERROR: X windows gui was selected, but X windows libraries were not found.

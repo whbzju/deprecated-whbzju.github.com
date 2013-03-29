@@ -33,6 +33,7 @@ default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html
   <p>A little something about me.</p>
 </section>
 ```
+<!--more-->
 #配置方法
 博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:
 

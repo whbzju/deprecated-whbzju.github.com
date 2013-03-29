@@ -20,6 +20,7 @@ categories: TryOS
 * 让OS能够部署到真正的机器中
 本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。
 ***
+<!--more-->
 ##环境搭建
 网上对bochs的环境配置有很多资料，作者使用的bochsrc在ubuntu下需要做些简单的修改。具体的配置过程也可以参照我的另一篇blog：[Ubuntu 12.04安装bochs 2.3.5](http://whbzju.github.com/blog/2013/02/04/bochs-config/).
 ##cpu相关
