@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JNI | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/jni/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2013-06-01T23:54:05+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Android JNI MAC OS环境配置]]></title>
+    <link href="http://whbzju.github.com/blog/2013/06/01/android-jni-config/"/>
+    <updated>2013-06-01T23:50:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/06/01/android-jni-config</id>
+    <content type="html"><![CDATA[<h2>前言---JNI技术简介</h2>
+
+<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
+
+<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
+
+<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
+
+<h2>两种编译环境</h2>
+
+<ul>
+<li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
+<li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
+</ul>
+
+
+<h2>NDK编译环境</h2>
+
+<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
+
+<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
+
+<p><code>
+export PATH=$PATH:/Users/youpath/android-ndk-r8e
+</code>
+重启bash，即可使用ndk-build</p>
+
+<p>```
+HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
+HaibotekiMacBook-Air:jni haibowu$ ndk-build</p>
+
+<p>```</p>
+
+<h2>运行Hello-jni</h2>
+
+<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
+
+<p><code>
+HaibotekiMacBook-Air:jni haibowu$ ndk-build
+Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
+Gdbsetup       : libs/armeabi/gdb.setup
+Compile thumb  : hello-jni &lt;= hello-jni.c
+SharedLibrary  : libhello-jni.so
+Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so
+</code>
+当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
+
+<h2>其他</h2>
+
+<ul>
+<li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
+<li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
+<li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
+</ul>
+
+
+<h2>后续</h2>
+
+<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
+]]></content>
+  </entry>
+  
+</feed>

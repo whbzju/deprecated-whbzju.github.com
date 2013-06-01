@@ -5,15 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>octopress custom-configuration 个性化配置 - 知行录</title>
+  <title>Android JNI MAC OS环境配置 - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
-个人介绍页面
-分类Categories
-sina微薄分享
-评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
+  <meta name="description" content="前言&#8212;JNI技术简介 JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,7 +18,7 @@ sina微薄分享
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/06/01/android-jni-config/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -84,7 +80,7 @@ sina微薄分享
   
   <header>
     
-      <h1 class="entry-title">Octopress Custom-configuration 个性化配置</h1>
+      <h1 class="entry-title">Android JNI MAC OS环境配置</h1>
     
     
       <p class="meta">
@@ -100,7 +96,7 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-06-01T23:50:00+08:00" pubdate data-updated="true">Jun 1<span>st</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -109,78 +105,73 @@ sina微薄分享
   </header>
 
 
-<div class="entry-content"><h1>概述</h1>
+<div class="entry-content"><h2>前言&#8212;JNI技术简介</h2>
 
-<p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
+<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
+
+<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
+
+<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
+
+<h2>两种编译环境</h2>
 
 <ul>
-<li>导航栏</li>
-<li>个人介绍页面</li>
-<li>分类Categories</li>
-<li>sina微薄分享</li>
-<li>评论</li>
+<li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
+<li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
 </ul>
 
 
-<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+<h2>NDK编译环境</h2>
+
+<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
+
+<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>export PATH=$PATH:/Users/youpath/android-ndk-r8e</span></code></pre></td></tr></table></div></figure>
+
+
+<p>重启bash，即可使用ndk-build</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
-</span><span class='line'>disqus_short_name: 
-</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
+</span><span class='line'>HaibotekiMacBook-Air:jni haibowu$ ndk-build
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
+<h2>运行Hello-jni</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
-</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
+<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
-</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
-</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HaibotekiMacBook-Air:jni haibowu$ ndk-build
+</span><span class='line'>Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
+</span><span class='line'>Gdbsetup       : libs/armeabi/gdb.setup
+</span><span class='line'>Compile thumb  : hello-jni &lt;= hello-jni.c
+</span><span class='line'>SharedLibrary  : libhello-jni.so
+</span><span class='line'>Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so</span></code></pre></td></tr></table></div></figure>
 
 
-<!--more-->
+<p>当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
 
-
-<h1>配置方法</h1>
-
-<p>博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
+<h2>其他</h2>
 
 <ul>
-<li>octopress navigation设置</li>
-<li>about页面，需要用rake new_page[&#8220;about&#8221;]，先生成页面。</li>
-<li>octopress 侧边栏设置</li>
-<li>个人介绍</li>
-<li>sina微博分享</li>
-<li>categories</li>
-<li>google analysis</li>
+<li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
+<li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
+<li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
 </ul>
 
 
-<h1>参考文献</h1>
+<h2>后续</h2>
 
-<p><a href="http://yanping.me/cn/blog/2012/01/07/theming-and-customization/">ctopress修改主题和自定义样式</a></p>
-
-<p><a href="http://linyi.herokuapp.com/blog/config-octopress.html">octopress的个性化配置</a></p>
-
-<p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">为octopress添加分类(category)列表</a></p>
-
-<p><a href="http://programus.github.com/blog/2012/03/03/add-weibo-sidebar-into-octopress/">为Octopress博客追加新浪微博侧栏</a></p>
+<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
 </div>
 
 
@@ -203,12 +194,12 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-06-01T23:50:00+08:00" pubdate data-updated="true">Jun 1<span>st</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+    <a class='category' href='/blog/categories/jni/'>JNI</a>
   
 </span>
 
@@ -224,10 +215,8 @@ sina微薄分享
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/23/tryos-xindetihui/" title="Previous Post: Orange's一个操作系统的实现---心得与体会">&laquo; Orange's一个操作系统的实现---心得与体会</a>
+        <a class="basic-alignment left" href="/blog/2013/03/29/lianjiatingsanbuqu/" title="Previous Post: 李安家庭三部曲杂想">&laquo; 李安家庭三部曲杂想</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/24/mac-test/" title="Next Post: Macbook air上手心得">Macbook air上手心得 &raquo;</a>
       
     </p>
   </footer>
@@ -327,8 +316,8 @@ sina微薄分享
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
-        var disqus_url = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/06/01/android-jni-config/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/06/01/android-jni-config/';
         var disqus_script = 'embed.js';
       
     (function () {
