@@ -5,15 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>octopress custom-configuration 个性化配置 - 知行录</title>
+  <title>入职两月总结 - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
-个人介绍页面
-分类Categories
-sina微薄分享
-评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
+  <meta name="description" content="好久没有写博客，一是工作后时间不是自己，每天很晚下班，回到家，洗洗差不多就要睡了。二是公司信息安全管的很严，资料带不出来，工作方面的积累不方便写到博客上，每次想起要重新写自己写过的东西，就很没有动力。 本周过后，入职已经两个月了，公司的体制不想也没有资格评论，做的项目确是我很满意的， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,7 +18,7 @@ sina微薄分享
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -84,7 +80,7 @@ sina微薄分享
   
   <header>
     
-      <h1 class="entry-title">Octopress Custom-configuration 个性化配置</h1>
+      <h1 class="entry-title">入职两月总结</h1>
     
     
       <p class="meta">
@@ -100,7 +96,7 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-06-23T09:01:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -109,78 +105,48 @@ sina微薄分享
   </header>
 
 
-<div class="entry-content"><h1>概述</h1>
+<div class="entry-content"><p>好久没有写博客，一是工作后时间不是自己，每天很晚下班，回到家，洗洗差不多就要睡了。二是公司信息安全管的很严，资料带不出来，工作方面的积累不方便写到博客上，每次想起要重新写自己写过的东西，就很没有动力。</p>
 
-<p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
+<p>本周过后，入职已经两个月了，公司的体制不想也没有资格评论，做的项目确是我很满意的，只能说塞翁失马焉知非福，找工作的时候千挑万选，也看不清进来后的项目，目前的情况还算幸运。现在的项目组涉及到的领域有Android开发、人脸识别、机器学习等，而且作为一个新的项目，我有幸可以从头开始接触整个项目。</p>
+
+<h2>成长</h2>
 
 <ul>
-<li>导航栏</li>
-<li>个人介绍页面</li>
-<li>分类Categories</li>
-<li>sina微薄分享</li>
-<li>评论</li>
+<li>Android源码环境调试app、系统组件</li>
+<li>Android 4.0 人脸解锁app研究</li>
+<li>Android JNI技术学习</li>
+<li>人脸识别算法PCA、FDA、LBP学习</li>
+<li>人脸检测HaarCascade学习</li>
+<li>Opencv 人脸识别 Demo研究：Eigenface、fisherFaces、LBP。</li>
+<li>机器学习LDA、贝叶斯学习</li>
 </ul>
 
 
-<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+<h2>博客计划</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
-</span><span class='line'>disqus_short_name: 
-</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
-</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
-</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
-</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<!--more-->
-
-
-<h1>配置方法</h1>
-
-<p>博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
+<p>后续博客将集中在三个领域</p>
 
 <ul>
-<li>octopress navigation设置</li>
-<li>about页面，需要用rake new_page[&#8220;about&#8221;]，先生成页面。</li>
-<li>octopress 侧边栏设置</li>
-<li>个人介绍</li>
-<li>sina微博分享</li>
-<li>categories</li>
-<li>google analysis</li>
+<li>Android技术：分为源码和应用开发技术</li>
+<li>人脸识别：集中于机器学习的方式实现</li>
+<li>机器学习：未来重点</li>
 </ul>
 
 
-<h1>参考文献</h1>
+<p>计划中的blog：</p>
 
-<p><a href="http://yanping.me/cn/blog/2012/01/07/theming-and-customization/">ctopress修改主题和自定义样式</a></p>
+<ul>
+<li>Android JNI技术简介</li>
+<li>Android调试小技巧</li>
+<li>PCA之我的理解</li>
+<li>fisherFaces之我的理解</li>
+<li>Opencv人脸识别Demo</li>
+<li>ADB的使用详解</li>
+<li>Haar分类器训练</li>
+</ul>
 
-<p><a href="http://linyi.herokuapp.com/blog/config-octopress.html">octopress的个性化配置</a></p>
 
-<p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">为octopress添加分类(category)列表</a></p>
-
-<p><a href="http://programus.github.com/blog/2012/03/03/add-weibo-sidebar-into-octopress/">为Octopress博客追加新浪微博侧栏</a></p>
+<p>欠了好多，这些内容我在公司都有写过文档，可惜不能直接用，希望在整理的过程中有进一步的理解。</p>
 </div>
 
 
@@ -203,14 +169,8 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-06-23T09:01:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
-  
-</span>
 
 
     </p>
@@ -224,10 +184,8 @@ sina微薄分享
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/23/tryos-xindetihui/" title="Previous Post: Orange's一个操作系统的实现---心得与体会">&laquo; Orange's一个操作系统的实现---心得与体会</a>
+        <a class="basic-alignment left" href="/blog/2013/06/01/android-jni-config/" title="Previous Post: Android JNI MAC OS环境配置">&laquo; Android JNI MAC OS环境配置</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/24/mac-test/" title="Next Post: Macbook air上手心得">Macbook air上手心得 &raquo;</a>
       
     </p>
   </footer>
@@ -327,8 +285,8 @@ sina微薄分享
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
-        var disqus_url = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/';
         var disqus_script = 'embed.js';
       
     (function () {
