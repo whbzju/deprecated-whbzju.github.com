@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>前言---JNI技术简介</title>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax:{inlineMath:[['$$$','$$$']]}});</script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<hr />
+
+<p>layout: post
+title: "Android JNI MAC OS环境配置"
+date: 2013-06-01 23:50
+comments: true</p>
+
+<h2>categories: JNI</h2>
+
+<h2>前言---JNI技术简介</h2>
+
+<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
+
+<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
+
+<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
+
+<h2>两种编译环境</h2>
+
+<ul>
+<li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
+<li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
+</ul>
+
+
+<h2>NDK编译环境</h2>
+
+<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
+
+<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
+
+<pre><code>export PATH=$PATH:/Users/youpath/android-ndk-r8e
+</code></pre>
+
+<p>重启bash，即可使用ndk-build</p>
+
+<pre><code>HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
+HaibotekiMacBook-Air:jni haibowu$ ndk-build
+</code></pre>
+
+<h2>运行Hello-jni</h2>
+
+<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
+
+<pre><code>HaibotekiMacBook-Air:jni haibowu$ ndk-build
+Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
+Gdbsetup       : libs/armeabi/gdb.setup
+Compile thumb  : hello-jni &lt;= hello-jni.c
+SharedLibrary  : libhello-jni.so
+Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so
+</code></pre>
+
+<p>当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
+
+<h2>其他</h2>
+
+<ul>
+<li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
+<li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
+<li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
+</ul>
+
+
+<h2>后续</h2>
+
+<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
+</body>
+</html>
