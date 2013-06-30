@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JNI | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/jni/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-06-30T11:31:36+08:00</updated>
+  <updated>2013-06-30T19:54:42+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -22,7 +22,444 @@
 
 <h1>动态注册</h1>
 
-<p>先看代码，将hello-jni修改成动态注册：</p>
+<h2>Java层</h2>
+
+<p>先看代码，为hello-jni的java层添加动态注册的native方法，与静态注册的native方法比较。</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>jniActivity  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">jniActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">private</span> <span class="n">TextView</span> <span class="n">tv</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Called when the activity is first created.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//setContentView(R.layout.main);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class='line'>    <span class="c1">//tv.setText( stringFromJNI() );</span>
+</span><span class='line'>    <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">DynamicStringFromJNI</span><span class="o">());</span>
+</span><span class='line'>    <span class="n">setContentView</span><span class="o">(</span><span class="n">tv</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 这个方法采用静态注册，参考ndk自带的例子hello-jni的实现</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 修改成动态注册</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">DynamicStringFromJNI</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 提供方法，让native层调用</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
+</span><span class='line'>    <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">&quot;Call from Native&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 加载jni库</span>
+</span><span class='line'><span class="kd">static</span><span class="o">{</span>
+</span><span class='line'>   <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>以上的代码很简单，stringFromJNI上上节中用来演示静态注册，testMethodForNativeCallJava是后面要用到，暂时不用关心。我们来看<code>public native String DynamicStringFromJNI()</code>。动态注册和静态注册对java层来说没有区别。</p>
+
+<h2>C层</h2>
+
+<p>同样，先看代码：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>learnjni  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">string</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">jni</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">assert</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">android</span><span class="o">/</span><span class="n">log</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">TAG</span> <span class="s">&quot;Learn-jni&quot;</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">define</span> <span class="n">LOGI</span><span class="p">(...)</span> <span class="p">((</span><span class="kt">void</span><span class="p">)</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_INFO</span><span class="p">,</span> <span class="n">TAG</span><span class="p">,</span> <span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">VA_ARGS__</span><span class="p">))</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">This</span> <span class="n">is</span> <span class="n">a</span> <span class="n">trivial</span> <span class="n">JNI</span> <span class="n">example</span> <span class="n">where</span> <span class="n">we</span> <span class="n">use</span> <span class="n">a</span> <span class="n">native</span> <span class="n">method</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">to</span> <span class="k">return</span> <span class="n">a</span> <span class="n">new</span> <span class="n">VM</span> <span class="n">String</span><span class="p">.</span> <span class="n">See</span> <span class="n">the</span> <span class="n">corresponding</span> <span class="n">Java</span> <span class="n">source</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">file</span> <span class="n">located</span> <span class="n">at</span><span class="o">:</span>
+</span><span class='line'> <span class="o">*</span>
+</span><span class='line'> <span class="o">*</span>   <span class="n">apps</span><span class="o">/</span><span class="n">samples</span><span class="o">/</span><span class="n">hello</span><span class="o">-</span><span class="n">jni</span><span class="o">/</span><span class="n">project</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">com</span><span class="o">/</span><span class="n">example</span><span class="o">/</span><span class="n">hellojni</span><span class="o">/</span><span class="n">HelloJni</span><span class="p">.</span><span class="n">java</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">jstring</span>
+</span><span class='line'><span class="n">Java_com_example_learn_jni_jniActivity_stringFromJNI</span><span class="p">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                                              <span class="n">jobject</span> <span class="n">thiz</span> <span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">&quot;Hello from JNI !&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">jstring</span> <span class="n">dynamicHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">&quot;Hello from Dynamic register&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">JNINativeMethod</span> <span class="n">gMethods</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">{</span>
+</span><span class='line'><span class="s">&quot;DynamicStringFromJNI&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="s">&quot;()Ljava/lang/String;&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">dynamicHello</span>
+</span><span class='line'><span class="p">},</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">registerNativeMethods</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">className</span> <span class="o">=</span> <span class="s">&quot;com/example/learn_jni/jniActivity&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">jniRegisterNativeMethods</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">className</span><span class="p">,</span> <span class="n">gMethods</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">[</span><span class="mi">0</span><span class="p">]))){</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">JNI_FALSE</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jniRegisterReturn 0, registerNative return 1&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">return</span> <span class="n">JNI_TRUE</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">jniRegisterNativeMethods</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">env</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">className</span><span class="p">,</span> <span class="k">const</span> <span class="n">JNINativeMethod</span><span class="o">*</span> <span class="n">gMethods</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numMethods</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">jclass</span> <span class="n">clazz</span><span class="p">;</span>
+</span><span class='line'><span class="n">clazz</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">FindClass</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">className</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;call jniRegisterNative&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="n">clazz</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+</span><span class='line'>    <span class="c1">//printf(&quot;clazz is null\n&quot;);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;clazz is null&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">JNI_FALSE</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">RegisterNatives</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">gMethods</span><span class="p">,</span> <span class="n">numMethods</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">0</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;RegisterNative failed&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jniRegister Return 0&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">jint</span> <span class="n">JNI_OnLoad</span><span class="p">(</span><span class="n">JavaVM</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">vm</span><span class="p">,</span> <span class="kt">void</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">reserved</span><span class="p">){</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;call java jni_onload&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="c1">//printf(&quot;JNI OnLoad&quot;);</span>
+</span><span class='line'><span class="n">assert</span><span class="p">(</span><span class="n">vm</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;vm ok&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="n">jint</span> <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
+</span><span class='line'><span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">vm</span><span class="p">)</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">GetEnv</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_4</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">){</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jni version failed&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//printf(&quot;JNI ONLoad\n&quot;);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">assert</span><span class="p">(</span><span class="n">env</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;env ok&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">registerNativeMethods</span><span class="p">(</span><span class="n">env</span><span class="p">)){</span>
+</span><span class='line'>    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;register failed&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">JNI_VERSION_1_4</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>代码有点长，其中类似<code>__android_log_print(ANDROID_LOG_DEBUG,"hello-jni","env ok");</code>是我用来调试用的，jni方法无法直接用ide调试，一般情况下可以用打log的方式调试，如上面的做法，还需要修改Android.mk，加入<code>LOCAL_LDLIBS :=-llog</code>，放在<code>include $(CLEAR_VARS)
+</code>后面。不过打log的方式有时候很低效，有另外一种调试方法是通过ndk-gdb来调试native的函数，当然这又是另外一个话题，针对它我还有一些疑问，哪天解决了再写一篇博客吧。</p>
+
+<h3>JNI签名介绍</h3>
+
+<p>不要被上面的代码吓到，我们来理一理思路。既然是动态注册，那是不是应该有类似符号表的东西来保存java层和native层之间的对应关系呢？答案是肯定的，它叫JNINativeMethod，其定义如下：</p>
+
+<pre><code>typedef struct{
+    const char* name;
+    const char* signature;
+    void*       fnPtr;
+} JNINativeMethod;
+</code></pre>
+
+<p>30~37行的代码即做了这个事情，这个逻辑上很好理解，唯一奇怪的是里面的内容。这里和签名的格式有关，网上类似的介绍很多，简单来讲，JNI类型签名定义如下：</p>
+
+<pre><code>（参数1类型标示;参数2类型标示;…参数n类型标示）返回值类型标示
+</code></pre>
+
+<p>其对应的类型标示可以参考jni.h中的定义，理解起来就是将java中的类型翻译成c中的类型：</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>jni  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">inttypes</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>      <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">C99</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">typedef</span> <span class="kt">uint8_t</span>         <span class="n">jboolean</span><span class="p">;</span>       <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">unsigned</span> <span class="mi">8</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int8_t</span>          <span class="n">jbyte</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">8</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">uint16_t</span>        <span class="n">jchar</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">unsigned</span> <span class="mi">16</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int16_t</span>         <span class="n">jshort</span><span class="p">;</span>         <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">16</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int32_t</span>         <span class="n">jint</span><span class="p">;</span>           <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">32</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int64_t</span>         <span class="n">jlong</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">64</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">float</span>           <span class="n">jfloat</span><span class="p">;</span>         <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="mi">32</span><span class="o">-</span><span class="n">bit</span> <span class="n">IEEE</span> <span class="mi">754</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">double</span>          <span class="n">jdouble</span><span class="p">;</span>        <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">IEEE</span> <span class="mi">754</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="k">else</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">jboolean</span><span class="p">;</span>       <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">unsigned</span> <span class="mi">8</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">char</span>     <span class="n">jbyte</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">8</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span>  <span class="n">jchar</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">unsigned</span> <span class="mi">16</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">short</span>           <span class="n">jshort</span><span class="p">;</span>         <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">16</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int</span>             <span class="n">jint</span><span class="p">;</span>           <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">32</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span>       <span class="n">jlong</span><span class="p">;</span>          <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="kt">signed</span> <span class="mi">64</span> <span class="n">bits</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">float</span>           <span class="n">jfloat</span><span class="p">;</span>         <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="mi">32</span><span class="o">-</span><span class="n">bit</span> <span class="n">IEEE</span> <span class="mi">754</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">double</span>          <span class="n">jdouble</span><span class="p">;</span>        <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="mi">64</span><span class="o">-</span><span class="n">bit</span> <span class="n">IEEE</span> <span class="mi">754</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">endif</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>更详细的对应关系请参考：<a href="http://blog.csdn.net/lizhiguo0532/article/details/7219357">http://blog.csdn.net/lizhiguo0532/article/details/7219357</a></p>
+
+<h3>注册</h3>
+
+<p>这里我实现了两个方法：<code>registerNativeMethods</code>和<code>jniRegisterNativeMethods</code>, 最终调用<code>RegisterNatives</code>完成注册。看起来好像很复杂，其实核心只有两个函数，总结如下：</p>
+
+<ul>
+<li>jclass clazz = (*env)->FindClass(env, className);</li>
+<li>(*env)->RegisterNatives(env, clazz, gMethods, numMethods)</li>
+</ul>
+
+
+<p><strong><em>PS:这里有个env，它是指向JNIEnv的一个结构体，它非常重要，后面会有针对它的讨论。</em></strong></p>
+
+<p>那么动态注册的函数在什么时候和什么地方被调用，引用《深入理解Android》卷一中的原文：</p>
+
+<blockquote><p>当Java层通过System.loadLibrary加载完JNI动态库后，紧接着会查找该库中一个叫JNI_Load的函数，如果有，就调用它，而动态注册的工作是在这里完成的。</p></blockquote>
+
+<p>对照上面的代码中JNI_Load的实现，来理解这句话。</p>
+
+<p>到这里动态注册就完成了。结果如下
+<img src="images/androidscreen1.png" alt="运行截图" /></p>
+
+<h1>未完待续</h1>
 ]]></content>
   </entry>
   
