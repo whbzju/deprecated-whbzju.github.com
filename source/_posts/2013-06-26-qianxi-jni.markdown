@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "浅析JNI"
+title: "浅析JNI(一)"
 date: 2013-06-26 22:31
 comments: true
 categories: 
@@ -37,7 +37,7 @@ public class jniActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main);
+        //setContentView(R.layout.main);
 
         TextView  tv = new TextView(this);
         tv.setText( stringFromJNI() );
@@ -48,7 +48,7 @@ public class jniActivity extends Activity {
     public native String  stringFromJNI();
 
     // 修改成动态注册
-    public native String DynamicStringFromJNI();
+    //public native String DynamicStringFromJNI();
 
     // 提供方法，让native层调用
     public void testMethodForNativeCallJava(){
@@ -57,7 +57,7 @@ public class jniActivity extends Activity {
 
     // 加载jni库
     static{
-       System.loadLibrary("learnJni");
+       System.loadLibrary("learn-jni");
     }
 }
 
@@ -85,7 +85,7 @@ public class jniActivity extends Activity {
  *   
  */
 jstring
-Java_com_example_learnjni_LearnJni_stringFromJNI( JNIEnv* env,
+Java_com_example_learn_jni_jniActivity_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
     return (*env)->NewStringUTF(env, "Hello from JNI !");
