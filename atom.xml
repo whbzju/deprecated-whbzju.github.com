@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-06-29T21:03:01+08:00</updated>
+  <updated>2013-06-30T11:31:36+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -14,7 +14,20 @@
 
   
   <entry>
-    <title type="html"><![CDATA[浅析JNI]]></title>
+    <title type="html"><![CDATA[浅析JNI（二）]]></title>
+    <link href="http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2/"/>
+    <updated>2013-06-30T09:55:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2</id>
+    <content type="html"><![CDATA[<p>上文：<a href="http://whbzju.github.io/blog/2013/06/26/qianxi-jni/">浅析JNI</a>中提到，静态注册方法有不少弊端，和现在的链接方式方式分静态链接和动态链接相识，jni技术中还有动态注册，本文将详细介绍其实现机制和原理。</p>
+
+<h1>动态注册</h1>
+
+<p>先看代码，将hello-jni修改成动态注册：</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[浅析JNI(一)]]></title>
     <link href="http://whbzju.github.com/blog/2013/06/26/qianxi-jni/"/>
     <updated>2013-06-26T22:31:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2013/06/26/qianxi-jni</id>
@@ -86,7 +99,7 @@
 </span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+</span><span class='line'>        <span class="c1">//setContentView(R.layout.main);</span>
 </span><span class='line'>
 </span><span class='line'>        <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 </span><span class='line'>        <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span> <span class="n">stringFromJNI</span><span class="o">()</span> <span class="o">);</span>
@@ -97,7 +110,7 @@
 </span><span class='line'>    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 修改成动态注册</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">DynamicStringFromJNI</span><span class="o">();</span>
+</span><span class='line'>    <span class="c1">//public native String DynamicStringFromJNI();</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 提供方法，让native层调用</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
@@ -106,7 +119,7 @@
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 加载jni库</span>
 </span><span class='line'>    <span class="kd">static</span><span class="o">{</span>
-</span><span class='line'>       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learnJni&quot;</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -152,7 +165,7 @@
 </span><span class='line'><span class="cm"> *   </span>
 </span><span class='line'><span class="cm"> */</span>
 </span><span class='line'><span class="n">jstring</span>
-</span><span class='line'><span class="nf">Java_com_example_learnjni_LearnJni_stringFromJNI</span><span class="o">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="o">,</span>
+</span><span class='line'><span class="nf">Java_com_example_learn_jni_jniActivity_stringFromJNI</span><span class="o">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="o">,</span>
 </span><span class='line'>                                                  <span class="n">jobject</span> <span class="n">thiz</span> <span class="o">)</span>
 </span><span class='line'><span class="o">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="o">(*</span><span class="n">env</span><span class="o">)-&gt;</span><span class="n">NewStringUTF</span><span class="o">(</span><span class="n">env</span><span class="o">,</span> <span class="s">&quot;Hello from JNI !&quot;</span><span class="o">);</span>

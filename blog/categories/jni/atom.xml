@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JNI | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/jni/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-06-29T21:03:01+08:00</updated>
+  <updated>2013-06-30T11:31:36+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[浅析JNI（二）]]></title>
+    <link href="http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2/"/>
+    <updated>2013-06-30T09:55:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2</id>
+    <content type="html"><![CDATA[<p>上文：<a href="http://whbzju.github.io/blog/2013/06/26/qianxi-jni/">浅析JNI</a>中提到，静态注册方法有不少弊端，和现在的链接方式方式分静态链接和动态链接相识，jni技术中还有动态注册，本文将详细介绍其实现机制和原理。</p>
+
+<h1>动态注册</h1>
+
+<p>先看代码，将hello-jni修改成动态注册：</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Android JNI MAC OS环境配置]]></title>

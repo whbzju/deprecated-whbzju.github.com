@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>浅析JNI - 知行录</title>
+  <title>浅析JNI(一) - 知行录</title>
   <meta name="author" content="阿波">
 
   
@@ -80,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">浅析JNI</h1>
+      <h1 class="entry-title">浅析JNI(一)</h1>
     
     
       <p class="meta">
@@ -173,7 +173,7 @@
 </span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+</span><span class='line'>        <span class="c1">//setContentView(R.layout.main);</span>
 </span><span class='line'>
 </span><span class='line'>        <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 </span><span class='line'>        <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span> <span class="n">stringFromJNI</span><span class="o">()</span> <span class="o">);</span>
@@ -184,7 +184,7 @@
 </span><span class='line'>    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 修改成动态注册</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">DynamicStringFromJNI</span><span class="o">();</span>
+</span><span class='line'>    <span class="c1">//public native String DynamicStringFromJNI();</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 提供方法，让native层调用</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
@@ -193,7 +193,7 @@
 </span><span class='line'>
 </span><span class='line'>    <span class="c1">// 加载jni库</span>
 </span><span class='line'>    <span class="kd">static</span><span class="o">{</span>
-</span><span class='line'>       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learnJni&quot;</span><span class="o">);</span>
+</span><span class='line'>       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure>
@@ -239,7 +239,7 @@
 </span><span class='line'><span class="cm"> *   </span>
 </span><span class='line'><span class="cm"> */</span>
 </span><span class='line'><span class="n">jstring</span>
-</span><span class='line'><span class="nf">Java_com_example_learnjni_LearnJni_stringFromJNI</span><span class="o">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="o">,</span>
+</span><span class='line'><span class="nf">Java_com_example_learn_jni_jniActivity_stringFromJNI</span><span class="o">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="o">,</span>
 </span><span class='line'>                                                  <span class="n">jobject</span> <span class="n">thiz</span> <span class="o">)</span>
 </span><span class='line'><span class="o">{</span>
 </span><span class='line'>    <span class="k">return</span> <span class="o">(*</span><span class="n">env</span><span class="o">)-&gt;</span><span class="n">NewStringUTF</span><span class="o">(</span><span class="n">env</span><span class="o">,</span> <span class="s">&quot;Hello from JNI !&quot;</span><span class="o">);</span>
@@ -385,6 +385,8 @@
         <a class="basic-alignment left" href="/blog/2013/06/23/ruzhilianggeyuezongjie/" title="Previous Post: 入职两月总结">&laquo; 入职两月总结</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/06/30/qianxi-jni-2/" title="Next Post: 浅析JNI（二）">浅析JNI（二） &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -423,7 +425,7 @@
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li class='category'><a href='/blog/categories/jni/'>JNI (1)</a></li>
+	        <li class='category'><a href='/blog/categories/jni/'>JNI (2)</a></li>
 <li class='category'><a href='/blog/categories/mac/'>Mac (1)</a></li>
 <li class='category'><a href='/blog/categories/os/'>OS (1)</a></li>
 <li class='category'><a href='/blog/categories/thoughts/'>Thoughts (1)</a></li>
@@ -437,7 +439,11 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/06/26/qianxi-jni/">浅析JNI</a>
+        <a href="/blog/2013/06/30/qianxi-jni-2/">浅析JNI（二）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/26/qianxi-jni/">浅析JNI(一)</a>
       </li>
     
       <li class="post">
@@ -450,10 +456,6 @@
     
       <li class="post">
         <a href="/blog/2013/03/29/lianjiatingsanbuqu/">李安家庭三部曲杂想</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/03/24/mac-test/">Macbook air上手心得</a>
       </li>
     
   </ul>
