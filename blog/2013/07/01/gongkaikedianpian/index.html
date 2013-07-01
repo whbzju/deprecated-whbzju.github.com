@@ -5,15 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>octopress custom-configuration 个性化配置 - 知行录</title>
+  <title>转：公开课点评（收藏用） - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
-个人介绍页面
-分类Categories
-sina微薄分享
-评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
+  <meta name="description" content="原文 !链接 今天在图灵Q群里聊到一些公开课心得。群友隋春宁建议我总结一下、发到社区。我也觉得这些信息可能对公开课同好有帮助，遂总结如下： 我觉得比较好的课程： Algorithms: Design and Analysis, Part 1 和 Part2 都挺好的，算是理论和实践结合得很好、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,7 +18,7 @@ sina微薄分享
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -84,7 +80,7 @@ sina微薄分享
   
   <header>
     
-      <h1 class="entry-title">Octopress Custom-configuration 个性化配置</h1>
+      <h1 class="entry-title">转：公开课点评（收藏用）</h1>
     
     
       <p class="meta">
@@ -100,7 +96,7 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-07-01T22:30:00+08:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -109,78 +105,47 @@ sina微薄分享
   </header>
 
 
-<div class="entry-content"><h1>概述</h1>
+<div class="entry-content"><h1>原文</h1>
 
-<p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
+<p><strong><em><a href="http://www.ituring.com.cn/article/44222">!链接</a></em></strong></p>
 
-<ul>
-<li>导航栏</li>
-<li>个人介绍页面</li>
-<li>分类Categories</li>
-<li>sina微薄分享</li>
-<li>评论</li>
-</ul>
+<p>今天在图灵Q群里聊到一些公开课心得。群友隋春宁建议我总结一下、发到社区。我也觉得这些信息可能对公开课同好有帮助，遂总结如下：</p>
 
+<p>我觉得比较好的课程：</p>
 
-<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+<p>Algorithms: Design and Analysis, Part 1 和 Part2 都挺好的，算是理论和实践结合得很好、难度介于入门和专业之间的课程。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
-</span><span class='line'>disqus_short_name: 
-</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
+<p>Web Intelligence and Big Data 涉及的面比较广，但每个点讲得都不深。如果想对这个领域有个全面了解和认识，可以听一下。不过讲课人略带口音，听起来有点别扭。</p>
 
+<p>几门复杂网络（社交网络、经济网络分析等）课程都相当不错：Networked Life、Social Network Analysis、Social and Economic Networks: Models and Analysis，（还有一门 Networks: Friends, Money, and Bytes，我没听过，但据其他人评价应该不错），我从中学到了很多。而且我想，这里的概念和机器学习的联系也都是很紧密的。但复杂网络（其实大多是图论知识了）和机器学习的交叉，现在做的人还不太多，基本上物理和计算机两边还都是各做各的。这一块未来应该有不小发展空间。</p>
 
-<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
+<p>Image and video processing: From Mars to Hollywood with a stop at the hospital 和 Computational Photography 都是入门课，适合想对图像处理有所了解的人听。讲课这两位老师都是大牛，算是深入浅出吧。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
-</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
+<p>Functional Programming Principles in Scala，语言大师、Scala 创始人 Martin Odersky 亲授。我虽然没跟完，只听和做了前面三到四周的课和作业，但感觉很有收获。编程作业应该和 sicp 蛮相关的。能领会不少函数式编程的精神。</p>
 
+<p>Neural Networks for Machine Learning，这门课由神经网络和深度学习的宗师 Geoffrey Hinton 开设，也是覆盖面很广。如果先对神经网络有一些了解与实践，再来听可能收获会更大。我就是当时听的时候很多东西都没理解，现在仍然在反复看。</p>
 
-<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
+<p>Linear and Discrete Optimization 这门课不错，大多是 Papadimitriou 那本经典教材《Combinatorial Optimization》（有中文版《组合最优化：算法和复杂性》）的内容，建立了线性规划与组合优化之间的联系，对算法设计与分析也颇有帮助。看过之后，会明白图论很多经典算法是如何从线性规划角度推导出来的。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
-</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
-</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
+<p>Introduction to Finance 算是不错的金融学入门课，后几周对我来说有点难。我个人感觉金融思维属于和我当前思维完全不同的另一种思维方式，渐渐习惯之后，可能会对生活中的很多事物和现象有全新的认识。</p>
 
+<p>我觉得比较烂的课程：</p>
 
-<!--more-->
+<p>Game Theory 不推荐。。讲得很乱。问过周围的coursera学友，几乎都有这种感觉。尤其是后几周。</p>
 
+<p>Computational Investing, Part I 不推荐，老师讲得乱七八糟的。</p>
 
-<h1>配置方法</h1>
+<p>Heterogeneous Parallel Programming 不推荐。。同样是讲得乱七八糟。内容主要是 cuda 编程。想学这方面内容，可以去 udacity 学那门 Introduction to Parallel Programming。</p>
 
-<p>博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
+<p>Computing for Data Analysis 这门课不推荐，讲R语言的，但感觉讲得很乱。反正我听完到现在是没什么印象了。</p>
 
-<ul>
-<li>octopress navigation设置</li>
-<li>about页面，需要用rake new_page[&#8220;about&#8221;]，先生成页面。</li>
-<li>octopress 侧边栏设置</li>
-<li>个人介绍</li>
-<li>sina微博分享</li>
-<li>categories</li>
-<li>google analysis</li>
-</ul>
+<p>暂时就这么多。还有一些课，比如：Control of Mobile Robots 、Introduction to Digital Sound Design 、Games without Chance: Combinatorial Game Theory 、Learn to Program: Crafting Quality Code 等，在我来说属于不好不坏的课程。有时间的话，听听亦无不可。</p>
 
+<p>欢迎讨论：）</p>
 
-<h1>参考文献</h1>
+<h1>感想</h1>
 
-<p><a href="http://yanping.me/cn/blog/2012/01/07/theming-and-customization/">ctopress修改主题和自定义样式</a></p>
-
-<p><a href="http://linyi.herokuapp.com/blog/config-octopress.html">octopress的个性化配置</a></p>
-
-<p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">为octopress添加分类(category)列表</a></p>
-
-<p><a href="http://programus.github.com/blog/2012/03/03/add-weibo-sidebar-into-octopress/">为Octopress博客追加新浪微博侧栏</a></p>
+<p>刚刚报名了Web Intelligence and Big Data，看自己什么时候能完成。</p>
 </div>
 
 
@@ -203,12 +168,12 @@ sina微薄分享
   
 
 
-<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+<time datetime="2013-07-01T22:30:00+08:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+    <a class='category' href='/blog/categories/公开课/'>公开课</a>
   
 </span>
 
@@ -224,10 +189,8 @@ sina微薄分享
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/02/23/tryos-xindetihui/" title="Previous Post: Orange's一个操作系统的实现---心得与体会">&laquo; Orange's一个操作系统的实现---心得与体会</a>
+        <a class="basic-alignment left" href="/blog/2013/06/30/qianxi-jni-2/" title="Previous Post: 浅析JNI（二）">&laquo; 浅析JNI（二）</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/24/mac-test/" title="Next Post: Macbook air上手心得">Macbook air上手心得 &raquo;</a>
       
     </p>
   </footer>
@@ -328,8 +291,8 @@ sina微薄分享
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
-        var disqus_url = 'http://whbzju.github.com/blog/2013/03/01/octopress-custom-config/';
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 公开课 | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/公开课/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2013-07-01T22:38:09+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[转：公开课点评（收藏用）]]></title>
+    <link href="http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/"/>
+    <updated>2013-07-01T22:30:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian</id>
+    <content type="html"><![CDATA[<h1>原文</h1>
+
+<p><strong><em><a href="http://www.ituring.com.cn/article/44222">!链接</a></em></strong></p>
+
+<p>今天在图灵Q群里聊到一些公开课心得。群友隋春宁建议我总结一下、发到社区。我也觉得这些信息可能对公开课同好有帮助，遂总结如下：</p>
+
+<p>我觉得比较好的课程：</p>
+
+<p>Algorithms: Design and Analysis, Part 1 和 Part2 都挺好的，算是理论和实践结合得很好、难度介于入门和专业之间的课程。</p>
+
+<p>Web Intelligence and Big Data 涉及的面比较广，但每个点讲得都不深。如果想对这个领域有个全面了解和认识，可以听一下。不过讲课人略带口音，听起来有点别扭。</p>
+
+<p>几门复杂网络（社交网络、经济网络分析等）课程都相当不错：Networked Life、Social Network Analysis、Social and Economic Networks: Models and Analysis，（还有一门 Networks: Friends, Money, and Bytes，我没听过，但据其他人评价应该不错），我从中学到了很多。而且我想，这里的概念和机器学习的联系也都是很紧密的。但复杂网络（其实大多是图论知识了）和机器学习的交叉，现在做的人还不太多，基本上物理和计算机两边还都是各做各的。这一块未来应该有不小发展空间。</p>
+
+<p>Image and video processing: From Mars to Hollywood with a stop at the hospital 和 Computational Photography 都是入门课，适合想对图像处理有所了解的人听。讲课这两位老师都是大牛，算是深入浅出吧。</p>
+
+<p>Functional Programming Principles in Scala，语言大师、Scala 创始人 Martin Odersky 亲授。我虽然没跟完，只听和做了前面三到四周的课和作业，但感觉很有收获。编程作业应该和 sicp 蛮相关的。能领会不少函数式编程的精神。</p>
+
+<p>Neural Networks for Machine Learning，这门课由神经网络和深度学习的宗师 Geoffrey Hinton 开设，也是覆盖面很广。如果先对神经网络有一些了解与实践，再来听可能收获会更大。我就是当时听的时候很多东西都没理解，现在仍然在反复看。</p>
+
+<p>Linear and Discrete Optimization 这门课不错，大多是 Papadimitriou 那本经典教材《Combinatorial Optimization》（有中文版《组合最优化：算法和复杂性》）的内容，建立了线性规划与组合优化之间的联系，对算法设计与分析也颇有帮助。看过之后，会明白图论很多经典算法是如何从线性规划角度推导出来的。</p>
+
+<p>Introduction to Finance 算是不错的金融学入门课，后几周对我来说有点难。我个人感觉金融思维属于和我当前思维完全不同的另一种思维方式，渐渐习惯之后，可能会对生活中的很多事物和现象有全新的认识。</p>
+
+<p>我觉得比较烂的课程：</p>
+
+<p>Game Theory 不推荐。。讲得很乱。问过周围的coursera学友，几乎都有这种感觉。尤其是后几周。</p>
+
+<p>Computational Investing, Part I 不推荐，老师讲得乱七八糟的。</p>
+
+<p>Heterogeneous Parallel Programming 不推荐。。同样是讲得乱七八糟。内容主要是 cuda 编程。想学这方面内容，可以去 udacity 学那门 Introduction to Parallel Programming。</p>
+
+<p>Computing for Data Analysis 这门课不推荐，讲R语言的，但感觉讲得很乱。反正我听完到现在是没什么印象了。</p>
+
+<p>暂时就这么多。还有一些课，比如：Control of Mobile Robots 、Introduction to Digital Sound Design 、Games without Chance: Combinatorial Game Theory 、Learn to Program: Crafting Quality Code 等，在我来说属于不好不坏的课程。有时间的话，听听亦无不可。</p>
+
+<p>欢迎讨论：）</p>
+
+<h1>感想</h1>
+
+<p>刚刚报名了Web Intelligence and Big Data，看自己什么时候能完成。</p>
+]]></content>
+  </entry>
+  
+</feed>
