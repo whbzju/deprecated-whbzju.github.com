@@ -9,7 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="至从看到同学在Github上搭建的blog，深以为这才是我想要的blog，简洁漂亮，静态页面，离线编辑，markdown文档写作格式，git版本控制。所以当论文的事情告一段落，终于有时间来折腾它。起初，我在window平台上搭建，参考该文献配置，其中最大的问题是中文字符支持的问题。 内容概述 &hellip;">
+  <meta name="description" content="一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。 工欲善其事，必先利其器
+首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +78,73 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/04/bochs-config/">Ubuntu 12.04安装bochs 2.3.5</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-04T23:37:00+08:00" pubdate data-updated="true">Feb 4<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/02/04/bochs-config/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。</p>
+
+<blockquote><p>工欲善其事，必先利其器
+首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知，bochs的安装包版本是不带有调试功能的，只有通过编译bochs源码，才能启用debug模式。</p></blockquote>
+
+<h2>bochs 2.3.5源码编译</h2>
+
+<p>网上编译bochs的资料非常多，基本的问题都有解决方案，我重点讲不常见的问题。
+<strong>基本安装步骤</strong></p>
+
+<pre><code>tar vxzf bochs-2.3.5.tar.gz
+cd bochs-2.3.5
+sudo ./configure --enable-debugger --enable-disasm
+sudo make
+sudo make install
+</code></pre>
+
+<p>bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等，需事先安装环境</p>
+
+<pre><code>sudo apt-get install build-essential
+sudo apt-get install xorg-dev //GUI界面
+sudo apt-get install bison
+</code></pre>
+
+<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/02/04/bochs-config/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -287,6 +355,10 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/27/qianxi-jni-3/">浅析JNI（三）</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/01/gongkaikedianpian/">转：公开课点评（收藏用）</a>
       </li>
     
@@ -300,10 +372,6 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
     
       <li class="post">
         <a href="/blog/2013/06/23/ruzhilianggeyuezongjie/">入职两月总结</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/01/android-jni-config/">Android JNI MAC OS环境配置</a>
       </li>
     
   </ul>
