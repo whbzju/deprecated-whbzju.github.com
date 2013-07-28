@@ -9,8 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。 工欲善其事，必先利其器
-首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知， &hellip;">
+  <meta name="description" content="前言 本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +77,66 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/02/23/tryos-xindetihui/">Orange&#8217;s一个操作系统的实现&#8212;心得与体会</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-23T15:57:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/02/23/tryos-xindetihui/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>前言</h1>
+
+<p>本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天，马上要毕业了从把此书匆匆过了一遍。
+不得不说，佩服作者的功力和心态，作者像是一个小孩，认真的为大家讲述他心爱的玩具是如何搭建的。在如今，实现一个这样的操作系统，并没有什么使用价值，只能作为学习的demo。为了搭建这个玩具，作者需要去了解x86架构的运行原理，内存的分页分段实现机制，8259A中断控制的部分原理和使用方法，还有文件系统、硬盘等等，我想当当是阅读这些设备组件的文档，就要耗去许多功夫，更别说调试的功夫。故在这种没有外界事物驱动的项目，若非有极大的热忱，是无论如何也坚持不下去。而我却连读完这本书这件事情都拖了3年，想来真是惭愧。</p>
+
+<h1>内容概述</h1>
+
+<p>整本书分为上下两篇，上篇的内容更为底层一些，因为本书是真正实现一个系统，所以上篇中有很多内容是有关硬件细节的，需要一定的汇编基础。下篇的内容则和我们平时接触的操作系统书籍有些类似，像IPC、文件系统、内存管理等更高级的话题，以C语言实现为主，也有部分汇编代码。内容大致分为：
+* 环境搭建&#8212;bochs、linux
+* cpu相关&#8212;引导扇区、保护模式
+* 内核相关&#8212;内核雏形、进程、输入输出
+* 进程通信IPC
+* 文件系统&#8212;硬盘驱动和简单的文件系统
+* 内存管理&#8212;fork、MM的简单实现
+* 让OS能够部署到真正的机器中
+本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。</p>
+
+<hr />
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/02/23/tryos-xindetihui/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -355,6 +414,10 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/28/renlianshibiezongjie/">人脸识别实践总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/27/qianxi-jni-3/">浅析JNI（三）</a>
       </li>
     
@@ -368,10 +431,6 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
     
       <li class="post">
         <a href="/blog/2013/06/26/qianxi-jni/">浅析JNI(一)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/23/ruzhilianggeyuezongjie/">入职两月总结</a>
       </li>
     
   </ul>

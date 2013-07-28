@@ -9,9 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="没想到这个话题写到第三篇博客，写blog真费时，我的周末没了。接上文继续：
-PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在公司写的东西不能带出来，每次要写这方面的资料，必须重写一些demo进行说明，重复劳动，没有动力。 内容概述 JNI数据类型
-JNIEnv介绍 JNI数据类型介绍 &hellip;">
+  <meta name="description" content="概述 前段时间接触了一阵子人脸识别，只能说是初窥门道，在这里做个总结。本文不涉及具体的算法原理，因为我都是参考别人的资料，只认为无法写的更好，在这边做个归纳总结。
+现需求如下：从摄像头视频中识别出你自己或朋友的人脸 要实现这个需求，大体分为两个步骤，分别为人脸检测和人脸识别， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,139 @@ JNIEnv介绍 JNI数据类型介绍 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/28/renlianshibiezongjie/">人脸识别实践总结</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-28T10:06:00+08:00" pubdate data-updated="true">Jul 28<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/07/28/renlianshibiezongjie/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>概述</h1>
+
+<p>前段时间接触了一阵子人脸识别，只能说是初窥门道，在这里做个总结。本文不涉及具体的算法原理，因为我都是参考别人的资料，只认为无法写的更好，在这边做个归纳总结。
+现需求如下：<strong><em>从摄像头视频中识别出你自己或朋友的人脸</em></strong></p>
+
+<p>要实现这个需求，大体分为两个步骤，分别为人脸检测和人脸识别，即先要从摄像头中识别出人脸，即人脸检测，其次对检测到的人脸进行识别，即人脸识别。本文基于Opencv的人脸算法实现。</p>
+
+<h2>人脸检测流程</h2>
+
+<ul>
+<li>选取特征（本文采用Haar-like特征）</li>
+<li>选取分类器算法，训练人脸分类器（本文采用Adaboost级联分类器）</li>
+<li>对图像进行人脸检测</li>
+</ul>
+
+
+<h2>人脸识别流程</h2>
+
+<ul>
+<li>选取人脸识别算法（本文包括PCA、FDA和LBP）</li>
+<li>训练识别模型</li>
+<li>对目标进行识别</li>
+</ul>
+
+
+<h1>Opencv相关资料介绍</h1>
+
+<p>opencv在2.4后引入了人脸识别相关模块，原来只有人脸检测部分。在Opencv官网，有较详细的介绍，看
+<a href="http://docs.opencv.org/trunk/modules/contrib/doc/facerec/">!目录</a>，在该目录中重点要看这篇<a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html">!Face Recognition with OpenCV</a>.</p>
+
+<p>这应该是一个德国人写的，在教程中他提到了3个算法：</p>
+
+<ul>
+<li>EigenFaces</li>
+<li>FisherFace</li>
+<li>Local Binary Patterns Histograms</li>
+</ul>
+
+
+<p>前面两个算法都是利用子空间的原理，有一定的相似性，分别以PCA和LDA为基础。后者以特征选取为主，做法思路都不大一样，建议分开看。该教程中对算法的描述过于简洁，不适合初学者看，建议寻找相关资料进一步阅读。</p>
+
+<h2>PCA-主成分分析法</h2>
+
+<p>PCA在很多地方都有应用，是一个十分简单有效的方法。其思想概括起来即降维，它认为原始数据中包含了大量的噪音和冗余，通过协方差矩阵的对角化可以得到一个子空间，该子空间的维度大大降低，却神奇的保留了原始数据中的显著特征。</p>
+
+<p>该算法的具体原理可参考斯坦福大学的公开课，Andrew.Ng的机器学习课程，里面有一章节专门讲pca，若觉得看视频太慢，可以直接看讲义，讲的很清楚。国内有几个博客作者对它进行了翻译，推荐：</p>
+
+<p><a href="http://www.cnblogs.com/jerrylead/archive/2011/04/18/2020209.html">!主成分分析（Principal components analysis）-最大方差解释</a></p>
+
+<p><a href="http://www.cnblogs.com/LeftNotEasy/archive/2011/01/08/lda-and-pca-machine-learning.html">!机器学习中的数学(4)-线性判别分析（LDA）, 主成分分析(PCA)</a></p>
+
+<p>该算法涉及较多的线性代数知识，忘掉的同学建议复习下相关内容。</p>
+
+<h2>LDA-线性判别分析</h2>
+
+<p>fisherface的FDA是在LDA基础之上的一种算法。关于线性判别的思想如下：它认为在PCA中，PCA把数据作为一个整体来看，即数据源中所有的显著特征都会被保留下来，如果一个人的脸在强光下和弱光下，pca生成的子空间有显著的差异，而他们却是同一张脸。LDA的思想是寻找一个分割平面（在二维中即直线），来区分两种不同类别的数据，既能够区分两个不同的人脸，进行归类。因此，它的目标就是怎么要找到这个平面，达到最好的区分效果。</p>
+
+<p>同样，该算法的具体原理还是推荐Andrew.Ng的机器学习公开课。国内也有相关介绍，但是他们的数学推导让我不满意。</p>
+
+<p><a href="http://www.cnblogs.com/jerrylead/archive/2011/04/21/2024384.html">!线性判别分析（Linear Discriminant Analysis）（一）</a>
+<a href="http://www.cnblogs.com/jerrylead/archive/2011/04/21/2024389.html">!线性判别分析（Linear Discriminant Analysis）（二）</a></p>
+
+<h2>LBPH</h2>
+
+<p>该算法较上面二者容易理解，这里不做详细介绍，大家自己查找相关资料即可。</p>
+
+<h2>Demo</h2>
+
+<p>上面教程中提到几个算法opencv中都有例子实现，当然要做2.4以上。教程讲了demo的位置和具体的使用。
+所有的Demo需要一个人脸库，教程中提供了几个，可以下载。下载下来的人脸库需要预处理，即打上标签，作者提供了python脚步，大家可以使用。</p>
+
+<p>有个demo值得关注，它实现了我们的需求，它有个专门的教程：<a href="http://docs.opencv.org/trunk/modules/contrib/doc/facerec/tutorial/facerec_video_recognition.html">!Face Recognition in Videos with OpenCV</a>. 不过要想识别自己的脸，必须将自己的脸裁剪下来保存到人脸库中进行训练。</p>
+
+<p>我不想自己拍照片去裁剪，我的做法是利用demo中的人脸检测算法，将我的人脸检测到，然后保存成灰度图，放到人脸库中。PS：这里有个问题，opencv自带的人脸检测分类器有可能会误捡，会把空白的墙壁当做人脸。我的做法是，在视频中指定一个矩形框，在这个矩形框中进行人脸检测，这样可以大大降低误捡率。实际操作中可以调整位置，让自己的人脸出现在矩形框中。</p>
+
+<h1>Haar-like特征Adaboost级联分类器</h1>
+
+<p>完成了人脸识别的Demo验证，大家一定很好奇人脸检测是怎么实现的。opencv里面自带的检测算法原至两篇论文：
+P. Viola and M. Jones.  Rapid object detection using a boosted cascade of simple features.
+R. Lienhart and J. Maydt.  An Extended Set of Haar-like Features for Rapid Object Detection.</p>
+
+<h2>整体感觉&#8211;如何训练自己的分类器</h2>
+
+<p>大家可以参考这篇<a href="http://wenku.baidu.com/view/39419a3567ec102de2bd891b.html">!教程</a>，利用opencv自带的例子训练一个分类器感觉感觉。
+训练分类器会遇到很多问题，人脸样本和非人类样本的比例有较高的要求，stage越高越难训练，训练时间也会随之快速增长，而且效果还不能保证，博主训练出来的分类器和opencv自带的分类器效果是没法比啊！</p>
+
+<h2>算法原理</h2>
+
+<p>我不打算这这里描述它的原理，首先是这方面资料已经很多，我无法做到写的更好，其次是展开后篇幅太长，内容太多，我不想写了，哈哈。
+若想较好的理解，直接看上面提到的两篇论文。若英文水平不行，可以看北大有个学生写的毕业论文：基于 AdaBoost 算法的人脸检测，作者：赵楠，还不错。</p>
+
+<p>Haar-like特征需要理解积分图的概念，Adaboost包括弱分类器、强分类器和级联分类器。其中级联分类器较比较麻烦。</p>
+
+<h1>总结</h1>
+
+<p>Opencv是个好东西，有个直接能运行的demo，比光秃秃的理论好多了，依靠它搭个自娱自乐的小工程没问题。人脸识别的水很深，本文提到的算法是opencv里面就有的，还有很多算法待各位自己有兴趣去研究。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1599,66 +1731,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/23/tryos-xindetihui/">Orange&#8217;s一个操作系统的实现&#8212;心得与体会</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-23T15:57:00+08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2013</time>
-        
-         | <a href="/blog/2013/02/23/tryos-xindetihui/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>前言</h1>
-
-<p>本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天，马上要毕业了从把此书匆匆过了一遍。
-不得不说，佩服作者的功力和心态，作者像是一个小孩，认真的为大家讲述他心爱的玩具是如何搭建的。在如今，实现一个这样的操作系统，并没有什么使用价值，只能作为学习的demo。为了搭建这个玩具，作者需要去了解x86架构的运行原理，内存的分页分段实现机制，8259A中断控制的部分原理和使用方法，还有文件系统、硬盘等等，我想当当是阅读这些设备组件的文档，就要耗去许多功夫，更别说调试的功夫。故在这种没有外界事物驱动的项目，若非有极大的热忱，是无论如何也坚持不下去。而我却连读完这本书这件事情都拖了3年，想来真是惭愧。</p>
-
-<h1>内容概述</h1>
-
-<p>整本书分为上下两篇，上篇的内容更为底层一些，因为本书是真正实现一个系统，所以上篇中有很多内容是有关硬件细节的，需要一定的汇编基础。下篇的内容则和我们平时接触的操作系统书籍有些类似，像IPC、文件系统、内存管理等更高级的话题，以C语言实现为主，也有部分汇编代码。内容大致分为：
-* 环境搭建&#8212;bochs、linux
-* cpu相关&#8212;引导扇区、保护模式
-* 内核相关&#8212;内核雏形、进程、输入输出
-* 进程通信IPC
-* 文件系统&#8212;硬盘驱动和简单的文件系统
-* 内存管理&#8212;fork、MM的简单实现
-* 让OS能够部署到真正的机器中
-本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。</p>
-
-<hr />
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/23/tryos-xindetihui/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1708,6 +1780,10 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/28/renlianshibiezongjie/">人脸识别实践总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/27/qianxi-jni-3/">浅析JNI（三）</a>
       </li>
     
@@ -1721,10 +1797,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
     
       <li class="post">
         <a href="/blog/2013/06/26/qianxi-jni/">浅析JNI(一)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/23/ruzhilianggeyuezongjie/">入职两月总结</a>
       </li>
     
   </ul>
