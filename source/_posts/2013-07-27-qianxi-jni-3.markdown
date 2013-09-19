@@ -16,14 +16,14 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 ##JNI数据类型介绍
 1. 基本数据类型
 先来看一张图：
-![JNI基本数据类型](images/jni_base_type.png)
+![JNI基本数据类型](/images/jni_base_type.png)
 
 可以明显的看出JNI的数据类型只是比java的基本数据类型多了个j。
 
 
 2. 引用数据类型
 同样看图：
-![JNI引用数据类型图](images/jni_ref_type.png)
+![JNI引用数据类型图](/images/jni_ref_type.png)
 
 可以看出所有的引用类型都是jobject，和java类似。不过jni里面对jstring单独做了处理，就叫jstring类型，估计是用的频率太高，如果也是jobject会涉及到大量的“装箱拆箱“吧。
 
