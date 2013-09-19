@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: C | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/c/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2013-09-19T23:32:15+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[C专家编程摘要]]></title>
+    <link href="http://whbzju.github.com/blog/2013/09/19/c-yuyuan/"/>
+    <updated>2013-09-19T23:27:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/09/19/c-yuyuan</id>
+    <content type="html"><![CDATA[<p>上个月经人推荐，看了这本《C专家编程》，大赞，推荐用C的人都去看看。除了能从历史上了解    C语言的一些语法，还能学到一些常用规范。特别是指针和数组部分，很有收获。
+用一张思维导向图总结
+<img src="/images/C_language_essential.png" alt="C语言精要" /></p>
+]]></content>
+  </entry>
+  
+</feed>
