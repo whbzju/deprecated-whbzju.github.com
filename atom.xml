@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-12-27T23:11:17+08:00</updated>
+  <updated>2013-12-28T19:34:40+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -65,8 +65,6 @@
 <h1>总结</h1>
 
 <p>计步器算法的基本思想大致如此，最终产品的表现还要不断打磨，针对异常场景进行优化。最后，终端设备上应用不可避免的是功耗问题，如果开了计步器，你的手机用半天就没电，估计没人愿意用。目前市场上许多低功耗计步器算法，大多以降低精度为代价。目前看来只有三星采用高通的sensorhub方案有较好的表现。</p>
-
-<p>PS: 此文的细节与本人所在公司利益相关，无法透露更多细节，请见谅。</p>
 
 <p>参考：</p>
 
