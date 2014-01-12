@@ -35,3 +35,6 @@ scikit需要numpy和scipy两个重要的组件，在scipy官网找到[安装教�
 	of Xcode (5.0.2).
 	
 
+##未完待续
+	
+
