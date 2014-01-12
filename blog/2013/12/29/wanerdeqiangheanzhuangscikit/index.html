@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: OS - 知行录</title>
+  <title>Mac OS 10.9 安装scikit--万恶的墙 - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="Category: OS">
+  <meta name="description" content="前言 工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
+安装教程 悲剧从此发生。。。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.comblog/categories/os/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2013/12/29/wanerdeqiangheanzhuangscikit/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -76,36 +77,117 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: OS</h1>
+    
+      <h1 class="entry-title">Mac OS 10.9 安装scikit--万恶的墙</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-29T14:26:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><h2>前言</h2>
 
-  
-  <h2>2013</h2>
+<p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
+<a href="https://gist.github.com/stared/4730202">安装教程</a></p>
 
-<article>
-  
-<h1><a href="/blog/2013/03/24/mac-test/">Macbook air上手心得</a></h1>
-<time datetime="2013-03-24T00:33:00+08:00" pubdate><span class='month'>Mar</span> <span class='day'>24</span> <span class='year'>2013</span></time>
+<p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/mac/'>Mac</a>, <a class='category' href='/blog/categories/os/'>OS</a></span>
-</footer>
+<h2>源码安装</h2>
 
+<p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
+scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
 
-</article>
+<p>在安装scipy的提示</p>
 
+<pre><code>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:
+</code></pre>
+
+<p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
+
+<h2>brew 撞墙怎么办</h2>
+
+<p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
+
+<h2>不要轻易更新系统</h2>
+
+<p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
+
+<pre><code>make: *** [bootstrap] Error 2
+Error: Homebrew doesn't know what compiler versions ship with your version
+of Xcode (5.0.2).
+</code></pre>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">阿波</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-29T14:26:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/12/27/pedometer/" title="Previous Post: 如何在手机上实现高精度及自适应多种场景的计步器算法">&laquo; 如何在手机上实现高精度及自适应多种场景的计步器算法</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/01/12/2013dushu/" title="Next Post: 2013年读过的书">2013年读过的书 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -199,7 +281,10 @@
       var disqus_shortname = 'hbwu';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://whbzju.github.com/blog/2013/12/29/wanerdeqiangheanzhuangscikit/';
+        var disqus_url = 'http://whbzju.github.com/blog/2013/12/29/wanerdeqiangheanzhuangscikit/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

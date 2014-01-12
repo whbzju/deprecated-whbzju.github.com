@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2013-12-28T19:34:40+08:00</updated>
+  <updated>2014-01-12T23:15:27+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2013年读过的书]]></title>
+    <link href="http://whbzju.github.com/blog/2014/01/12/2013dushu/"/>
+    <updated>2014-01-12T23:09:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/01/12/2013dushu</id>
+    <content type="html"><![CDATA[<h2>技术类</h2>
+
+<h3>C++</h3>
+
+<ol>
+<li>esstianl c++，大学的时候读过，忘的差不多了。这次项目用到c++，为了快速上手，重读了一遍。评价五星。</li>
+<li>c++ prime。至今还没有通读，处于当手册使用的阶段，书中的例子很赞，可以作为c++ cookbook。</li>
+<li>effective c++。强烈推荐，不解释。</li>
+<li>effective stl，因为effective c++才买的，看了感觉和上一本的级别差太多，不推荐。</li>
+</ol>
+
+
+<p>这里推荐c++ reference这个网站，有很多优秀例子代码，是很好的参考对象。同时，该网站支持在线编译运行，很赞。</p>
+
+<h3>C</h3>
+
+<ol>
+<li>C专家编程。很赞，为它写了一篇简单的博客。</li>
+</ol>
+
+
+<h3>Android</h3>
+
+<ol>
+<li>深入Android源码分析，卷一，邓平凡。强烈推荐，作者功力深厚，庖丁解牛。目前通读一遍，对JNI、Binder通信的理解加深许多。而像SurfaceFlinge这样的系统还没有很好的理解。</li>
+<li>深入Android源码分析，卷二，同。</li>
+</ol>
+
+
+<h3>机器学习</h3>
+
+<ol>
+<li>斯坦福大学机器学习课程及讲义。入门的好材料。</li>
+<li>集体智慧编程。基于Python的机器学习常见算法教程。</li>
+</ol>
+
+
+<h3>代码质量、设计</h3>
+
+<ol>
+<li>设计模式。GOF的，看一遍，感觉理解了，很快又会忘掉不少，每次做完项目重新看，都会有收获。</li>
+<li>google开源编程规范。</li>
+</ol>
+
+
+<h3>其他</h3>
+
+<ol>
+<li>自己动手实现操作系统。</li>
+<li>深入理解C#</li>
+<li>effective Java</li>
+</ol>
+
+
+<h2>非技术</h2>
+
+<ol>
+<li>德川家康&#8212;长篇推荐，感慨日本人名字的神奇</li>
+<li>冰与火之歌&#8212;魔龙狂舞，马丁爷爷一定要长命百岁</li>
+<li>浪潮之巅&#8212;-推荐</li>
+<li>活着活着就老了，冯唐</li>
+<li>小通鉴，冯唐</li>
+<li>人为什么活着，王小波</li>
+<li>地久天长，王小波</li>
+<li>走出软件磨坊</li>
+<li>精益创业</li>
+<li>创业四步法</li>
+</ol>
+
+
+<p>PS：今年上的最多的网站是知乎，感谢各位大牛热心分享知识。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mac OS 10.9 安装scikit--万恶的墙]]></title>
+    <link href="http://whbzju.github.com/blog/2013/12/29/wanerdeqiangheanzhuangscikit/"/>
+    <updated>2013-12-29T14:26:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2013/12/29/wanerdeqiangheanzhuangscikit</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
+<a href="https://gist.github.com/stared/4730202">安装教程</a></p>
+
+<p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
+
+<h2>源码安装</h2>
+
+<p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
+scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
+
+<p>在安装scipy的提示</p>
+
+<pre><code>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:
+</code></pre>
+
+<p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
+
+<h2>brew 撞墙怎么办</h2>
+
+<p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
+
+<h2>不要轻易更新系统</h2>
+
+<p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
+
+<pre><code>make: *** [bootstrap] Error 2
+Error: Homebrew doesn't know what compiler versions ship with your version
+of Xcode (5.0.2).
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何在手机上实现高精度及自适应多种场景的计步器算法]]></title>
