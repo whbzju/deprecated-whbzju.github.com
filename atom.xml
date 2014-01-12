@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-01-12T23:15:27+08:00</updated>
+  <updated>2014-01-12T23:19:40+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -128,6 +128,8 @@ scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="ht
 Error: Homebrew doesn't know what compiler versions ship with your version
 of Xcode (5.0.2).
 </code></pre>
+
+<h2>未完待续</h2>
 ]]></content>
   </entry>
   
