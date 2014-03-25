@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: 公开课 - 知行录</title>
+  <title>Introduction to android adb - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="Category: 公开课">
+  <meta name="description" content="Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you must already familiar with adb shell,adb logcat, or maybe &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.comblog/categories/公开课/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2014/03/25/introduction-of-android-adb/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -76,36 +76,168 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: 公开课</h1>
+    
+      <h1 class="entry-title">Introduction to Android Adb</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-25T21:31:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you must already familiar with <code>adb shell</code>,<code>adb logcat</code>, or maybe you are only use eclipse, you should you that behind DDMS there is adb.</p>
 
-  
-  <h2>2013</h2>
+<h1>ADB overview</h1>
 
-<article>
-  
-<h1><a href="/blog/2013/07/01/gongkaikedianpian/">转：公开课点评（收藏用）</a></h1>
-<time datetime="2013-07-01T22:30:00+08:00" pubdate><span class='month'>Jul</span> <span class='day'>01</span> <span class='year'>2013</span></time>
+<p>We can find adb description from android developer website.</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/公开课/'>公开课</a></span>
-</footer>
+<blockquote><p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p></blockquote>
+
+<p>As introduction by google, it has three key component.</p>
+
+<blockquote><ul>
+<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
+<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
+<li>A daemon, which runs as a background process on each emulator or device instance.</li>
+</ul>
+</blockquote>
+
+<h1>Basic communication model</h1>
+
+<p>We can make it clear through this picture.
+<img src="/images/2014-03-25_adb_overview.png" alt="adb overview" /></p>
+
+<ul>
+<li><p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p></li>
+<li><p>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</p></li>
+<li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
+</ul>
 
 
-</article>
+<h1>Command Detail</h1>
 
+<p>Please reference <a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
+
+<h1>How can I connect to Android with ADB over TCP?</h1>
+
+<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:</p>
+
+<h3>if your device is rooted</h3>
+
+<p>According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
+
+<hr />
+
+<p><code>su</code></p>
+
+<p><code>setprop service.adb.tcp.port 5555</code></p>
+
+<p><code>stop adbd</code></p>
+
+<p><code>start adbd</code></p>
+
+<hr />
+
+<p>And you can disable it and return ADB to listening on USB with</p>
+
+<p><code>setprop service.adb.tcp.port -1</code></p>
+
+<p><code>stop adbd</code></p>
+
+<p><code>start adbd</code></p>
+
+<h3>if you have USB access already</h3>
+
+<p>It is even easier to switch to using Wi-Fi, if you already have USB. From a command line on the computer that has the device connected via USB, issue the commands</p>
+
+<p><code>adb tcpip 5555</code></p>
+
+<p><code>adb connect IP:5555</code></p>
+
+<h3>return to listening over USB</h3>
+
+<p>Apps to automate the process by:</p>
+
+<p><code>adb usb</code></p>
+
+<h3>other</h3>
+
+<p>There are also several apps on Google Play that automate this process.</p>
+
+<h1>Reference</h1>
+
+<p><a href="http://events.linuxfoundation.org/images/stories/pdf/lf_abs12_kobayashi.pdf">lf_abs12_kobayashi</a></p>
+
+<p><a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">阿波</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-25T21:31:00+08:00" pubdate data-updated="true">Mar 25<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/01/12/2013dushu/" title="Previous Post: 2013年读过的书">&laquo; 2013年读过的书</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -188,7 +320,10 @@
       var disqus_shortname = 'hbwu';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://whbzju.github.com/blog/2014/03/25/introduction-of-android-adb/';
+        var disqus_url = 'http://whbzju.github.com/blog/2014/03/25/introduction-of-android-adb/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
