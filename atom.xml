@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-03-25T22:30:10+08:00</updated>
+  <updated>2014-03-30T12:26:26+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Introduction to android adb]]></title>
-    <link href="http://whbzju.github.com/blog/2014/03/25/introduction-of-android-adb/"/>
-    <updated>2014-03-25T21:31:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2014/03/25/introduction-of-android-adb</id>
+    <title type="html"><![CDATA[introduction to android adb]]></title>
+    <link href="http://whbzju.github.com/blog/2014/03/30/introduction-to-android-adb/"/>
+    <updated>2014-03-30T12:23:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/03/30/introduction-to-android-adb</id>
     <content type="html"><![CDATA[<p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you must already familiar with <code>adb shell</code>,<code>adb logcat</code>, or maybe you are only use eclipse, you should you that behind DDMS there is adb.</p>
 
 <h1>ADB overview</h1>
@@ -92,6 +92,25 @@
 <p>Apps to automate the process by:</p>
 
 <p><code>adb usb</code></p>
+
+<h3>proctocol</h3>
+
+<ul>
+<li>server
+
+<ul>
+<li>success: OKAY</li>
+<li>fail: FAIL</li>
+</ul>
+</li>
+<li>client
+
+<ul>
+<li>Message component with head which is 4 bytes indicate length of message, and follow is content.</li>
+</ul>
+</li>
+</ul>
+
 
 <h3>other</h3>
 
