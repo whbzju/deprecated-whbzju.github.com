@@ -6,13 +6,13 @@ comments: true
 categories: 
 ---
 
-Recently, I'm interesting how android adb works. If you are an Android programer, you must already familiar with `adb shell`,`adb logcat`, or maybe you are only use eclipse, you should you that behind DDMS there is adb.
+Recently, I'm interesting how android adb works. If you are an Android programer, you certainly familiar with `adb shell`,`adb logcat`. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.
 
 #ADB overview
 We can find adb description from android developer website.
 >Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:
 
-As introduction by google, it has three key component.
+As introducted by google, it has three key components.
 
 >* A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.
 >* A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.
