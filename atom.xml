@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-03-30T12:26:26+08:00</updated>
+  <updated>2014-04-04T19:38:58+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -18,7 +18,7 @@
     <link href="http://whbzju.github.com/blog/2014/03/30/introduction-to-android-adb/"/>
     <updated>2014-03-30T12:23:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2014/03/30/introduction-to-android-adb</id>
-    <content type="html"><![CDATA[<p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you must already familiar with <code>adb shell</code>,<code>adb logcat</code>, or maybe you are only use eclipse, you should you that behind DDMS there is adb.</p>
+    <content type="html"><![CDATA[<p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
 
 <h1>ADB overview</h1>
 
@@ -26,7 +26,7 @@
 
 <blockquote><p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p></blockquote>
 
-<p>As introduction by google, it has three key component.</p>
+<p>As introducted by google, it has three key components.</p>
 
 <blockquote><ul>
 <li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
