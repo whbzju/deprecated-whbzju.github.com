@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: vim | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2014-04-08T22:48:41+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Vim tips]]></title>
+    <link href="http://whbzju.github.com/blog/2014/04/07/vim-tips/"/>
+    <updated>2014-04-07T10:00:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/04/07/vim-tips</id>
+    <content type="html"><![CDATA[<p>收集我个人学习使用Vim的小技巧</p>
+
+<h2>快速替换</h2>
+
+<ul>
+<li>语法: [addr]s/源字符串/目的字符串/[option]</li>
+<li>[addr] 表示检索范围，省略时表示当前行。如：
+
+<ul>
+<li>“1，20” ：表示从第1行到20行；</li>
+<li>“%” ：表示整个文件，同“1,$”；</li>
+<li>“. ,$” ：从当前行到文件尾；</li>
+</ul>
+</li>
+<li>s：正则表达式中替换命令</li>
+<li>[option] : 表示操作类型
+
+<ul>
+<li>g 表示全局替换;</li>
+<li>c 表示进行确认</li>
+<li>p 表示替代结果逐行显示（Ctrl + L恢复屏幕）</li>
+<li>i 不区分大小写</li>
+<li>省略option时仅对每行第一个匹配串进行替换；</li>
+</ul>
+</li>
+<li>如果在源字符串和目的字符串中出现特殊字符，需要用”\”转义</li>
+</ul>
+
+
+<p>例子：将多个空格换成一个空格: %s/  */ /g</p>
+
+<h2>多文件打开</h2>
+
+<p>打开：split file<br/>
+切换窗口：双击ctrl+w，或ctrl+w+上下左右键</p>
+]]></content>
+  </entry>
+  
+</feed>
