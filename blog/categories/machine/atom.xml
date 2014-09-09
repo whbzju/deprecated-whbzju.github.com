@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Machine | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/machine/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2014-09-09T22:43:17+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[机器学习实践小札]]></title>
+    <link href="http://whbzju.github.com/blog/2014/07/27/machine-learning-summary/"/>
+    <updated>2014-07-27T09:05:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/07/27/machine-learning-summary</id>
+    <content type="html"><![CDATA[<h1>概述</h1>
+
+<ul>
+<li>预研</li>
+<li>快速实验</li>
+<li>常见问题</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

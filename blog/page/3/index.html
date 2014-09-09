@@ -9,7 +9,11 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="前言 本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange&#8217;s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天， &hellip;">
+  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
+个人介绍页面
+分类Categories
+sina微薄分享
+评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +81,92 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/01/octopress-custom-config/">Octopress Custom-configuration 个性化配置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-01T09:25:00+08:00" pubdate data-updated="true">Mar 1<span>st</span>, 2013</time>
+        
+         | <a href="/blog/2013/03/01/octopress-custom-config/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>概述</h1>
+
+<p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
+
+<ul>
+<li>导航栏</li>
+<li>个人介绍页面</li>
+<li>分类Categories</li>
+<li>sina微薄分享</li>
+<li>评论</li>
+</ul>
+
+
+<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
+</span><span class='line'>disqus_short_name: 
+</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
+</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
+</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
+</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
+</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/01/octopress-custom-config/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -456,12 +546,16 @@ return 0;
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>Learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>Machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/27/machine-learning-summary/">机器学习实践小札</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
@@ -477,10 +571,6 @@ return 0;
     
       <li class="post">
         <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/03/30/introduction-to-android-adb/">introduction to android adb</a>
       </li>
     
   </ul>
