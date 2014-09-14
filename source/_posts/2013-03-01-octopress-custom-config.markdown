@@ -45,6 +45,9 @@ default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html
 * categories
 * google analysis
 
+# 建议
+最好把里面的twitter相关的信息全部删掉，否则由于GFW的原因，将会造成页面load很慢。同理，修改定制文件/source/_includes/custom/head.html 把google的自定义字体去掉
+
 #参考文献
 [ctopress修改主题和自定义样式](http://yanping.me/cn/blog/2012/01/07/theming-and-customization/)
 
