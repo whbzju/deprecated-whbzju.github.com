@@ -4,7 +4,7 @@
   <title><![CDATA[Category: octopress | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-09-14T20:46:12+08:00</updated>
+  <updated>2014-09-14T21:00:40+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -73,6 +73,10 @@ disqus_show_comment_count:
 <li>google analysis</li>
 </ul>
 
+
+<h1>建议</h1>
+
+<p>最好把里面的twitter相关的信息全部删掉，否则由于GFW的原因，将会造成页面load很慢。同理，修改定制文件/source/_includes/custom/head.html 把google的自定义字体去掉</p>
 
 <h1>参考文献</h1>
 
