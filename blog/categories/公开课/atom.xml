@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 公开课 | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/公开课/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-09-14T21:00:40+08:00</updated>
+  <updated>2014-11-22T23:44:18+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -18,8 +18,7 @@
     <link href="http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/"/>
     <updated>2013-07-01T22:30:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian</id>
-    <content type="html"><![CDATA[<h1>原文</h1>
-
+    <content type="html"><![CDATA[<h1 id="section">原文</h1>
 <p><strong><em><a href="http://www.ituring.com.cn/article/44222">!链接</a></em></strong></p>
 
 <p>今天在图灵Q群里聊到一些公开课心得。群友隋春宁建议我总结一下、发到社区。我也觉得这些信息可能对公开课同好有帮助，遂总结如下：</p>
@@ -56,18 +55,16 @@
 
 <p>欢迎讨论：）</p>
 
-<h1>讨论部分精华集合</h1>
+<h1 id="section-1">讨论部分精华集合</h1>
 
 <ol>
-<li>还有一门是刚刚结课的UW的Hardware/Software Interface，所讲的内容和用的教材就是CS：APP，讲课和作业也相当好，尤其是其中的几个Lab设计的都很精巧，起码学完后大大提升gdb调试功力。在课程的讨论版中也是多溢美之词。个人认为这门课是仅次于UW的Dan Grossman开的Programming Language的CS领域的第二好课</li>
-<li>UW的Prof. Grossman有一个Programming Languages非常不错，今年二月份一直跟的，对FP的理论讲解比Scala那个要详细得多，强烈推荐哇。这门课主要通过ML，Racket和Ruby三门语言，向大家介绍Functional Programming里面的关键特性。ML部分是让大家熟悉基本的FP特性；Racket部分会让你独立用Racket写一个简单的子语言解释器，包括实现闭包和宏；Ruby部分详细对比FP和OOP的区别，会让大家写一个小游戏。最后会让大家用三门语言实现同一个跟计算几何相关的程序，来比较各种设计方法的优劣和其之间的权衡。</li>
-<li>最经典的课当属Andrew Ng的machine learning和Keller的PGM。
+  <li>还有一门是刚刚结课的UW的Hardware/Software Interface，所讲的内容和用的教材就是CS：APP，讲课和作业也相当好，尤其是其中的几个Lab设计的都很精巧，起码学完后大大提升gdb调试功力。在课程的讨论版中也是多溢美之词。个人认为这门课是仅次于UW的Dan Grossman开的Programming Language的CS领域的第二好课</li>
+  <li>UW的Prof. Grossman有一个Programming Languages非常不错，今年二月份一直跟的，对FP的理论讲解比Scala那个要详细得多，强烈推荐哇。这门课主要通过ML，Racket和Ruby三门语言，向大家介绍Functional Programming里面的关键特性。ML部分是让大家熟悉基本的FP特性；Racket部分会让你独立用Racket写一个简单的子语言解释器，包括实现闭包和宏；Ruby部分详细对比FP和OOP的区别，会让大家写一个小游戏。最后会让大家用三门语言实现同一个跟计算几何相关的程序，来比较各种设计方法的优劣和其之间的权衡。</li>
+  <li>最经典的课当属Andrew Ng的machine learning和Keller的PGM。 
 我还看了NLP的两门课，都很不错。</li>
 </ol>
 
-
-<h1>感想</h1>
-
+<h1 id="section-2">感想</h1>
 <p>刚刚报名了Web Intelligence and Big Data，看自己什么时候能完成。</p>
 ]]></content>
   </entry>

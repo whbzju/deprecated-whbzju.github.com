@@ -29,7 +29,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -106,15 +105,14 @@
   </header>
 
 
-<div class="entry-content"><h2>前言</h2>
+<div class="entry-content"><h2 id="section">前言</h2>
 
 <p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
 <a href="https://gist.github.com/stared/4730202">安装教程</a></p>
 
 <p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
 
-<h2>源码安装</h2>
-
+<h2 id="section-1">源码安装</h2>
 <p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
 scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
 
@@ -125,12 +123,10 @@ scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="ht
 
 <p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
 
-<h2>brew 撞墙怎么办</h2>
-
+<h2 id="brew-">brew 撞墙怎么办</h2>
 <p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
 
-<h2>不要轻易更新系统</h2>
-
+<h2 id="section-2">不要轻易更新系统</h2>
 <p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
 
 <pre><code>make: *** [bootstrap] Error 2
@@ -138,7 +134,8 @@ Error: Homebrew doesn't know what compiler versions ship with your version
 of Xcode (5.0.2).
 </code></pre>
 
-<h2>未完待续</h2>
+<h2 id="section-3">未完待续</h2>
+
 </div>
 
 
@@ -219,12 +216,16 @@ of Xcode (5.0.2).
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -242,10 +243,6 @@ of Xcode (5.0.2).
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -260,7 +257,23 @@ of Xcode (5.0.2).
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

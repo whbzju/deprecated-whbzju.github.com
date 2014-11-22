@@ -9,11 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="概述 我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏
-个人介绍页面
-分类Categories
-sina微薄分享
-评论 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
+  <meta name="description" content="概述
+我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如： 导航栏 个人介绍页面 分类Categories sina微薄分享 评论 好在octopress的可定制性非常强，其核心配置文件叫 _config.yml, 基本上的配置都需要用到这个文件。它的逻辑比较简单， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -32,7 +29,6 @@ sina微薄分享
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -109,75 +105,58 @@ sina微薄分享
   </header>
 
 
-<div class="entry-content"><h1>概述</h1>
-
+<div class="entry-content"><h1 id="section">概述</h1>
 <p>我使用的octopress默认的主题，但是它的一些页面设置不能满足我的需求。比如：</p>
 
 <ul>
-<li>导航栏</li>
-<li>个人介绍页面</li>
-<li>分类Categories</li>
-<li>sina微薄分享</li>
-<li>评论</li>
+  <li>导航栏</li>
+  <li>个人介绍页面</li>
+  <li>分类Categories</li>
+  <li>sina微薄分享</li>
+  <li>评论</li>
 </ul>
 
-
-<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Disqus Comments
-</span><span class='line'>disqus_short_name: 
-</span><span class='line'>disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># list each of the sidebar modules you want to include, in the order you want them to appear.
-</span><span class='line'># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-</span><span class='line'>default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;About Me&lt;/h1&gt;
-</span><span class='line'>  &lt;p&gt;A little something about me.&lt;/p&gt;
-</span><span class='line'>&lt;/section&gt;</span></code></pre></td></tr></table></div></figure>
-
-
+<p>好在octopress的可定制性非常强，其核心配置文件叫 <code>_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;div class="highlight"&gt;&lt;table&gt;&lt;tr&gt;&lt;td class="gutter"&gt;&lt;pre class="line-numbers"&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class=''&gt;&lt;span class='line'&gt;# Disqus Comments
+&lt;/span&gt;&lt;span class='line'&gt;disqus_short_name: 
+&lt;/span&gt;&lt;span class='line'&gt;disqus_show_comment_count:&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：
+&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;div class="highlight"&gt;&lt;table&gt;&lt;tr&gt;&lt;td class="gutter"&gt;&lt;pre class="line-numbers"&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
+&lt;span class='line-number'&gt;2&lt;/span&gt;
+&lt;span class='line-number'&gt;3&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class=''&gt;&lt;span class='line'&gt;# list each of the sidebar modules you want to include, in the order you want them to appear.
+&lt;/span&gt;&lt;span class='line'&gt;# To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
+&lt;/span&gt;&lt;span class='line'&gt;default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+如注释中提到，asides的设置，关联的目录在</code>/source/_includes/custom/asides<code>。比如想要在右侧边栏中加入about me框，则需要在</code>/source/_includes/custom/asides/`中新建about.html。建议借用该目录下默认的about.html。
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&lt;section&gt;
+</span><span class="line">  &lt;h1&gt;About Me&lt;/h1&gt;
+</span><span class="line">  &lt;p&gt;A little something about me.&lt;/p&gt;
+</span><span class="line">&lt;/section&gt;</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
 <!--more-->
-
-
-<h1>配置方法</h1>
-
-<p>博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
+#配置方法
+博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:</p>
 
 <ul>
-<li>octopress navigation设置</li>
-<li>about页面，需要用rake new_page[&#8220;about&#8221;]，先生成页面。</li>
-<li>octopress 侧边栏设置</li>
-<li>个人介绍</li>
-<li>sina微博分享</li>
-<li>categories</li>
-<li>google analysis</li>
+  <li>octopress navigation设置</li>
+  <li>about页面，需要用rake new_page[“about”]，先生成页面。</li>
+  <li>octopress 侧边栏设置</li>
+  <li>个人介绍</li>
+  <li>sina微博分享</li>
+  <li>categories</li>
+  <li>google analysis</li>
 </ul>
 
-
-<h1>建议</h1>
-
+<h1 id="section-1">建议</h1>
 <p>最好把里面的twitter相关的信息全部删掉，否则由于GFW的原因，将会造成页面load很慢。同理，修改定制文件/source/_includes/custom/head.html 把google的自定义字体去掉</p>
 
-<h1>参考文献</h1>
-
+<h1 id="section-2">参考文献</h1>
 <p><a href="http://yanping.me/cn/blog/2012/01/07/theming-and-customization/">ctopress修改主题和自定义样式</a></p>
 
 <p><a href="http://linyi.herokuapp.com/blog/config-octopress.html">octopress的个性化配置</a></p>
@@ -185,6 +164,7 @@ sina微薄分享
 <p><a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">为octopress添加分类(category)列表</a></p>
 
 <p><a href="http://programus.github.com/blog/2012/03/03/add-weibo-sidebar-into-octopress/">为Octopress博客追加新浪微博侧栏</a></p>
+
 </div>
 
 
@@ -271,12 +251,16 @@ sina微薄分享
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -294,10 +278,6 @@ sina微薄分享
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -312,7 +292,23 @@ sina微薄分享
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

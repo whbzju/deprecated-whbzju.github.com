@@ -9,7 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。 工欲善其事，必先利其器
+  <meta name="description" content="一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。
+&gt; 工欲善其事，必先利其器
 首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知， &hellip;">
   
 
@@ -29,7 +30,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -106,83 +106,47 @@
   </header>
 
 
-<div class="entry-content"><p>一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。</p>
+<div class="entry-content"><p>一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。
+&gt; 工欲善其事，必先利其器
+首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知，bochs的安装包版本是不带有调试功能的，只有通过编译bochs源码，才能启用debug模式。</p>
 
-<blockquote><p>工欲善其事，必先利其器
-首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知，bochs的安装包版本是不带有调试功能的，只有通过编译bochs源码，才能启用debug模式。</p></blockquote>
-
-<h2>bochs 2.3.5源码编译</h2>
-
+<h2 id="bochs-235">bochs 2.3.5源码编译</h2>
 <p>网上编译bochs的资料非常多，基本的问题都有解决方案，我重点讲不常见的问题。
-<strong>基本安装步骤</strong></p>
+<strong>基本安装步骤</strong>
+	tar vxzf bochs-2.3.5.tar.gz
+	cd bochs-2.3.5
+	sudo ./configure –enable-debugger –enable-disasm
+	sudo make
+	sudo make install
+bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等，需事先安装环境
+	sudo apt-get install build-essential
+	sudo apt-get install xorg-dev //GUI界面
+	sudo apt-get install bison</p>
 
-<pre><code>tar vxzf bochs-2.3.5.tar.gz
-cd bochs-2.3.5
-sudo ./configure --enable-debugger --enable-disasm
-sudo make
-sudo make install
-</code></pre>
-
-<p>bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等，需事先安装环境</p>
-
-<pre><code>sudo apt-get install build-essential
-sudo apt-get install xorg-dev //GUI界面
-sudo apt-get install bison
-</code></pre>
-
-<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em></p>
-
+<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em>
 <!--more-->
-
-
-<p>采用解决办法：</p>
-
-<blockquote><p>只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉</p>
-
-<pre><code>echo ERROR: X windows gui was selected, but X windows libraries were not found.
-    #exit 1
-</code></pre></blockquote>
+采用解决办法：
+&gt; 只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉
+    echo ERROR: X windows gui was selected, but X windows libraries were not found.
+        #exit 1</p>
 
 <pre><code>configure命令后加 LDFLAGS="-L/usr/lib/i386-linux-gnu -lX该问题不能用--with-nogui解决，否则无法输出hello os，因为需要使用gui
 </code></pre>
 
-<p><strong>make</strong>之前需要修改一份文件bx_debug/symbol.cc</p>
+<p><strong>make</strong>之前需要修改一份文件bx_debug/symbol.cc
+	在97行之后加入代码如下,
+	using namespace std;</p>
 
-<pre><code>在97行之后加入代码如下,
-using namespace std;
-
-#ifdef __GNUC__ //修改
+<pre><code>#ifdef __GNUC__ //修改
 using namespace __gnu_cxx; //修改
 #endif //修改
 
-struct symbol_entry_t
+struct symbol_entry_t keymap若提示找不到，注释掉即可。 ##bochsrc bochsrc是bochs启动时读取配置的文件，其中关键的是romimage和vgaromimage的路径设置。关于rom，install vagbios后，/usr/share/bochs路径存在，romimage路径在ubuntu下：/usr/local/share/bochs，修改下即可 ##制作引导盘 用bximage制作软盘映像 `bximage 按提示制作 将引导扇区写入软盘 `dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc ##启动bochs 终端中输入bochs，按提示输入，在debug模式下，需要输入c让程序运行。若一切顺利，能看到屏幕上输出hello os的字符。 ##关于64位机子的问题 在configure时，enable-long-phy-address不存在，无法顺利支持64位寻址，需进一步研究确认。
 </code></pre>
 
-<p>keymap若提示找不到，注释掉即可。</p>
-
-<h2>bochsrc</h2>
-
-<p>bochsrc是bochs启动时读取配置的文件，其中关键的是romimage和vgaromimage的路径设置。关于rom，install vagbios后，/usr/share/bochs路径存在，romimage路径在ubuntu下：/usr/local/share/bochs，修改下即可</p>
-
-<h2>制作引导盘</h2>
-
-<p>用bximage制作软盘映像
-<code>bximage
-按提示制作
-将引导扇区写入软盘
-</code>dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc</p>
-
-<h2>启动bochs</h2>
-
-<p>终端中输入bochs，按提示输入，在debug模式下，需要输入c让程序运行。若一切顺利，能看到屏幕上输出hello os的字符。</p>
-
-<h2>关于64位机子的问题</h2>
-
-<p>在configure时，enable-long-phy-address不存在，无法顺利支持64位寻址，需进一步研究确认。</p>
-
-<h2>诡异问题</h2>
-
+<h2 id="section">诡异问题</h2>
 <p>依旧还有unknow VEG error，不知道怎么解决。</p>
+
 </div>
 
 
@@ -269,12 +233,16 @@ struct symbol_entry_t
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -292,10 +260,6 @@ struct symbol_entry_t
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -310,7 +274,23 @@ struct symbol_entry_t
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

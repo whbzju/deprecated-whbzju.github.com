@@ -9,10 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="收集我个人学习使用Vim的小技巧 快速替换 语法: [addr]s/源字符串/目的字符串/[option]
-[addr] 表示检索范围，省略时表示当前行。如： “1，20” ：表示从第1行到20行；
-“%” ：表示整个文件，同“1,$”；
-“. ,$” ：从当前行到文件尾； s： &hellip;">
+  <meta name="description" content="收集我个人学习使用Vim的小技巧 快速替换 语法: [addr]s/源字符串/目的字符串/[option] [addr] 表示检索范围，省略时表示当前行。如： “1，20” ：表示从第1行到20行； “%” ：表示整个文件，同“1,$”； “. ,$” ：从当前行到文件尾； s： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -31,7 +28,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -110,38 +106,34 @@
 
 <div class="entry-content"><p>收集我个人学习使用Vim的小技巧</p>
 
-<h2>快速替换</h2>
+<h2 id="section">快速替换</h2>
 
 <ul>
-<li>语法: [addr]s/源字符串/目的字符串/[option]</li>
-<li>[addr] 表示检索范围，省略时表示当前行。如：
-
-<ul>
-<li>“1，20” ：表示从第1行到20行；</li>
-<li>“%” ：表示整个文件，同“1,$”；</li>
-<li>“. ,$” ：从当前行到文件尾；</li>
+  <li>语法: [addr]s/源字符串/目的字符串/[option]</li>
+  <li>[addr] 表示检索范围，省略时表示当前行。如：
+    <ul>
+      <li>“1，20” ：表示从第1行到20行；</li>
+      <li>“%” ：表示整个文件，同“1,$”；</li>
+      <li>“. ,$” ：从当前行到文件尾；</li>
+    </ul>
+  </li>
+  <li>s：正则表达式中替换命令</li>
+  <li>[option] : 表示操作类型
+    <ul>
+      <li>g 表示全局替换; </li>
+      <li>c 表示进行确认</li>
+      <li>p 表示替代结果逐行显示（Ctrl + L恢复屏幕）</li>
+      <li>i 不区分大小写</li>
+      <li>省略option时仅对每行第一个匹配串进行替换；</li>
+    </ul>
+  </li>
+  <li>如果在源字符串和目的字符串中出现特殊字符，需要用”\”转义</li>
 </ul>
-</li>
-<li>s：正则表达式中替换命令</li>
-<li>[option] : 表示操作类型
-
-<ul>
-<li>g 表示全局替换;</li>
-<li>c 表示进行确认</li>
-<li>p 表示替代结果逐行显示（Ctrl + L恢复屏幕）</li>
-<li>i 不区分大小写</li>
-<li>省略option时仅对每行第一个匹配串进行替换；</li>
-</ul>
-</li>
-<li>如果在源字符串和目的字符串中出现特殊字符，需要用”\”转义</li>
-</ul>
-
 
 <p>例子：将多个空格换成一个空格: %s/  */ /g</p>
 
-<h2>多文件打开</h2>
-
-<p>打开：split file<br/>
+<h2 id="section-1">多文件打开</h2>
+<p>打开：split file<br />
 切换窗口：双击ctrl+w，或ctrl+w+上下左右键</p>
 </div>
 
@@ -229,12 +221,16 @@
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -252,10 +248,6 @@
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -270,7 +262,23 @@
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

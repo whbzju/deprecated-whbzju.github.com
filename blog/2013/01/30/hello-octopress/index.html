@@ -9,9 +9,11 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="Hello Octopress This is my first octopress blog, just for test. 中文 try chinese code include &lt;stdio.h> int main()
-{ printf("Hello world\n");
-return &hellip;">
+  <meta name="description" content="Hello Octopress This is my first octopress blog, just for test. 中文
+try chinese code include int main()
+{ printf(“Hello world\n”); return 0;
+}
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -30,7 +32,6 @@ return &hellip;">
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -107,26 +108,21 @@ return &hellip;">
   </header>
 
 
-<div class="entry-content"><h1>Hello Octopress</h1>
+<div class="entry-content"><h1 id="hello-octopress">Hello Octopress</h1>
 
 <p>This is my first octopress blog, just for test.</p>
 
-<h2>中文</h2>
-
+<h2 id="section">中文</h2>
 <p>try chinese</p>
 
-<h2>code</h2>
+<h2 id="code">code</h2>
 
-<h1>include &lt;stdio.h></h1>
-
+<h1 id="include-stdioh">include <stdio.h /></h1>
 <p>int main()
-{</p>
-
-<pre><code>printf("Hello world\n");
-return 0;
-</code></pre>
-
-<p>}</p>
+{
+	printf(“Hello world\n”);
+	return 0;
+}</p>
 </div>
 
 
@@ -205,12 +201,16 @@ return 0;
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -228,10 +228,6 @@ return 0;
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -246,7 +242,23 @@ return 0;
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

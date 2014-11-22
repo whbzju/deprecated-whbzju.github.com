@@ -9,7 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you certainly familiar with adb shell,adb logcat. Or maybe &hellip;">
+  <meta name="description" content="Recently, I’m interesting how android adb works. If you are an Android programer, you certainly familiar with adb shell,adb logcat. Or maybe you only &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,7 +28,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -105,49 +104,43 @@
   </header>
 
 
-<div class="entry-content"><p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
+<div class="entry-content"><p>Recently, I’m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
 
-<h1>ADB overview</h1>
-
-<p>We can find adb description from android developer website.</p>
-
-<blockquote><p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p></blockquote>
+<h1 id="adb-overview">ADB overview</h1>
+<p>We can find adb description from android developer website.
+&gt;Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
 
 <p>As introducted by google, it has three key components.</p>
 
-<blockquote><ul>
-<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
-<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
-<li>A daemon, which runs as a background process on each emulator or device instance.</li>
-</ul>
+<blockquote>
+  <ul>
+    <li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
+    <li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
+    <li>A daemon, which runs as a background process on each emulator or device instance.</li>
+  </ul>
 </blockquote>
 
-<h1>Basic communication model</h1>
-
+<h1 id="basic-communication-model">Basic communication model</h1>
 <p>We can make it clear through this picture.
 <img src="/images/2014-03-25_adb_overview.png" alt="adb overview" /></p>
 
 <ul>
-<li><p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p></li>
-<li><p>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</p></li>
-<li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
+  <li>
+    <p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p>
+  </li>
+  <li>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</li>
+  <li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
 </ul>
 
-
-<h1>Command Detail</h1>
-
+<h1 id="command-detail">Command Detail</h1>
 <p>Please reference <a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
 
-<h1>How can I connect to Android with ADB over TCP?</h1>
-
-<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:</p>
-
-<h3>if your device is rooted</h3>
-
-<p>According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
+<h1 id="how-can-i-connect-to-android-with-adb-over-tcp">How can I connect to Android with ADB over TCP?</h1>
+<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:
+###if your device is rooted
+According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
 
 <hr />
-
 <p><code>su</code></p>
 
 <p><code>setprop service.adb.tcp.port 5555</code></p>
@@ -157,54 +150,45 @@
 <p><code>start adbd</code></p>
 
 <hr />
-
 <p>And you can disable it and return ADB to listening on USB with</p>
 
-<p><code>setprop service.adb.tcp.port -1</code></p>
+<p><code>setprop service.adb.tcp.port -1</code> </p>
 
 <p><code>stop adbd</code></p>
 
 <p><code>start adbd</code></p>
 
-<h3>if you have USB access already</h3>
-
+<h3 id="if-you-have-usb-access-already">if you have USB access already</h3>
 <p>It is even easier to switch to using Wi-Fi, if you already have USB. From a command line on the computer that has the device connected via USB, issue the commands</p>
 
 <p><code>adb tcpip 5555</code></p>
 
 <p><code>adb connect IP:5555</code></p>
 
-<h3>return to listening over USB</h3>
-
+<h3 id="return-to-listening-over-usb">return to listening over USB</h3>
 <p>Apps to automate the process by:</p>
 
-<p><code>adb usb</code></p>
+<p><code>adb usb</code> </p>
 
-<h3>proctocol</h3>
-
+<h3 id="proctocol">proctocol</h3>
 <ul>
-<li>server
-
-<ul>
-<li>success: OKAY</li>
-<li>fail: FAIL</li>
-</ul>
-</li>
-<li>client
-
-<ul>
-<li>Message component with head which is 4 bytes indicate length of message, and follow is content.</li>
-</ul>
-</li>
+  <li>server
+    <ul>
+      <li>success: OKAY</li>
+      <li>fail: FAIL</li>
+    </ul>
+  </li>
+  <li>client
+    <ul>
+      <li>Message component with head which is 4 bytes indicate length of message, and follow is content. </li>
+    </ul>
+  </li>
 </ul>
 
+<h3 id="other">other</h3>
+<p>There are also several apps on Google Play that automate this process. </p>
 
-<h3>other</h3>
-
-<p>There are also several apps on Google Play that automate this process.</p>
-
-<h1>Reference</h1>
-
+<h1 id="reference">Reference</h1>
 <p><a href="http://events.linuxfoundation.org/images/stories/pdf/lf_abs12_kobayashi.pdf">lf_abs12_kobayashi</a></p>
 
 <p><a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
@@ -288,12 +272,16 @@
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -311,10 +299,6 @@
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -329,7 +313,23 @@
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

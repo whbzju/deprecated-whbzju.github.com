@@ -9,7 +9,9 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="前言 该课程非常适合初学者，比原先Ng在斯坦福大学的公开课要简单许多，少去了许多数学，并且在课程内容安排上更加紧凑，涉及的内容广泛，旨在搭建初学者与机器学习的桥梁。值得一提的是，该课程较为接近工程的角度，故我建议有兴趣的工程师可以尝试下。 本人花了3周左右的时间完成了该课程的视频和project， &hellip;">
+  <meta name="description" content="概述
+在面对聚类问题时，选择何种距离计算方法求相似度是一个basic question。文献[1]中提到了N多计算方法，从大类来看有以下几种： $L_p$ Minkowski家族 $ L_1 $ 家族 Intersection 家族 Inner Product家族 etl
+简单算一下大概有40+ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -28,7 +30,6 @@
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
 <!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
-
   
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -83,6 +84,152 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-22T22:01:00+08:00" pubdate data-updated="true">Nov 22<span>nd</span>, 2014</time>
+        
+         | <a href="/blog/2014/11/22/ml-distance-measure/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2 id="section">概述</h2>
+<p>在面对聚类问题时，选择何种距离计算方法求相似度是一个basic question。文献[1]中提到了N多计算方法，从大类来看有以下几种：</p>
+
+<ul>
+  <li>$L_p$ Minkowski家族</li>
+  <li>$ L_1 $ 家族</li>
+  <li>Intersection 家族</li>
+  <li>Inner Product家族</li>
+  <li>etl
+简单算一下大概有40+个计算方法，其中有好多没有听过。好在工业界一般只涉及到几个，本文将按自己理解大致介绍下这些方法及应用情况。</li>
+</ul>
+
+<h2 id="section-1">距离的类型和尺度</h2>
+<p>类型：</p>
+
+<ul>
+  <li>二进制（binary）</li>
+  <li>离散值（Discrete）</li>
+  <li>连续值(Continuous)</li>
+</ul>
+
+<p>尺度：</p>
+
+<ul>
+  <li>定性：比如同义：red、green、black，比如顺序：高、中、低</li>
+  <li>定量：
+  a) interval
+  b) ratio
+距离的类型和尺度非常重要，影响后续聚类算法的选择。</li>
+</ul>
+
+<h2 id="section-2">距离计算方法定义</h2>
+<p>严谨的定义参考[4]，通俗来讲，在一个空间内，距离计算方法满足以下4个公理。</p>
+
+<ol>
+  <li>$d(x,y) ≥ 0$</li>
+  <li>$ d(x,y)=0$ if $x=y$</li>
+  <li>$ d(x, y) = d(y, x)$ (distance is symmetric)</li>
+  <li>$d(x, y) ≤ d(x, z) + d(z, y)$ (the triangle inequality).</li>
+</ol>
+
+<p>在欧式空间，第四个公理可以直观理解为两点之间距离最短。在其他情况需要一些证明才能推导。</p>
+
+<h2 id="section-3">常见的距离计算方法</h2>
+
+<h3 id="lr-norm">Lr norm</h3>
+<p>在n维空间，其计算公式如下：</p>
+
+<p>$d(x,y)=(\sum_{k=1}^{n} |x_k-y_k| ^r)^{1/r}$</p>
+
+<ul>
+  <li>
+    <p>欧式距离
+当r=2，这就是我们熟悉的欧式距离，其聚类形状在二维空间是一个圆。归属于$L_2$ norm</p>
+  </li>
+  <li>
+    <p>曼哈顿距离
+r=1，归属于$L_1$ norm，其名字的来源与该距离计算过程有关。该距离类似在x和y的每个维度上沿grid line上travel，类似曼哈顿的街道。</p>
+  </li>
+  <li>
+    <p>$L_∞$ norm
+当r不断变大，该式中只有max $|x_i-y_i|$项起作用，故又称L_max norm</p>
+  </li>
+</ul>
+
+<h3 id="jaccard-distance">Jaccard Distance</h3>
+<p>类似于相识度，x和y每个维度上相同的值的个数/总的维度。</p>
+
+<p>The comparison of two binary vectors, p and q, leads to four quantities: </p>
+
+<ul>
+  <li>M01 = the number of positions where p was 0 and q was 1 </li>
+  <li>M10 = the number of positions where p was 1 and q was 0 </li>
+  <li>M00 = the number of positions where p was 0 and q was 0 </li>
+  <li>M11 = the number of positions where p was 1 and q was 1 </li>
+</ul>
+
+<p>The simplest similarity coefficient is the simple matching coefficient </p>
+
+<p>$ J = (M11) / (M01 + M10 + M11) $ </p>
+
+<p>如：</p>
+
+<ul>
+  <li>a = 1 0 0 0 0 0 0 0 0 0</li>
+  <li>b = 0 0 0 0 0 0 1 0 0 1
+J = 0</li>
+</ul>
+
+<h3 id="cosine-distance">cosine Distance</h3>
+<p>即余弦公式。求x和y两个特征向量的夹角。
+cos( d1, d2 ) = (d1 • d2) / ||d1|| ||d2|| </p>
+
+<h3 id="edit-distance">Edit Distance</h3>
+<p>一般适用于String point。通过不断的删除和添加单个字符来计算两个string之间的距离。</p>
+
+<h3 id="hamming-distance">Hamming Distance</h3>
+<p>pass</p>
+
+<h2 id="section-4">参考</h2>
+
+<ul>
+  <li>[1] Comprehensive survey on distance/similarity measures between probability density functions. SH Cha
+City, 2007 - csis.pace.edu</li>
+  <li>[2] An Introduction to Cluster Analysis for Data Mining</li>
+  <li>[3] Unsupervised and Semi-supervised Clustering:
+a Brief Survey</li>
+  <li>[4] Mining of Massive Datasets - chapter 3</li>
+</ul>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a></h1>
     
     
@@ -108,46 +255,41 @@
   </header>
 
 
-  <div class="entry-content"><h2>前言</h2>
-
+  <div class="entry-content"><h2 id="section">前言</h2>
 <p>该课程非常适合初学者，比原先Ng在斯坦福大学的公开课要简单许多，少去了许多数学，并且在课程内容安排上更加紧凑，涉及的内容广泛，旨在搭建初学者与机器学习的桥梁。值得一提的是，该课程较为接近工程的角度，故我建议有兴趣的工程师可以尝试下。</p>
 
 <p>本人花了3周左右的时间完成了该课程的视频和project，并拿到证书。每天下班回来比较晚，倒腾一两个小时，就该洗洗睡了，还好妹子理解。但不建议初学者像我一样，原因如下：</p>
 
 <ul>
-<li>本人有一定的机器学习基础。</li>
-<li>虽然不熟悉octave，但是写过几年程序，能较快的适应它的语法。</li>
-<li>该课程没有中文字幕，不过Andrew Ng将的英文都比较简单，大家可以放心，我一般加速1.5x听。</li>
+  <li>本人有一定的机器学习基础。</li>
+  <li>虽然不熟悉octave，但是写过几年程序，能较快的适应它的语法。</li>
+  <li>该课程没有中文字幕，不过Andrew Ng将的英文都比较简单，大家可以放心，我一般加速1.5x听。</li>
 </ul>
-
 
 <p>该课程有个较为合理的时间预估，可根据它安排学习计划。</p>
 
 <hr />
 
-<h2>内容介绍</h2>
+<h2 id="section-1">内容介绍</h2>
 
-<h3>建议先看视频</h3>
+<h3 id="section-2">建议先看视频</h3>
 
 <p>Ng的视频和ppt做的非常有质量，简洁易懂。该课程有19个课程，每个课程一般有4-6个小视频，视频时间有长有短，最长的不会超过20分钟。下面列下个人觉得最有价值的部分：</p>
 
 <ul>
-<li>Octave Tutorial，该教程能够帮你快速了解octave的基本用法，后续所有的project都会涉及到它。请对照该课程的讲义熟悉octave。PS：mac上安装octave可能会出些问题，我这边只要取消安装text help部分即可。</li>
-<li>主流算法，Logistic回归，SVM，ANN，Kmeans，PCA，协同过滤等，可以理解为通俗易懂版的讲解，不满足的同学建议去看看Ng在斯坦福公开课中的视频，那边会有较详细的数学推导。</li>
-<li>最为精华，即本人认为该课程最核心的部分是：X. Advice for Applying Machine Learning (Week 6)和XVIII. Application Example: Photo OCR。因为其他知识很容易得到，而且可以得到更好更完备的解释，而这两个视频，是Ng从工程的角度指导我们如何应用机器学习，并且给了一个实际的例子。</li>
+  <li>Octave Tutorial，该教程能够帮你快速了解octave的基本用法，后续所有的project都会涉及到它。请对照该课程的讲义熟悉octave。PS：mac上安装octave可能会出些问题，我这边只要取消安装text help部分即可。</li>
+  <li>主流算法，Logistic回归，SVM，ANN，Kmeans，PCA，协同过滤等，可以理解为通俗易懂版的讲解，不满足的同学建议去看看Ng在斯坦福公开课中的视频，那边会有较详细的数学推导。</li>
+  <li>最为精华，即本人认为该课程最核心的部分是：X. Advice for Applying Machine Learning (Week 6)和XVIII. Application Example: Photo OCR。因为其他知识很容易得到，而且可以得到更好更完备的解释，而这两个视频，是Ng从工程的角度指导我们如何应用机器学习，并且给了一个实际的例子。</li>
 </ul>
 
-
-<h3>建议完成所有课程的project</h3>
-
+<h3 id="project">建议完成所有课程的project</h3>
 <p>由于这些project的说明文档写的非常仔细，较为容易完成。通过写一些代码，可以对这些算法有更深的理解。另外，也可以认识到octave vectorizing写法的威力。</p>
 
 <p>PS：请不要着急去网上搜课程答案，Ng在课程里面明确说明不要把作业答案放到网上，但还是有不少人放了自己的答案。提前看了答案，你会少很多乐趣。</p>
 
 <hr />
 
-<h2>总结</h2>
-
+<h2 id="section-3">总结</h2>
 <p>后来也看了几个coursera上的课程，暂时还么有找到能和它一拚的课程。如果有哪位同学知道，可以分享下。
 当然，这个课程只是个开始，后续可以看斯坦福大学的机器学习课程，同时配合Pattern Recognized and Machine Learning这本书效果会更好。</p>
 </div>
@@ -187,69 +329,59 @@
   </header>
 
 
-  <div class="entry-content"><p>个人收藏用，转：&lt;&lt; <a href="http://wowubuntu.com">访问 Wow!Ubuntu</a></p>
+  <div class="entry-content"><p>个人收藏用，转：« <a href="http://wowubuntu.com">访问 Wow!Ubuntu</a></p>
 
 <p><strong>NOTE:</strong> This is Simplelified  Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to <a href="http://daringfireball.net/projects/markdown/syntax">Markdown: Syntax</a>.</p>
 
-<p><strong>声明：</strong> 这份文档派生(fork)于<a href="http://markdown.tw/">繁体中文版</a>，在此基础上进行了繁体转简体工作，并进行了适当的润色。此文档用 Markdown 语法编写，你可以到这里<a href="http://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md">查看它的源文件</a>。「繁体中文版的原始文件可以<a href="https://github.com/othree/markdown-syntax-zhtw/blob/master/syntax.md">查看这里</a> 。」&#8211;By @<a href="http://twitter.com/riku">riku</a></p>
+<p><strong>声明：</strong> 这份文档派生(fork)于<a href="http://markdown.tw/">繁体中文版</a>，在此基础上进行了繁体转简体工作，并进行了适当的润色。此文档用 Markdown 语法编写，你可以到这里<a href="http://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md">查看它的源文件</a>。「繁体中文版的原始文件可以<a href="https://github.com/othree/markdown-syntax-zhtw/blob/master/syntax.md">查看这里</a> 。」–By @<a href="http://twitter.com/riku">riku</a></p>
 
-<p><strong>注：</strong> 本项目托管于 <a href="http://gitcafe.com/riku/Markdown-Syntax-CN/">GitCafe</a>上，请通过&#8221;派生&#8221;和&#8221;合并请求&#8221;来帮忙改进本项目。</p>
+<p><strong>注：</strong> 本项目托管于 <a href="http://gitcafe.com/riku/Markdown-Syntax-CN/">GitCafe</a>上，请通过”派生”和”合并请求”来帮忙改进本项目。</p>
 
-<h1>Markdown 语法说明 (简体中文版) / (<a href="./basic.html">点击查看快速入门</a>)</h1>
-
-<ul>
-<li><a href="#overview">概述</a>
+<h1 id="markdown----basichtml">Markdown 语法说明 (简体中文版) / (<a href="./basic.html">点击查看快速入门</a>)</h1>
 
 <ul>
-<li><a href="#philosophy">宗旨</a></li>
-<li><a href="#html">兼容 HTML</a></li>
-<li><a href="#autoescape">特殊字符自动转换</a></li>
+  <li><a href="#overview">概述</a>
+    <ul>
+      <li><a href="#philosophy">宗旨</a></li>
+      <li><a href="#html">兼容 HTML</a></li>
+      <li><a href="#autoescape">特殊字符自动转换</a></li>
+    </ul>
+  </li>
+  <li><a href="#block">区块元素</a>
+    <ul>
+      <li><a href="#p">段落和换行</a></li>
+      <li><a href="#header">标题</a></li>
+      <li><a href="#blockquote">区块引用</a></li>
+      <li><a href="#list">列表</a></li>
+      <li><a href="#precode">代码区块</a></li>
+      <li><a href="#hr">分隔线</a></li>
+    </ul>
+  </li>
+  <li><a href="#span">区段元素</a>
+    <ul>
+      <li><a href="#link">链接</a></li>
+      <li><a href="#em">强调</a></li>
+      <li><a href="#code">代码</a></li>
+      <li><a href="#img">图片</a></li>
+    </ul>
+  </li>
+  <li><a href="#misc">其它</a>
+    <ul>
+      <li><a href="#backslash">反斜杠</a></li>
+      <li><a href="#autolink">自动链接</a></li>
+    </ul>
+  </li>
+  <li><a href="#acknowledgement">感谢</a></li>
+  <li><a href="#editor">Markdown 免费编辑器</a></li>
 </ul>
-</li>
-<li><a href="#block">区块元素</a>
-
-<ul>
-<li><a href="#p">段落和换行</a></li>
-<li><a href="#header">标题</a></li>
-<li><a href="#blockquote">区块引用</a></li>
-<li><a href="#list">列表</a></li>
-<li><a href="#precode">代码区块</a></li>
-<li><a href="#hr">分隔线</a></li>
-</ul>
-</li>
-<li><a href="#span">区段元素</a>
-
-<ul>
-<li><a href="#link">链接</a></li>
-<li><a href="#em">强调</a></li>
-<li><a href="#code">代码</a></li>
-<li><a href="#img">图片</a></li>
-</ul>
-</li>
-<li><a href="#misc">其它</a>
-
-<ul>
-<li><a href="#backslash">反斜杠</a></li>
-<li><a href="#autolink">自动链接</a></li>
-</ul>
-</li>
-<li><a href="#acknowledgement">感谢</a></li>
-<li><a href="#editor">Markdown 免费编辑器</a></li>
-</ul>
-
 
 <hr />
 
 <h2 id="overview">概述</h2>
 
-
-
-
 <h3 id="philosophy">宗旨</h3>
 
-
-<p>Markdown 的目标是实现「易读易写」。</p>
-
+<p>Markdown 的目标是实现「易读易写」。
 </div>
   
   
@@ -331,38 +463,34 @@
 
   <div class="entry-content"><p>收集我个人学习使用Vim的小技巧</p>
 
-<h2>快速替换</h2>
+<h2 id="section">快速替换</h2>
 
 <ul>
-<li>语法: [addr]s/源字符串/目的字符串/[option]</li>
-<li>[addr] 表示检索范围，省略时表示当前行。如：
-
-<ul>
-<li>“1，20” ：表示从第1行到20行；</li>
-<li>“%” ：表示整个文件，同“1,$”；</li>
-<li>“. ,$” ：从当前行到文件尾；</li>
+  <li>语法: [addr]s/源字符串/目的字符串/[option]</li>
+  <li>[addr] 表示检索范围，省略时表示当前行。如：
+    <ul>
+      <li>“1，20” ：表示从第1行到20行；</li>
+      <li>“%” ：表示整个文件，同“1,$”；</li>
+      <li>“. ,$” ：从当前行到文件尾；</li>
+    </ul>
+  </li>
+  <li>s：正则表达式中替换命令</li>
+  <li>[option] : 表示操作类型
+    <ul>
+      <li>g 表示全局替换; </li>
+      <li>c 表示进行确认</li>
+      <li>p 表示替代结果逐行显示（Ctrl + L恢复屏幕）</li>
+      <li>i 不区分大小写</li>
+      <li>省略option时仅对每行第一个匹配串进行替换；</li>
+    </ul>
+  </li>
+  <li>如果在源字符串和目的字符串中出现特殊字符，需要用”\”转义</li>
 </ul>
-</li>
-<li>s：正则表达式中替换命令</li>
-<li>[option] : 表示操作类型
-
-<ul>
-<li>g 表示全局替换;</li>
-<li>c 表示进行确认</li>
-<li>p 表示替代结果逐行显示（Ctrl + L恢复屏幕）</li>
-<li>i 不区分大小写</li>
-<li>省略option时仅对每行第一个匹配串进行替换；</li>
-</ul>
-</li>
-<li>如果在源字符串和目的字符串中出现特殊字符，需要用”\”转义</li>
-</ul>
-
 
 <p>例子：将多个空格换成一个空格: %s/  */ /g</p>
 
-<h2>多文件打开</h2>
-
-<p>打开：split file<br/>
+<h2 id="section-1">多文件打开</h2>
+<p>打开：split file<br />
 切换窗口：双击ctrl+w，或ctrl+w+上下左右键</p>
 </div>
   
@@ -439,49 +567,43 @@
   </header>
 
 
-  <div class="entry-content"><p>Recently, I&#8217;m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
+  <div class="entry-content"><p>Recently, I’m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
 
-<h1>ADB overview</h1>
-
-<p>We can find adb description from android developer website.</p>
-
-<blockquote><p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p></blockquote>
+<h1 id="adb-overview">ADB overview</h1>
+<p>We can find adb description from android developer website.
+&gt;Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
 
 <p>As introducted by google, it has three key components.</p>
 
-<blockquote><ul>
-<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
-<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
-<li>A daemon, which runs as a background process on each emulator or device instance.</li>
-</ul>
+<blockquote>
+  <ul>
+    <li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
+    <li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
+    <li>A daemon, which runs as a background process on each emulator or device instance.</li>
+  </ul>
 </blockquote>
 
-<h1>Basic communication model</h1>
-
+<h1 id="basic-communication-model">Basic communication model</h1>
 <p>We can make it clear through this picture.
 <img src="/images/2014-03-25_adb_overview.png" alt="adb overview" /></p>
 
 <ul>
-<li><p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p></li>
-<li><p>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</p></li>
-<li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
+  <li>
+    <p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p>
+  </li>
+  <li>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</li>
+  <li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
 </ul>
 
-
-<h1>Command Detail</h1>
-
+<h1 id="command-detail">Command Detail</h1>
 <p>Please reference <a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
 
-<h1>How can I connect to Android with ADB over TCP?</h1>
-
-<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:</p>
-
-<h3>if your device is rooted</h3>
-
-<p>According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
+<h1 id="how-can-i-connect-to-android-with-adb-over-tcp">How can I connect to Android with ADB over TCP?</h1>
+<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:
+###if your device is rooted
+According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
 
 <hr />
-
 <p><code>su</code></p>
 
 <p><code>setprop service.adb.tcp.port 5555</code></p>
@@ -491,54 +613,45 @@
 <p><code>start adbd</code></p>
 
 <hr />
-
 <p>And you can disable it and return ADB to listening on USB with</p>
 
-<p><code>setprop service.adb.tcp.port -1</code></p>
+<p><code>setprop service.adb.tcp.port -1</code> </p>
 
 <p><code>stop adbd</code></p>
 
 <p><code>start adbd</code></p>
 
-<h3>if you have USB access already</h3>
-
+<h3 id="if-you-have-usb-access-already">if you have USB access already</h3>
 <p>It is even easier to switch to using Wi-Fi, if you already have USB. From a command line on the computer that has the device connected via USB, issue the commands</p>
 
 <p><code>adb tcpip 5555</code></p>
 
 <p><code>adb connect IP:5555</code></p>
 
-<h3>return to listening over USB</h3>
-
+<h3 id="return-to-listening-over-usb">return to listening over USB</h3>
 <p>Apps to automate the process by:</p>
 
-<p><code>adb usb</code></p>
+<p><code>adb usb</code> </p>
 
-<h3>proctocol</h3>
-
+<h3 id="proctocol">proctocol</h3>
 <ul>
-<li>server
-
-<ul>
-<li>success: OKAY</li>
-<li>fail: FAIL</li>
-</ul>
-</li>
-<li>client
-
-<ul>
-<li>Message component with head which is 4 bytes indicate length of message, and follow is content.</li>
-</ul>
-</li>
+  <li>server
+    <ul>
+      <li>success: OKAY</li>
+      <li>fail: FAIL</li>
+    </ul>
+  </li>
+  <li>client
+    <ul>
+      <li>Message component with head which is 4 bytes indicate length of message, and follow is content. </li>
+    </ul>
+  </li>
 </ul>
 
+<h3 id="other">other</h3>
+<p>There are also several apps on Google Play that automate this process. </p>
 
-<h3>other</h3>
-
-<p>There are also several apps on Google Play that automate this process.</p>
-
-<h1>Reference</h1>
-
+<h1 id="reference">Reference</h1>
 <p><a href="http://events.linuxfoundation.org/images/stories/pdf/lf_abs12_kobayashi.pdf">lf_abs12_kobayashi</a></p>
 
 <p><a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
@@ -579,75 +692,62 @@
   </header>
 
 
-  <div class="entry-content"><h2>技术类</h2>
-
-<h3>C++</h3>
+  <div class="entry-content"><h2 id="section">技术类</h2>
+<p>###C++</p>
 
 <ol>
-<li>esstianl c++，大学的时候读过，忘的差不多了。这次项目用到c++，为了快速上手，重读了一遍。评价五星。</li>
-<li>c++ prime。至今还没有通读，处于当手册使用的阶段，书中的例子很赞，可以作为c++ cookbook。</li>
-<li>effective c++。强烈推荐，不解释。</li>
-<li>effective stl，因为effective c++才买的，看了感觉和上一本的级别差太多，不推荐。</li>
+  <li>esstianl c++，大学的时候读过，忘的差不多了。这次项目用到c++，为了快速上手，重读了一遍。评价五星。</li>
+  <li>c++ prime。至今还没有通读，处于当手册使用的阶段，书中的例子很赞，可以作为c++ cookbook。</li>
+  <li>effective c++。强烈推荐，不解释。</li>
+  <li>effective stl，因为effective c++才买的，看了感觉和上一本的级别差太多，不推荐。</li>
 </ol>
-
 
 <p>这里推荐c++ reference这个网站，有很多优秀例子代码，是很好的参考对象。同时，该网站支持在线编译运行，很赞。</p>
 
-<h3>C</h3>
-
+<h3 id="c">C</h3>
 <ol>
-<li>C专家编程。很赞，为它写了一篇简单的博客。</li>
+  <li>C专家编程。很赞，为它写了一篇简单的博客。</li>
 </ol>
 
-
-<h3>Android</h3>
-
+<h3 id="android">Android</h3>
 <ol>
-<li>深入Android源码分析，卷一，邓平凡。强烈推荐，作者功力深厚，庖丁解牛。目前通读一遍，对JNI、Binder通信的理解加深许多。而像SurfaceFlinge这样的系统还没有很好的理解。</li>
-<li>深入Android源码分析，卷二，同。</li>
+  <li>深入Android源码分析，卷一，邓平凡。强烈推荐，作者功力深厚，庖丁解牛。目前通读一遍，对JNI、Binder通信的理解加深许多。而像SurfaceFlinge这样的系统还没有很好的理解。</li>
+  <li>深入Android源码分析，卷二，同。</li>
 </ol>
 
-
-<h3>机器学习</h3>
-
+<h3 id="section-1">机器学习</h3>
 <ol>
-<li>斯坦福大学机器学习课程及讲义。入门的好材料。</li>
-<li>集体智慧编程。基于Python的机器学习常见算法教程。</li>
+  <li>斯坦福大学机器学习课程及讲义。入门的好材料。</li>
+  <li>集体智慧编程。基于Python的机器学习常见算法教程。</li>
 </ol>
 
-
-<h3>代码质量、设计</h3>
-
+<h3 id="section-2">代码质量、设计</h3>
 <ol>
-<li>设计模式。GOF的，看一遍，感觉理解了，很快又会忘掉不少，每次做完项目重新看，都会有收获。</li>
-<li>google开源编程规范。</li>
+  <li>设计模式。GOF的，看一遍，感觉理解了，很快又会忘掉不少，每次做完项目重新看，都会有收获。</li>
+  <li>google开源编程规范。</li>
 </ol>
 
-
-<h3>其他</h3>
-
+<h3 id="section-3">其他</h3>
 <ol>
-<li>自己动手实现操作系统。</li>
-<li>深入理解C#</li>
-<li>effective Java</li>
+  <li>自己动手实现操作系统。</li>
+  <li>深入理解C#</li>
+  <li>effective Java</li>
 </ol>
 
-
-<h2>非技术</h2>
+<h2 id="section-4">非技术</h2>
 
 <ol>
-<li>德川家康&#8212;长篇推荐，感慨日本人名字的神奇</li>
-<li>冰与火之歌&#8212;魔龙狂舞，马丁爷爷一定要长命百岁</li>
-<li>浪潮之巅&#8212;-推荐</li>
-<li>活着活着就老了，冯唐</li>
-<li>小通鉴，冯唐</li>
-<li>人为什么活着，王小波</li>
-<li>地久天长，王小波</li>
-<li>走出软件磨坊</li>
-<li>精益创业</li>
-<li>创业四步法</li>
+  <li>德川家康—长篇推荐，感慨日本人名字的神奇</li>
+  <li>冰与火之歌—魔龙狂舞，马丁爷爷一定要长命百岁</li>
+  <li>浪潮之巅—-推荐</li>
+  <li>活着活着就老了，冯唐</li>
+  <li>小通鉴，冯唐</li>
+  <li>人为什么活着，王小波</li>
+  <li>地久天长，王小波</li>
+  <li>走出软件磨坊</li>
+  <li>精益创业</li>
+  <li>创业四步法</li>
 </ol>
-
 
 <p>PS：今年上的最多的网站是知乎，感谢各位大牛热心分享知识。</p>
 </div>
@@ -687,15 +787,14 @@
   </header>
 
 
-  <div class="entry-content"><h2>前言</h2>
+  <div class="entry-content"><h2 id="section">前言</h2>
 
 <p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
 <a href="https://gist.github.com/stared/4730202">安装教程</a></p>
 
 <p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
 
-<h2>源码安装</h2>
-
+<h2 id="section-1">源码安装</h2>
 <p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
 scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
 
@@ -706,12 +805,10 @@ scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="ht
 
 <p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
 
-<h2>brew 撞墙怎么办</h2>
-
+<h2 id="brew-">brew 撞墙怎么办</h2>
 <p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
 
-<h2>不要轻易更新系统</h2>
-
+<h2 id="section-2">不要轻易更新系统</h2>
 <p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
 
 <pre><code>make: *** [bootstrap] Error 2
@@ -719,7 +816,8 @@ Error: Homebrew doesn't know what compiler versions ship with your version
 of Xcode (5.0.2).
 </code></pre>
 
-<h2>未完待续</h2>
+<h2 id="section-3">未完待续</h2>
+
 </div>
   
   
@@ -757,52 +855,43 @@ of Xcode (5.0.2).
   </header>
 
 
-  <div class="entry-content"><h1>前言</h1>
-
+  <div class="entry-content"><h1 id="section">前言</h1>
 <p>随着当前智能终端的普及，人们可做的事情变得越来越有趣，比如计步器。传统的计步器一般是一个单独的设备，戴在身体的某个位置，由于必须在用户身上增加一个设备，推广起来有一定阻力。其实，计步器只需要一个3-轴加速度传感器就能做到较高的记步精度，类似三星note3的计步器精度在95%以上。当前智能手机一般都含有加速度传感器，许多人开始在手机上做计步器。可惜目前Android市场上大多数计步器精度都不理想，经本人测试，目前最好的是三星的note3的健康伙伴，更关键的是三星使用了sensorhub的技术，在保持精度的同时，做到了超低功耗。
 在手机上做计步器相较于传统的计步器最大的难点在于手机使用时位置不固定，计步器要能适应不同放置位置和不同走路场景，这就要求计步器算法有很好的动态调整能力。</p>
 
-<h1>计步器模型介绍</h1>
-
+<h1 id="section-1">计步器模型介绍</h1>
 <p>关于人走路的模型，前人[1]已经做了很多研究，不再累赘。总结来讲，人在走路时，加速度传感器会形成一个类似正弦波形图，因此可以根据检测波峰波谷记步。见下图：</p>
 
 <p><img src="/images/pedometer.png" alt="步伐传感器数据波形图" /></p>
 
-<h1>算法</h1>
+<h1 id="section-2">算法</h1>
 
-<h2>概述</h2>
-
+<h2 id="section-3">概述</h2>
 <ol>
-<li>特征选取</li>
-<li>滤波</li>
-<li>基于动态阈值检测步数</li>
-<li>步数矫正</li>
+  <li>特征选取</li>
+  <li>滤波</li>
+  <li>基于动态阈值检测步数</li>
+  <li>步数矫正</li>
 </ol>
 
-
-<h2>特征选取</h2>
-
+<h2 id="section-4">特征选取</h2>
 <p>考虑到手机在不同放置情况下传感器的每个轴会有不同表现，因此，取其强度特征可以避免该类问题，即取三轴平方和。</p>
 
-<h2>滤波</h2>
-
+<h2 id="section-5">滤波</h2>
 <p>滤波是一种常见的数据预处理方法，特别是手机上加速度传感器数据存在一定的噪音，经过滤波后能得到较平滑的数据。滤波算法有许多中，常见的有数字滤波，也可以叫中值滤波、高斯滤波、快速傅里叶变换。本人试过几种滤波算法后，发现采用中值滤波即可满足需求，因为算法的瓶颈并不在此。另一个考虑是终端的计算资源有限，过多的计算将造成大量的耗电。</p>
 
 <p>简单来讲，即取一个时间窗做平滑，假设以50HZ的频率采集加速度传感器数值，即在Android中注册Sensor频率为Fastest（不同手机可能会有差异）。我采用5个数据做一次平滑，即收到5个数据算一次平均值，当做当前值。当然，你可以增加时间窗长度，但是需要考虑用户体验，不能延迟太久。</p>
 
-<h2>动态阈值</h2>
-
+<h2 id="section-6">动态阈值</h2>
 <p>通常，计步器有两种思路：一种是通过计算过零率来记步；另外一种是计算极大值和极小值，判断峰谷值来记步。两种算法的思想类似，都需要设置阈值。为了适应各种不同的位置和走路姿势，你不能简单设一个阈值来检测步数。第一种方法容易出现误记，需要结合其他方法排除在mean值附近抖动的数据。第二种方法容易出现漏检，同时如果误记，还会影响到后续的记步，因为在一次步伐中出现好几个峰谷是很正常的，如何去除这些数据的影响需要良好的设计。</p>
 
 <p>本人采用的检测峰谷值得方法记步，但不是通过计算极大值和极小值，而是设置波峰的阈值和波谷的阈值，即当数据大于波峰阈值时，都记为未确认峰值，保存其中最大的一个，这样可以避免数据在上升途中偶尔出现的抖动。同理，作用于峰谷。
 检测出峰谷之后，通过保存一个时间窗，通过里面的峰谷个数记步。这里更多的是工程上的设计。</p>
 
-<h2>步数矫正</h2>
+<h2 id="section-7">步数矫正</h2>
+<p>基本思想是人类走路的特性，人的步伐速度在200-2000ms之间，通过记录记步的时间戳，矫正步数。步伐间隔&lt;200ms和&gt;2000ms，认为是无效步数。这部分也是目前终端计步器算法的核心，做的好的公司都有相应的矫正机制。</p>
 
-<p>基本思想是人类走路的特性，人的步伐速度在200-2000ms之间，通过记录记步的时间戳，矫正步数。步伐间隔&lt;200ms和>2000ms，认为是无效步数。这部分也是目前终端计步器算法的核心，做的好的公司都有相应的矫正机制。</p>
-
-<h1>总结</h1>
-
+<h1 id="section-8">总结</h1>
 <p>计步器算法的基本思想大致如此，最终产品的表现还要不断打磨，针对异常场景进行优化。最后，终端设备上应用不可避免的是功耗问题，如果开了计步器，你的手机用半天就没电，估计没人愿意用。目前市场上许多低功耗计步器算法，大多以降低精度为代价。目前看来只有三星采用高通的sensorhub方案有较好的表现。</p>
 
 <p>参考：</p>
@@ -810,47 +899,6 @@ of Xcode (5.0.2).
 <p>[1] <a href="http://www.analog.com/library/analogDialogue/china/archives/44-06/pedometer.html">利用3轴数字加速度计实现功能全面的计步器设计</a></p>
 
 <p>[2] <a href="https://github.com/bagilevi/android-pedometer">Github上的一个计步器实现代码</a> 改代码直接使用效果不好</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/20/bianchengzhihuidiao/">编程小扎之回调</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-20T14:49:00+08:00" pubdate data-updated="true">Sep 20<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/09/20/bianchengzhihuidiao/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在我的认知中，编程最需要要关心的是数据结构和消息机制。进一步，即模块功能的定义，以及模块之间的通信。这和编程中的回调机制十分类似。回调在wiki中有如下定义：</p>
-
-<blockquote><p>In computer programming, a callback is a piece of executable code that is passed as an argument to other code, which is expected to call back (execute) the argument at some convenient time. The invocation may be immediate as in a synchronous callback or it might happen at later time, as in an asynchronous callback.
-The ways that callbacks are supported in programming languages differ, but they are often implemented with subroutines, lambda expressions, blocks, or function pointers.</p></blockquote>
 </div>
   
   
@@ -892,12 +940,16 @@ The ways that callbacks are supported in programming languages differ, but they 
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
@@ -915,10 +967,6 @@ The ways that callbacks are supported in programming languages differ, but they 
         <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/07/ubuntu-tips/">Ubuntu tips</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -932,7 +980,23 @@ The ways that callbacks are supported in programming languages differ, but they 
 
     </div>
   </div>
-  <footer role="contentinfo"><p>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
   Copyright &copy; 2014 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>

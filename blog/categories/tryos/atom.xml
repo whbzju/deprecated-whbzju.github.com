@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TryOS | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/tryos/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-09-14T21:00:40+08:00</updated>
+  <updated>2014-11-22T23:44:18+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -18,64 +18,41 @@
     <link href="http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui/"/>
     <updated>2013-02-23T15:57:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2013/02/23/tryos-xindetihui</id>
-    <content type="html"><![CDATA[<h1>前言</h1>
-
-<p>本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange's 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天，马上要毕业了从把此书匆匆过了一遍。
-不得不说，佩服作者的功力和心态，作者像是一个小孩，认真的为大家讲述他心爱的玩具是如何搭建的。在如今，实现一个这样的操作系统，并没有什么使用价值，只能作为学习的demo。为了搭建这个玩具，作者需要去了解x86架构的运行原理，内存的分页分段实现机制，8259A中断控制的部分原理和使用方法，还有文件系统、硬盘等等，我想当当是阅读这些设备组件的文档，就要耗去许多功夫，更别说调试的功夫。故在这种没有外界事物驱动的项目，若非有极大的热忱，是无论如何也坚持不下去。而我却连读完这本书这件事情都拖了3年，想来真是惭愧。</p>
-
-<h1>内容概述</h1>
-
-<p>整本书分为上下两篇，上篇的内容更为底层一些，因为本书是真正实现一个系统，所以上篇中有很多内容是有关硬件细节的，需要一定的汇编基础。下篇的内容则和我们平时接触的操作系统书籍有些类似，像IPC、文件系统、内存管理等更高级的话题，以C语言实现为主，也有部分汇编代码。内容大致分为：
-* 环境搭建---bochs、linux
-* cpu相关---引导扇区、保护模式
-* 内核相关---内核雏形、进程、输入输出
+    <content type="html"><![CDATA[<h1 id="section">前言</h1>
+<p>本科的时候，室友有一本《自己动手写操作系统》，曾拿来翻了一翻，觉得十分有趣，可惜当时要应付考研，没有时间好好看这本书。后来读研之后，马上入了一本，不过此时该书已经是第二版，叫《Orange’s 一个操作系统的实现》，却因自己畏难和拖延不决，一直到今天，马上要毕业了从把此书匆匆过了一遍。
+不得不说，佩服作者的功力和心态，作者像是一个小孩，认真的为大家讲述他心爱的玩具是如何搭建的。在如今，实现一个这样的操作系统，并没有什么使用价值，只能作为学习的demo。为了搭建这个玩具，作者需要去了解x86架构的运行原理，内存的分页分段实现机制，8259A中断控制的部分原理和使用方法，还有文件系统、硬盘等等，我想当当是阅读这些设备组件的文档，就要耗去许多功夫，更别说调试的功夫。故在这种没有外界事物驱动的项目，若非有极大的热忱，是无论如何也坚持不下去。而我却连读完这本书这件事情都拖了3年，想来真是惭愧。
+#内容概述
+整本书分为上下两篇，上篇的内容更为底层一些，因为本书是真正实现一个系统，所以上篇中有很多内容是有关硬件细节的，需要一定的汇编基础。下篇的内容则和我们平时接触的操作系统书籍有些类似，像IPC、文件系统、内存管理等更高级的话题，以C语言实现为主，也有部分汇编代码。内容大致分为：
+* 环境搭建—bochs、linux
+* cpu相关—引导扇区、保护模式
+* 内核相关—内核雏形、进程、输入输出
 * 进程通信IPC
-* 文件系统---硬盘驱动和简单的文件系统
-* 内存管理---fork、MM的简单实现
+* 文件系统—硬盘驱动和简单的文件系统
+* 内存管理—fork、MM的简单实现
 * 让OS能够部署到真正的机器中
-本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。</p>
-
-<hr />
-
+本文变不打算重复书中的实现细节，因为文字没有代码讲的清楚，作者的代码带有大量的注释，所有的细节都在其中。
+***
 <!--more-->
+##环境搭建
+网上对bochs的环境配置有很多资料，作者使用的bochsrc在ubuntu下需要做些简单的修改。具体的配置过程也可以参照我的另一篇blog：<a href="http://whbzju.github.com/blog/2013/02/04/bochs-config/">Ubuntu 12.04安装bochs 2.3.5</a>.
+##cpu相关
+第三章保护模式的内容是整本书的基础。后续章节讨论的内容都需要以此章的知识为基础。若你想深入了解操作系统实现的细节，本章是必须掌握的内容，当然如果你在本章遇到了困难，也可以先看后续章节，通过后续章节的知识来反馈本章的内容，也是一条可行之路，譬如博主就是这样做的。知识需要时间的沉淀，可能当时你很难理解的内容，过了一阵子，在其他知识的帮助下，你可以很顺利的理解它。然而，本章的内容你是无法糊弄过去，否则将会成为你理解是后续章节内容的傍脚石。
+其中，保护模式的概念理解是一个坎，去网上了解下cpu发展的历史和相应的保护模式介绍内容将有助于你了解它。在理解概念后，书中所讲的只是如何通过汇编来使cpu进入保护模式而已，没有其他障碍。接着是整个操作系统运行原理的基石，分别为特权集的变化(特别是在变换时栈的变化)、中断的原理（8259A芯片的操作）和GDT、LDT、页式存储等一些重要的概念。
+##内核相关
+在前面的章节中，我们写的程序是直接在引导程序中，而一个操作系统必然是要运行其他程序的，那么，自然要实现我们自己的内核。而一个操作系统从开机到运行。
+&gt; 大致经历“引导—&gt;加载内核入内存—&gt;跳入保护模式—&gt;开始执行内核”。</p>
 
-
-<h2>环境搭建</h2>
-
-<p>网上对bochs的环境配置有很多资料，作者使用的bochsrc在ubuntu下需要做些简单的修改。具体的配置过程也可以参照我的另一篇blog：<a href="http://whbzju.github.com/blog/2013/02/04/bochs-config/">Ubuntu 12.04安装bochs 2.3.5</a>.</p>
-
-<h2>cpu相关</h2>
-
-<p>第三章保护模式的内容是整本书的基础。后续章节讨论的内容都需要以此章的知识为基础。若你想深入了解操作系统实现的细节，本章是必须掌握的内容，当然如果你在本章遇到了困难，也可以先看后续章节，通过后续章节的知识来反馈本章的内容，也是一条可行之路，譬如博主就是这样做的。知识需要时间的沉淀，可能当时你很难理解的内容，过了一阵子，在其他知识的帮助下，你可以很顺利的理解它。然而，本章的内容你是无法糊弄过去，否则将会成为你理解是后续章节内容的傍脚石。
-其中，保护模式的概念理解是一个坎，去网上了解下cpu发展的历史和相应的保护模式介绍内容将有助于你了解它。在理解概念后，书中所讲的只是如何通过汇编来使cpu进入保护模式而已，没有其他障碍。接着是整个操作系统运行原理的基石，分别为特权集的变化(特别是在变换时栈的变化)、中断的原理（8259A芯片的操作）和GDT、LDT、页式存储等一些重要的概念。</p>
-
-<h2>内核相关</h2>
-
-<p>在前面的章节中，我们写的程序是直接在引导程序中，而一个操作系统必然是要运行其他程序的，那么，自然要实现我们自己的内核。而一个操作系统从开机到运行。</p>
-
-<blockquote><p>大致经历“引导--->加载内核入内存--->跳入保护模式--->开始执行内核”。</p></blockquote>
-
-<p>这样看来引导区扇的512字节很可能不够，所以有必要实现一个loader来加载内核。第四章重点介绍了FAT12和loader的实现。第五章开始讲述内核的实现，其中一个重要的概念是ELF，类似于一种标准，告诉loader怎么加载程序。该章最后在内核中加入中断，这样一个内核雏形就完成了。第六章的讲述的是进程，操作系统中最重要的概念。在实现进程，除了我们已经了解的进程表的设置和进程调度算法外，本章提到的进程切换的特权集变换和栈空间的变换值得学习。当然，本章还实现了多线程，利用cpu时钟中断的机制实现。最后是系统调用，这里面涉及到讨论宏内核和微内核的内容，作者的选择是微内核。第七章是输入输出的内容，我兴趣不大，一带而过了。</p>
-
-<h2>进程通信IPC</h2>
-
-<p>本章节的内容没什么好说的，由于作者采用微内核，故在实现IPC时，需要有类似与MM的系统调用。</p>
-
-<h2>文件系统</h2>
-
-<p>一开始是对硬盘的介绍，目的是要实现一个硬盘的驱动程序。接着对文件系统的核心数据结构进行设计，见代码。</p>
-
-<h2>内存管理</h2>
-
-<p>内存管理本来是我十分感兴趣的一章，但是本书对该部分的内容算是浅尝而至，没有达到我对他的期望。不过，关于内存分配的细节还是能通过本章的例子了解不少。不过，本章的最后实现了一个简单的shell，算是一个补偿。</p>
-
-<h2>尾声</h2>
-
-<p>在书本的最后，作者将自己的操作系统安装到真正的机器中，作为本书的结尾。</p>
-
-<h1>总结</h1>
-
-<p>整本书读下来，虽然有不少知识点我不感兴趣，囫囵吞枣般的过去了，还是有不少收获。特别是对中断、栈空间、进程的理解有了进一步，下一步阅读有关操作系统方面经典的书籍应该会有不一样的体会，而且为我后面了解linux内核和android系统源码应该有不少帮助，这样我的目的也就达到了。</p>
+<p>这样看来引导区扇的512字节很可能不够，所以有必要实现一个loader来加载内核。第四章重点介绍了FAT12和loader的实现。第五章开始讲述内核的实现，其中一个重要的概念是ELF，类似于一种标准，告诉loader怎么加载程序。该章最后在内核中加入中断，这样一个内核雏形就完成了。第六章的讲述的是进程，操作系统中最重要的概念。在实现进程，除了我们已经了解的进程表的设置和进程调度算法外，本章提到的进程切换的特权集变换和栈空间的变换值得学习。当然，本章还实现了多线程，利用cpu时钟中断的机制实现。最后是系统调用，这里面涉及到讨论宏内核和微内核的内容，作者的选择是微内核。第七章是输入输出的内容，我兴趣不大，一带而过了。
+##进程通信IPC
+本章节的内容没什么好说的，由于作者采用微内核，故在实现IPC时，需要有类似与MM的系统调用。
+##文件系统
+一开始是对硬盘的介绍，目的是要实现一个硬盘的驱动程序。接着对文件系统的核心数据结构进行设计，见代码。
+##内存管理
+内存管理本来是我十分感兴趣的一章，但是本书对该部分的内容算是浅尝而至，没有达到我对他的期望。不过，关于内存分配的细节还是能通过本章的例子了解不少。不过，本章的最后实现了一个简单的shell，算是一个补偿。
+##尾声
+在书本的最后，作者将自己的操作系统安装到真正的机器中，作为本书的结尾。
+#总结
+整本书读下来，虽然有不少知识点我不感兴趣，囫囵吞枣般的过去了，还是有不少收获。特别是对中断、栈空间、进程的理解有了进一步，下一步阅读有关操作系统方面经典的书籍应该会有不一样的体会，而且为我后面了解linux内核和android系统源码应该有不少帮助，这样我的目的也就达到了。</p>
 ]]></content>
   </entry>
   
@@ -84,83 +61,47 @@
     <link href="http://whbzju.github.com/blog/2013/02/04/bochs-config/"/>
     <updated>2013-02-04T23:37:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2013/02/04/bochs-config</id>
-    <content type="html"><![CDATA[<p>一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。</p>
+    <content type="html"><![CDATA[<p>一直对操作系统本身抱有一定的崇拜心理，可是长久以来都没有好好专研下这本书。趁着工作之前的最后一个寒假，希望能顺利完成这本书，对操作系统的认识有一个新的认识。
+&gt; 工欲善其事，必先利其器
+首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知，bochs的安装包版本是不带有调试功能的，只有通过编译bochs源码，才能启用debug模式。</p>
 
-<blockquote><p>工欲善其事，必先利其器
-首先，我们先要配置出书本中模拟实验的环境，即虚拟机bochs的配置。众所周知，bochs的安装包版本是不带有调试功能的，只有通过编译bochs源码，才能启用debug模式。</p></blockquote>
-
-<h2>bochs 2.3.5源码编译</h2>
-
+<h2 id="bochs-235">bochs 2.3.5源码编译</h2>
 <p>网上编译bochs的资料非常多，基本的问题都有解决方案，我重点讲不常见的问题。
-<strong>基本安装步骤</strong></p>
+<strong>基本安装步骤</strong>
+	tar vxzf bochs-2.3.5.tar.gz
+	cd bochs-2.3.5
+	sudo ./configure –enable-debugger –enable-disasm
+	sudo make
+	sudo make install
+bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等，需事先安装环境
+	sudo apt-get install build-essential
+	sudo apt-get install xorg-dev //GUI界面
+	sudo apt-get install bison</p>
 
-<pre><code>tar vxzf bochs-2.3.5.tar.gz
-cd bochs-2.3.5
-sudo ./configure --enable-debugger --enable-disasm
-sudo make
-sudo make install
-</code></pre>
-
-<p>bochs是c++实现的，因此其依赖环境会有build-esstianl g++ devlib等，需事先安装环境</p>
-
-<pre><code>sudo apt-get install build-essential
-sudo apt-get install xorg-dev //GUI界面
-sudo apt-get install bison
-</code></pre>
-
-<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em></p>
-
+<p>在执行./configure时，出现apt-get orgx-dev后依旧出现仍然提示<em>ERROR: X windows gui was selected, but X windows libraries were not found</em>
 <!--more-->
-
-
-<p>采用解决办法：</p>
-
-<blockquote><p>只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉</p>
-
-<pre><code>echo ERROR: X windows gui was selected, but X windows libraries were not found.
-    #exit 1
-</code></pre></blockquote>
+采用解决办法：
+&gt; 只要编译的时候连接了 -lX11这个库就可以了，所以可以让configure阶段出错的地方不退出，并且在make的时候link X11这个库，编辑configure, 将退出的地方注释掉
+    echo ERROR: X windows gui was selected, but X windows libraries were not found.
+        #exit 1</p>
 
 <pre><code>configure命令后加 LDFLAGS="-L/usr/lib/i386-linux-gnu -lX该问题不能用--with-nogui解决，否则无法输出hello os，因为需要使用gui
 </code></pre>
 
-<p><strong>make</strong>之前需要修改一份文件bx_debug/symbol.cc</p>
+<p><strong>make</strong>之前需要修改一份文件bx_debug/symbol.cc
+	在97行之后加入代码如下,
+	using namespace std;</p>
 
-<pre><code>在97行之后加入代码如下,
-using namespace std;
-
-#ifdef __GNUC__ //修改
+<pre><code>#ifdef __GNUC__ //修改
 using namespace __gnu_cxx; //修改
 #endif //修改
 
-struct symbol_entry_t
+struct symbol_entry_t keymap若提示找不到，注释掉即可。 ##bochsrc bochsrc是bochs启动时读取配置的文件，其中关键的是romimage和vgaromimage的路径设置。关于rom，install vagbios后，/usr/share/bochs路径存在，romimage路径在ubuntu下：/usr/local/share/bochs，修改下即可 ##制作引导盘 用bximage制作软盘映像 `bximage 按提示制作 将引导扇区写入软盘 `dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc ##启动bochs 终端中输入bochs，按提示输入，在debug模式下，需要输入c让程序运行。若一切顺利，能看到屏幕上输出hello os的字符。 ##关于64位机子的问题 在configure时，enable-long-phy-address不存在，无法顺利支持64位寻址，需进一步研究确认。
 </code></pre>
 
-<p>keymap若提示找不到，注释掉即可。</p>
-
-<h2>bochsrc</h2>
-
-<p>bochsrc是bochs启动时读取配置的文件，其中关键的是romimage和vgaromimage的路径设置。关于rom，install vagbios后，/usr/share/bochs路径存在，romimage路径在ubuntu下：/usr/local/share/bochs，修改下即可</p>
-
-<h2>制作引导盘</h2>
-
-<p>用bximage制作软盘映像
-<code>bximage
-按提示制作
-将引导扇区写入软盘
-</code>dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc</p>
-
-<h2>启动bochs</h2>
-
-<p>终端中输入bochs，按提示输入，在debug模式下，需要输入c让程序运行。若一切顺利，能看到屏幕上输出hello os的字符。</p>
-
-<h2>关于64位机子的问题</h2>
-
-<p>在configure时，enable-long-phy-address不存在，无法顺利支持64位寻址，需进一步研究确认。</p>
-
-<h2>诡异问题</h2>
-
+<h2 id="section">诡异问题</h2>
 <p>依旧还有unknow VEG error，不知道怎么解决。</p>
+
 ]]></content>
   </entry>
   
