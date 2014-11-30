@@ -15,13 +15,16 @@ categories: octopress
 
 ##ubuntu 12.04配置octopress和github Page 
   首先，我们来了解下概念问题，关于octopress，可以见下文：
+
 > Octopress is a blogging framework which generates your enire blog in static files. Octopress has integrated Twitter, Google Analytics, Google Plus, Facebook and some other webservices. There are also good plugins for adding images, code, videos and other content into your blog posts. The framework is made for hackers and people who know something about Linux and shell.There are three official ways to deploy Octopress
 Github Pages
 Heroku
 Rsync
 
 大致的意思是说octopress是一个静态页面生成框架，具有一些列集成的功能。有三种发布方式：Github Pages，Heroku和Rsync，本文采用Github Pages。由于Octopress是基于Ruby实现，我对ruby没有接触，从别人blog中了解到一下关于ruby的几个重要概念
+
 > Gem ruby的easy install，用来安装各种库，是用ruby写的，全称叫rubygems。
+
 Bundler 基于gem的更高级管理工具，bundler相对于gem就好比apt-get相对于aptitude。不过他不是单纯的下载安装，他会根据本目录的Gemfile文件，把你缺少的包给装上。
 Rvm Ruby Version Manager，用来安装各种版本的ruby，问题是ubuntu有apt-get，这个不大派上用场。
 Rbenv Simple Ruby Version Management，也是用来安装各种版本的ruby。
@@ -29,13 +32,18 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
 <!--more-->
 ###配置安装环境
 ubuntu在默认环境下是没有octorpess的依赖环境，同时也缺少git工具。所以首先：
+
 	sudo apt-get install bash curl git-core -y
 	sudo apt-get install build-essential bison openssl libreadline6 libreadline6-dev zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-0 libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake -y
+
 接着安装rvm，我们采用rvm来安装ruby和octopress的依赖环境。
+
 `bash -s stable < <(curl -s https://raw.github.com/wayneeseguin/rvm/master/binscripts/rvm-installer)`
 同时我们还需要配置bash的环境，并重启bash
+
 	echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function' >> ~/.bashrc
 	source .bashrc
+
 然后，配置octopress的环境：
 	rvm pkg install openssl
 	rvm pkg install iconv
