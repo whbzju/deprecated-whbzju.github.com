@@ -9,9 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="概述
-在面对聚类问题时，选择何种距离计算方法求相似度是一个basic question。文献[1]中提到了N多计算方法，从大类来看有以下几种： $L_p$ Minkowski家族 $ L_1 $ 家族 Intersection 家族 Inner Product家族 etl
-简单算一下大概有40+ &hellip;">
+  <meta name="description" content="这届R语言大会在杭师仓前校区举行，由阿里巴巴承办。邀请到了libsvm的作者林老师。但据同事说林教授演讲用的ppt都是一套（汗~~~）。上午是主会场，有四位嘉宾做了介绍，其他几位介绍的比较范，林稍微带点干货，特别提到数据没有到20T，不一定要上big data。下午是分会场，本人去听了： &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +76,112 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-30T11:01:00+08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2014</time>
+        
+         | <a href="/blog/2014/11/30/r-language-conference/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这届R语言大会在杭师仓前校区举行，由阿里巴巴承办。邀请到了libsvm的作者林老师。但据同事说林教授演讲用的ppt都是一套（汗~~~）。上午是主会场，有四位嘉宾做了介绍，其他几位介绍的比较范，林稍微带点干货，特别提到数据没有到20T，不一定要上big data。下午是分会场，本人去听了：</p>
+
+<ul>
+  <li>分析师使用的R包</li>
+  <li>京东的ctr模型</li>
+  <li>天猫learning to rank</li>
+  <li>天猫数据驱动运营。</li>
+</ul>
+
+<h2 id="section">点评</h2>
+
+<ul>
+  <li>京东分享推荐的ctr模型。和我街处于同一起跑线，模型和特征做法都很相似。赞下京东的分享着，讲的很实在。</li>
+  <li>天猫l2r。没什么干货，介绍了一些基本概念就结束了。</li>
+  <li>天猫数据驱动运营。预测销量，c2b。介绍的比较范，而且个人觉得他讲的效果有夸大的嫌疑。</li>
+  <li>分析师用的R包。R中类似ipython notebook的东西。可交互的图，非常实用。</li>
+</ul>
+
+<h2 id="section-1">感想</h2>
+
+<ul>
+  <li>Spark出现的频率很高。</li>
+  <li>用R来作云服务，我个人觉得不靠谱。</li>
+  <li>libsvm的作者好有趣。演讲前看论文，演讲后睡觉。工业界范十足。</li>
+  <li>学术界的分享依旧不靠谱。</li>
+  <li>IBM关于电信领域的挖掘是来搞笑的吗</li>
+  <li>接下来就等ppt了。</li>
+</ul>
+
+<p>最后，和阿里比，其他公司的所处的阶段还是非常的初级。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/23/ipython-notebook-bring-to-me/">Ipython Notebook对机器学习工程师的价值</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-23T16:17:00+08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2014</time>
+        
+         | <a href="/blog/2014/11/23/ipython-notebook-bring-to-me/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>作为一个机器学习相关的工程师，永远有无数的dirty work要做。个人使用过matlab、R、python</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -757,155 +861,6 @@ According to a post on stackoverflow, you can enable ADB over Wi-Fi from the dev
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/29/wanerdeqiangheanzhuangscikit/">Mac OS 10.9 安装scikit&#8211;万恶的墙</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-29T14:26:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/12/29/wanerdeqiangheanzhuangscikit/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2 id="section">前言</h2>
-
-<p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
-<a href="https://gist.github.com/stared/4730202">安装教程</a></p>
-
-<p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
-
-<h2 id="section-1">源码安装</h2>
-<p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
-scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
-
-<p>在安装scipy的提示</p>
-
-<pre><code>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:
-</code></pre>
-
-<p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
-
-<h2 id="brew-">brew 撞墙怎么办</h2>
-<p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
-
-<h2 id="section-2">不要轻易更新系统</h2>
-<p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
-
-<pre><code>make: *** [bootstrap] Error 2
-Error: Homebrew doesn't know what compiler versions ship with your version
-of Xcode (5.0.2).
-</code></pre>
-
-<h2 id="section-3">未完待续</h2>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/27/pedometer/">如何在手机上实现高精度及自适应多种场景的计步器算法</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-27T22:58:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/12/27/pedometer/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1 id="section">前言</h1>
-<p>随着当前智能终端的普及，人们可做的事情变得越来越有趣，比如计步器。传统的计步器一般是一个单独的设备，戴在身体的某个位置，由于必须在用户身上增加一个设备，推广起来有一定阻力。其实，计步器只需要一个3-轴加速度传感器就能做到较高的记步精度，类似三星note3的计步器精度在95%以上。当前智能手机一般都含有加速度传感器，许多人开始在手机上做计步器。可惜目前Android市场上大多数计步器精度都不理想，经本人测试，目前最好的是三星的note3的健康伙伴，更关键的是三星使用了sensorhub的技术，在保持精度的同时，做到了超低功耗。
-在手机上做计步器相较于传统的计步器最大的难点在于手机使用时位置不固定，计步器要能适应不同放置位置和不同走路场景，这就要求计步器算法有很好的动态调整能力。</p>
-
-<h1 id="section-1">计步器模型介绍</h1>
-<p>关于人走路的模型，前人[1]已经做了很多研究，不再累赘。总结来讲，人在走路时，加速度传感器会形成一个类似正弦波形图，因此可以根据检测波峰波谷记步。见下图：</p>
-
-<p><img src="/images/pedometer.png" alt="步伐传感器数据波形图" /></p>
-
-<h1 id="section-2">算法</h1>
-
-<h2 id="section-3">概述</h2>
-<ol>
-  <li>特征选取</li>
-  <li>滤波</li>
-  <li>基于动态阈值检测步数</li>
-  <li>步数矫正</li>
-</ol>
-
-<h2 id="section-4">特征选取</h2>
-<p>考虑到手机在不同放置情况下传感器的每个轴会有不同表现，因此，取其强度特征可以避免该类问题，即取三轴平方和。</p>
-
-<h2 id="section-5">滤波</h2>
-<p>滤波是一种常见的数据预处理方法，特别是手机上加速度传感器数据存在一定的噪音，经过滤波后能得到较平滑的数据。滤波算法有许多中，常见的有数字滤波，也可以叫中值滤波、高斯滤波、快速傅里叶变换。本人试过几种滤波算法后，发现采用中值滤波即可满足需求，因为算法的瓶颈并不在此。另一个考虑是终端的计算资源有限，过多的计算将造成大量的耗电。</p>
-
-<p>简单来讲，即取一个时间窗做平滑，假设以50HZ的频率采集加速度传感器数值，即在Android中注册Sensor频率为Fastest（不同手机可能会有差异）。我采用5个数据做一次平滑，即收到5个数据算一次平均值，当做当前值。当然，你可以增加时间窗长度，但是需要考虑用户体验，不能延迟太久。</p>
-
-<h2 id="section-6">动态阈值</h2>
-<p>通常，计步器有两种思路：一种是通过计算过零率来记步；另外一种是计算极大值和极小值，判断峰谷值来记步。两种算法的思想类似，都需要设置阈值。为了适应各种不同的位置和走路姿势，你不能简单设一个阈值来检测步数。第一种方法容易出现误记，需要结合其他方法排除在mean值附近抖动的数据。第二种方法容易出现漏检，同时如果误记，还会影响到后续的记步，因为在一次步伐中出现好几个峰谷是很正常的，如何去除这些数据的影响需要良好的设计。</p>
-
-<p>本人采用的检测峰谷值得方法记步，但不是通过计算极大值和极小值，而是设置波峰的阈值和波谷的阈值，即当数据大于波峰阈值时，都记为未确认峰值，保存其中最大的一个，这样可以避免数据在上升途中偶尔出现的抖动。同理，作用于峰谷。
-检测出峰谷之后，通过保存一个时间窗，通过里面的峰谷个数记步。这里更多的是工程上的设计。</p>
-
-<h2 id="section-7">步数矫正</h2>
-<p>基本思想是人类走路的特性，人的步伐速度在200-2000ms之间，通过记录记步的时间戳，矫正步数。步伐间隔&lt;200ms和&gt;2000ms，认为是无效步数。这部分也是目前终端计步器算法的核心，做的好的公司都有相应的矫正机制。</p>
-
-<h1 id="section-8">总结</h1>
-<p>计步器算法的基本思想大致如此，最终产品的表现还要不断打磨，针对异常场景进行优化。最后，终端设备上应用不可避免的是功耗问题，如果开了计步器，你的手机用半天就没电，估计没人愿意用。目前市场上许多低功耗计步器算法，大多以降低精度为代价。目前看来只有三星采用高通的sensorhub方案有较好的表现。</p>
-
-<p>参考：</p>
-
-<p>[1] <a href="http://www.analog.com/library/analogDialogue/china/archives/44-06/pedometer.html">利用3轴数字加速度计实现功能全面的计步器设计</a></p>
-
-<p>[2] <a href="https://github.com/bagilevi/android-pedometer">Github上的一个计步器实现代码</a> 改代码直接使用效果不好</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -940,12 +895,20 @@ of Xcode (5.0.2).
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/maching'>maching</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/23/ipython-notebook-bring-to-me/">ipython notebook对机器学习工程师的价值</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
@@ -957,14 +920,6 @@ of Xcode (5.0.2).
     
       <li class="post">
         <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/windows-tips/">Windows tips</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
   </ul>

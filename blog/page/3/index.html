@@ -9,8 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="购机
-即将毕业，手头正在用的Thinkpad 410要还给实验室，而原来本科时候用的benq S41突然坏了。没办法，还没有开始赚钱，却要先败家了。年前开始看笔记本，自从用了TP的机子后，很喜欢它的做工，用了3年，硬件上没出过什么问题。在电脑城逛了一圈，实在看不上其他品牌笔记本的做工（ &hellip;">
+  <meta name="description" content="前言—JNI技术简介
+JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,143 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/01/android-jni-config/">Android JNI MAC OS环境配置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-01T23:50:00+08:00" pubdate data-updated="true">Jun 1<span>st</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/01/android-jni-config/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2 id="jni">前言—JNI技术简介</h2>
+<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
+
+<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
+
+<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
+
+<h2 id="section">两种编译环境</h2>
+<ul>
+  <li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
+  <li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
+</ul>
+
+<h2 id="ndk">NDK编译环境</h2>
+<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
+
+<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">export PATH=$PATH:/Users/youpath/android-ndk-r8e</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>重启bash，即可使用ndk-build</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
+</span><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="hello-jni">运行Hello-jni</h2>
+<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
+</span><span class="line">Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
+</span><span class="line">Gdbsetup       : libs/armeabi/gdb.setup
+</span><span class="line">Compile thumb  : hello-jni &lt;= hello-jni.c
+</span><span class="line">SharedLibrary  : libhello-jni.so
+</span><span class="line">Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
+
+<h2 id="section-1">其他</h2>
+<ul>
+  <li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
+  <li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
+  <li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
+</ul>
+
+<h2 id="section-2">后续</h2>
+<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/29/lianjiatingsanbuqu/">李安家庭三部曲杂想</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-29T14:10:00+08:00" pubdate data-updated="true">Mar 29<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/03/29/lianjiatingsanbuqu/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近少年PI的漂流很火，很少见的微博上一致的好评，可惜妹子正值考研的关键阶段，不好打扰。再加上自己经济上实在是拮据，也不想多给家里增添负担，只好作罢。至今为止有两部电影很想看却没看成，一部是它，另一部是阿凡达。当然，其中缘由大相径庭，谁叫生活变化这么快呢。</p>
+
+<p>写东西，对我来讲是自身思维的整理，把我想的虑的形成文字表达出来。一个是我觉得自己最近的思路混乱，经常无法将一个问题描述清楚，逻辑上缺乏锻炼，或者也有可能是自己对问题本身并没有一个成型的思路。所以最近想把内心的东西挖出来，写点东西理一理，再次加工。</p>
+
+<p>李安的电影我其实看的很少，小的是看过卧虎藏龙，后来读研的时候重新回顾了一遍。这个导演把每个镜头都拍的很美，很用心，在讲他想讲的东西，拍他想给我们看得东西，于是，整个片子中透露着一种美。真正的艺术家，不会去迎合大众，不会去矫揉造作，他应该做他自己，展现出他想展现的，不带名利的枷锁，这样的作品中自然透露着一种美。请允许我不断的用美这个词汇，因为我词穷。当一个艺术家在创作时不是往自己的内心挖掘，而开始在意外界的元素时，比如名利，就是他艺术消亡的开始。
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/29/lianjiatingsanbuqu/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -560,12 +697,20 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/maching'>maching</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/23/ipython-notebook-bring-to-me/">ipython notebook对机器学习工程师的价值</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
@@ -577,14 +722,6 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
     
       <li class="post">
         <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/windows-tips/">Windows tips</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: machine | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/machine/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-11-22T23:44:18+08:00</updated>
+  <updated>2014-11-30T13:12:47+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,16 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ipython notebook对机器学习工程师的价值]]></title>
+    <link href="http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me/"/>
+    <updated>2014-11-23T16:17:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me</id>
+    <content type="html"><![CDATA[<p>作为一个机器学习相关的工程师，永远有无数的dirty work要做。个人使用过matlab、R、python</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[聚类算法中常见的距离计算方法]]></title>

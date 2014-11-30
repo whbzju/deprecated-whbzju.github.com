@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-11-22T23:44:18+08:00</updated>
+  <updated>2014-11-30T13:12:47+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[记第七届R语言大会]]></title>
+    <link href="http://whbzju.github.com/blog/2014/11/30/r-language-conference/"/>
+    <updated>2014-11-30T11:01:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/11/30/r-language-conference</id>
+    <content type="html"><![CDATA[<p>这届R语言大会在杭师仓前校区举行，由阿里巴巴承办。邀请到了libsvm的作者林老师。但据同事说林教授演讲用的ppt都是一套（汗~~~）。上午是主会场，有四位嘉宾做了介绍，其他几位介绍的比较范，林稍微带点干货，特别提到数据没有到20T，不一定要上big data。下午是分会场，本人去听了：</p>
+
+<ul>
+  <li>分析师使用的R包</li>
+  <li>京东的ctr模型</li>
+  <li>天猫learning to rank</li>
+  <li>天猫数据驱动运营。</li>
+</ul>
+
+<h2 id="section">点评</h2>
+
+<ul>
+  <li>京东分享推荐的ctr模型。和我街处于同一起跑线，模型和特征做法都很相似。赞下京东的分享着，讲的很实在。</li>
+  <li>天猫l2r。没什么干货，介绍了一些基本概念就结束了。</li>
+  <li>天猫数据驱动运营。预测销量，c2b。介绍的比较范，而且个人觉得他讲的效果有夸大的嫌疑。</li>
+  <li>分析师用的R包。R中类似ipython notebook的东西。可交互的图，非常实用。</li>
+</ul>
+
+<h2 id="section-1">感想</h2>
+
+<ul>
+  <li>Spark出现的频率很高。</li>
+  <li>用R来作云服务，我个人觉得不靠谱。</li>
+  <li>libsvm的作者好有趣。演讲前看论文，演讲后睡觉。工业界范十足。</li>
+  <li>学术界的分享依旧不靠谱。</li>
+  <li>IBM关于电信领域的挖掘是来搞笑的吗</li>
+  <li>接下来就等ppt了。</li>
+</ul>
+
+<p>最后，和阿里比，其他公司的所处的阶段还是非常的初级。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ipython notebook对机器学习工程师的价值]]></title>
+    <link href="http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me/"/>
+    <updated>2014-11-23T16:17:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me</id>
+    <content type="html"><![CDATA[<p>作为一个机器学习相关的工程师，永远有无数的dirty work要做。个人使用过matlab、R、python</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[聚类算法中常见的距离计算方法]]></title>
@@ -2459,91 +2507,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 
 <p>欠了好多，这些内容我在公司都有写过文档，可惜不能直接用，希望在整理的过程中有进一步的理解。</p>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Android JNI MAC OS环境配置]]></title>
-    <link href="http://whbzju.github.com/blog/2013/06/01/android-jni-config/"/>
-    <updated>2013-06-01T23:50:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2013/06/01/android-jni-config</id>
-    <content type="html"><![CDATA[<h2 id="jni">前言—JNI技术简介</h2>
-<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
-
-<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
-
-<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
-
-<h2 id="section">两种编译环境</h2>
-<ul>
-  <li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
-  <li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
-</ul>
-
-<h2 id="ndk">NDK编译环境</h2>
-<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
-
-<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">export PATH=$PATH:/Users/youpath/android-ndk-r8e</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>重启bash，即可使用ndk-build</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
-</span><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h2 id="hello-jni">运行Hello-jni</h2>
-<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
-</span><span class="line">Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
-</span><span class="line">Gdbsetup       : libs/armeabi/gdb.setup
-</span><span class="line">Compile thumb  : hello-jni &lt;= hello-jni.c
-</span><span class="line">SharedLibrary  : libhello-jni.so
-</span><span class="line">Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
-
-<h2 id="section-1">其他</h2>
-<ul>
-  <li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
-  <li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
-  <li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
-</ul>
-
-<h2 id="section-2">后续</h2>
-<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[李安家庭三部曲杂想]]></title>
-    <link href="http://whbzju.github.com/blog/2013/03/29/lianjiatingsanbuqu/"/>
-    <updated>2013-03-29T14:10:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2013/03/29/lianjiatingsanbuqu</id>
-    <content type="html"><![CDATA[<p>最近少年PI的漂流很火，很少见的微博上一致的好评，可惜妹子正值考研的关键阶段，不好打扰。再加上自己经济上实在是拮据，也不想多给家里增添负担，只好作罢。至今为止有两部电影很想看却没看成，一部是它，另一部是阿凡达。当然，其中缘由大相径庭，谁叫生活变化这么快呢。</p>
-
-<p>写东西，对我来讲是自身思维的整理，把我想的虑的形成文字表达出来。一个是我觉得自己最近的思路混乱，经常无法将一个问题描述清楚，逻辑上缺乏锻炼，或者也有可能是自己对问题本身并没有一个成型的思路。所以最近想把内心的东西挖出来，写点东西理一理，再次加工。</p>
-
-<p>李安的电影我其实看的很少，小的是看过卧虎藏龙，后来读研的时候重新回顾了一遍。这个导演把每个镜头都拍的很美，很用心，在讲他想讲的东西，拍他想给我们看得东西，于是，整个片子中透露着一种美。真正的艺术家，不会去迎合大众，不会去矫揉造作，他应该做他自己，展现出他想展现的，不带名利的枷锁，这样的作品中自然透露着一种美。请允许我不断的用美这个词汇，因为我词穷。当一个艺术家在创作时不是往自己的内心挖掘，而开始在意外界的元素时，比如名利，就是他艺术消亡的开始。
-<!--more-->
-虽然没有机会看少年PI的漂流，只好抽空看了他的家庭三部曲：饮食男女、推手、喜宴。其中我最喜欢的饮食男女，依然是唯美的画面，缓慢的节奏，虽然在剧情安排上有点出入意料，总体还是充满生活气息。看李安的电影，一定要在心境平实的时候，镜头通常是缓慢柔和，剧情温润如玉，会让你觉得这就是生活。特别是里面那些下厨的镜头，美得惊心动魄，我要变成李安的脑残粉了。</p>
-
-<p>剧中每个人都有一个梗，你越是努力去拔，越是徒劳，生活常常不经意间跟你开个玩笑，打乱你的平静。就像吃东西，你吃的再精致，也不会比别人得到更多的能量，怎么都是个吃，何必处处讲究，那不过是自己的梗，自己和自己较劲较真。只有你把它当回事，它才是回事，其实它远没有你想象的那么重要，没有它，世界依旧继续。就像没有你，世界也不会有什么不同。母亲死后，大姐把自己放在了母亲的位置，没了自己，为了让自己显得理所当然，她为自己编织了一个梦，姐妹需要她这么做，爸爸需要她这么做，连爱人她也可以编织一个出来。父亲每星期的家庭聚餐，与其说是维持家庭感情，不如说是为自己营造一个被人需要的感觉。人真是一种很奇怪的动物，人会自己给自己设立许多自己决定正确的事情，然后一刀切的实施到他人身上。</p>
-
-<p>推手里面最喜欢的画面是儿子在牢房里面探望老头子，痛哭流涕。拼命读书，留学，努力工作，就是希望能把爸爸接到美国来过几天好日子。最终的现实却是不断的相互折磨，不开心。年轻的时候，总觉自己聪明、勤奋，世界就在自己的手中，可以捏成自己想要的摸样。给自己设了一个个目标，以为做到了就能得到幸福。可惜，人生来好像就是受苦受磨难一般，总是出乎意料的让你无所适从。这些镜头不免让人想到自己，我们也一样为自己画了一个美丽可口的饼，然后告诉自己完成这些目标就能吃到那个饼，就是不知道吃到的饼还是不是自己从前想要的那个饼。</p>
-
-<p>可是生活还在继续，我们得活下去，若没有那么多硬性的要求，要赚多少钱，要让父母多开心，多放下一些会不会好一些呢？谁知道呢，写了半天，我们还是会按照原来的路子走的。</p>
-
-<p>PS：写完发现文字好悲观，可能正是这些悲观，才能让自己对得失释然一些，才会显得更加乐观，因为生活不会因为悲观就变好起来是吧。</p>
 ]]></content>
   </entry>
   

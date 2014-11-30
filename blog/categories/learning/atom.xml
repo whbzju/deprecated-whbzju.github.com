@@ -4,7 +4,7 @@
   <title><![CDATA[Category: learning | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/learning/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-11-22T23:44:18+08:00</updated>
+  <updated>2014-11-30T13:12:47+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[记第七届R语言大会]]></title>
+    <link href="http://whbzju.github.com/blog/2014/11/30/r-language-conference/"/>
+    <updated>2014-11-30T11:01:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/11/30/r-language-conference</id>
+    <content type="html"><![CDATA[<p>这届R语言大会在杭师仓前校区举行，由阿里巴巴承办。邀请到了libsvm的作者林老师。但据同事说林教授演讲用的ppt都是一套（汗~~~）。上午是主会场，有四位嘉宾做了介绍，其他几位介绍的比较范，林稍微带点干货，特别提到数据没有到20T，不一定要上big data。下午是分会场，本人去听了：</p>
+
+<ul>
+  <li>分析师使用的R包</li>
+  <li>京东的ctr模型</li>
+  <li>天猫learning to rank</li>
+  <li>天猫数据驱动运营。</li>
+</ul>
+
+<h2 id="section">点评</h2>
+
+<ul>
+  <li>京东分享推荐的ctr模型。和我街处于同一起跑线，模型和特征做法都很相似。赞下京东的分享着，讲的很实在。</li>
+  <li>天猫l2r。没什么干货，介绍了一些基本概念就结束了。</li>
+  <li>天猫数据驱动运营。预测销量，c2b。介绍的比较范，而且个人觉得他讲的效果有夸大的嫌疑。</li>
+  <li>分析师用的R包。R中类似ipython notebook的东西。可交互的图，非常实用。</li>
+</ul>
+
+<h2 id="section-1">感想</h2>
+
+<ul>
+  <li>Spark出现的频率很高。</li>
+  <li>用R来作云服务，我个人觉得不靠谱。</li>
+  <li>libsvm的作者好有趣。演讲前看论文，演讲后睡觉。工业界范十足。</li>
+  <li>学术界的分享依旧不靠谱。</li>
+  <li>IBM关于电信领域的挖掘是来搞笑的吗</li>
+  <li>接下来就等ppt了。</li>
+</ul>
+
+<p>最后，和阿里比，其他公司的所处的阶段还是非常的初级。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ipython notebook对机器学习工程师的价值]]></title>
+    <link href="http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me/"/>
+    <updated>2014-11-23T16:17:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me</id>
+    <content type="html"><![CDATA[<p>作为一个机器学习相关的工程师，永远有无数的dirty work要做。个人使用过matlab、R、python</p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[聚类算法中常见的距离计算方法]]></title>

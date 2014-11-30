@@ -9,8 +9,8 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="在我的认知中，编程最需要要关心的是数据结构和消息机制。进一步，即模块功能的定义，以及模块之间的通信。这和编程中的回调机制十分类似。回调在wiki中有如下定义：
-&gt; In computer programming, a callback is a piece of executable &hellip;">
+  <meta name="description" content="前言 工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
+安装教程 悲剧从此发生。。。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,155 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/29/wanerdeqiangheanzhuangscikit/">Mac OS 10.9 安装scikit&#8211;万恶的墙</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-29T14:26:00+08:00" pubdate data-updated="true">Dec 29<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/12/29/wanerdeqiangheanzhuangscikit/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2 id="section">前言</h2>
+
+<p>工作以来，接触不少机器学习相关的知识，一直听说python在这方面有许多优秀的工具，顺便自己也想学习python。经google后，决定安装scikit-learn试试。在官网上找到安装教程后，开心的发现支持brew。
+<a href="https://gist.github.com/stared/4730202">安装教程</a></p>
+
+<p>悲剧从此发生。。。brew需要安装的源许多都在SourceForge上，但是该网站被天朝强大的“墙”屏蔽了。没有办法一键安装。</p>
+
+<h2 id="section-1">源码安装</h2>
+<p>我也很纳闷为什么brew的源大部分在SourceForge上，为何不用GitHub的。既然不能一键安装，那我通过源码安装总可以吧。
+scikit需要numpy和scipy两个重要的组件，在scipy官网找到<a href="http://www.scipy.org/scipylib/building/macosx.html">安装教程</a>.</p>
+
+<p>在安装scipy的提示</p>
+
+<pre><code>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: can't open input file:
+</code></pre>
+
+<p>在查阅了一些资料后，问题貌似是由于xcode 5版本和xcode 4在工具链上有不少调整导致的，试了几种方法后未能解决。</p>
+
+<h2 id="brew-">brew 撞墙怎么办</h2>
+<p>参考网上资料，只有自己把文件下好，放到 /Library/Caches/Homebrew/ ，但是如果文件很多，就悲剧了。</p>
+
+<h2 id="section-2">不要轻易更新系统</h2>
+<p>在解决了brew撞墙问题后，继续尝试brew安装，依旧没有成功，提示xcode5版本太新，</p>
+
+<pre><code>make: *** [bootstrap] Error 2
+Error: Homebrew doesn't know what compiler versions ship with your version
+of Xcode (5.0.2).
+</code></pre>
+
+<h2 id="section-3">未完待续</h2>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/27/pedometer/">如何在手机上实现高精度及自适应多种场景的计步器算法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-27T22:58:00+08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/12/27/pedometer/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1 id="section">前言</h1>
+<p>随着当前智能终端的普及，人们可做的事情变得越来越有趣，比如计步器。传统的计步器一般是一个单独的设备，戴在身体的某个位置，由于必须在用户身上增加一个设备，推广起来有一定阻力。其实，计步器只需要一个3-轴加速度传感器就能做到较高的记步精度，类似三星note3的计步器精度在95%以上。当前智能手机一般都含有加速度传感器，许多人开始在手机上做计步器。可惜目前Android市场上大多数计步器精度都不理想，经本人测试，目前最好的是三星的note3的健康伙伴，更关键的是三星使用了sensorhub的技术，在保持精度的同时，做到了超低功耗。
+在手机上做计步器相较于传统的计步器最大的难点在于手机使用时位置不固定，计步器要能适应不同放置位置和不同走路场景，这就要求计步器算法有很好的动态调整能力。</p>
+
+<h1 id="section-1">计步器模型介绍</h1>
+<p>关于人走路的模型，前人[1]已经做了很多研究，不再累赘。总结来讲，人在走路时，加速度传感器会形成一个类似正弦波形图，因此可以根据检测波峰波谷记步。见下图：</p>
+
+<p><img src="/images/pedometer.png" alt="步伐传感器数据波形图" /></p>
+
+<h1 id="section-2">算法</h1>
+
+<h2 id="section-3">概述</h2>
+<ol>
+  <li>特征选取</li>
+  <li>滤波</li>
+  <li>基于动态阈值检测步数</li>
+  <li>步数矫正</li>
+</ol>
+
+<h2 id="section-4">特征选取</h2>
+<p>考虑到手机在不同放置情况下传感器的每个轴会有不同表现，因此，取其强度特征可以避免该类问题，即取三轴平方和。</p>
+
+<h2 id="section-5">滤波</h2>
+<p>滤波是一种常见的数据预处理方法，特别是手机上加速度传感器数据存在一定的噪音，经过滤波后能得到较平滑的数据。滤波算法有许多中，常见的有数字滤波，也可以叫中值滤波、高斯滤波、快速傅里叶变换。本人试过几种滤波算法后，发现采用中值滤波即可满足需求，因为算法的瓶颈并不在此。另一个考虑是终端的计算资源有限，过多的计算将造成大量的耗电。</p>
+
+<p>简单来讲，即取一个时间窗做平滑，假设以50HZ的频率采集加速度传感器数值，即在Android中注册Sensor频率为Fastest（不同手机可能会有差异）。我采用5个数据做一次平滑，即收到5个数据算一次平均值，当做当前值。当然，你可以增加时间窗长度，但是需要考虑用户体验，不能延迟太久。</p>
+
+<h2 id="section-6">动态阈值</h2>
+<p>通常，计步器有两种思路：一种是通过计算过零率来记步；另外一种是计算极大值和极小值，判断峰谷值来记步。两种算法的思想类似，都需要设置阈值。为了适应各种不同的位置和走路姿势，你不能简单设一个阈值来检测步数。第一种方法容易出现误记，需要结合其他方法排除在mean值附近抖动的数据。第二种方法容易出现漏检，同时如果误记，还会影响到后续的记步，因为在一次步伐中出现好几个峰谷是很正常的，如何去除这些数据的影响需要良好的设计。</p>
+
+<p>本人采用的检测峰谷值得方法记步，但不是通过计算极大值和极小值，而是设置波峰的阈值和波谷的阈值，即当数据大于波峰阈值时，都记为未确认峰值，保存其中最大的一个，这样可以避免数据在上升途中偶尔出现的抖动。同理，作用于峰谷。
+检测出峰谷之后，通过保存一个时间窗，通过里面的峰谷个数记步。这里更多的是工程上的设计。</p>
+
+<h2 id="section-7">步数矫正</h2>
+<p>基本思想是人类走路的特性，人的步伐速度在200-2000ms之间，通过记录记步的时间戳，矫正步数。步伐间隔&lt;200ms和&gt;2000ms，认为是无效步数。这部分也是目前终端计步器算法的核心，做的好的公司都有相应的矫正机制。</p>
+
+<h1 id="section-8">总结</h1>
+<p>计步器算法的基本思想大致如此，最终产品的表现还要不断打磨，针对异常场景进行优化。最后，终端设备上应用不可避免的是功耗问题，如果开了计步器，你的手机用半天就没电，估计没人愿意用。目前市场上许多低功耗计步器算法，大多以降低精度为代价。目前看来只有三星采用高通的sensorhub方案有较好的表现。</p>
+
+<p>参考：</p>
+
+<p>[1] <a href="http://www.analog.com/library/analogDialogue/china/archives/44-06/pedometer.html">利用3轴数字加速度计实现功能全面的计步器设计</a></p>
+
+<p>[2] <a href="https://github.com/bagilevi/android-pedometer">Github上的一个计步器实现代码</a> 改代码直接使用效果不好</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1447,143 +1596,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/01/android-jni-config/">Android JNI MAC OS环境配置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-01T23:50:00+08:00" pubdate data-updated="true">Jun 1<span>st</span>, 2013</time>
-        
-         | <a href="/blog/2013/06/01/android-jni-config/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2 id="jni">前言—JNI技术简介</h2>
-<p>JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是，计算机的世界在Java出现之前已经发展了很久，有很多优秀健壮的代码可以复用。比如Linux下的好多驱动模块、文件系统等。Java若去重新实现这些功能，未免费力不讨好，落下重复造轮子的名声。通过JNI技术，使用这些Native的模块，便成了一个折中的办法。同时，Java的世界依靠虚拟机构建，而虚拟机是native语言实现，并且虚拟机运行在具体的平台上，所以虚拟机本身是无法做到平台无关。通过JNI技术，可能做到在Java层的平台无关，即在Java层，底层的细节完全被屏蔽掉了。综合来讲，JNI技术一直支撑这Java世界，只不过我们平时接触的较少。</p>
-
-<p>在Android的世界里，不允许纯C/C++的程序出现，但是它支持JNI，通过JNI来实现java和C/C++的交互。因此，JNI对于需要接触到Android源码、底层驱动、图形图像等领域的开发者来讲异常重要。</p>
-
-<p>在Android中，Native语言实现的代码最终要编译成*.so动态库的方式，供java层调用，目前有两种途径实现。</p>
-
-<h2 id="section">两种编译环境</h2>
-<ul>
-  <li>源码编译环境：Android平台提供基于Make的编译环境，为App正确的编写Android.mk即可使用该编译环境，该环境需要通过git从Android的官方的源码平台获取源码并编译，得到环境。具体见：<a href="http://source.android.com/index.html">http://source.android.com/index.html</a></li>
-  <li>基于Android NDK的编译环境:NDK的全称叫做Native Development Kit。是google提供给我们用于本地编译JNI的工具。事实上，NDK和源码编译环境一样，都是使用Android的编译系统，通过Android.mk来控制编译。本文重点介绍这种方式。</li>
-</ul>
-
-<h2 id="ndk">NDK编译环境</h2>
-<p>在Mac下，配置NDK的环境十分简便，你只需要去<a href="http://developer.android.com/tools/sdk/ndk/index.html">官网</a>下载ndk包，前提是你已经安装好ndk需要的工具，一般你如果安装过xcode，基本的环境都会有。解压缩到任意一个目录下，把该目录加到你的PATH中即可。比如我的：</p>
-
-<p>在~/.bash_profile中把路径加入PATH，如果没有，可以创建一个.bash_profile，在最后加入下面语句。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">export PATH=$PATH:/Users/youpath/android-ndk-r8e</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>重启bash，即可使用ndk-build</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ source ~/.bash_profile
-</span><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h2 id="hello-jni">运行Hello-jni</h2>
-<p>ndk包解压缩之后，自带一些jni的例子，下面我们就来编译运行下hello-jni，感觉下jni的世界。该demo的路径在ndk安装路径的sample目录下。进入该路径，执行下列命令：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">HaibotekiMacBook-Air:jni haibowu$ ndk-build
-</span><span class="line">Gdbserver      : [arm-linux-androideabi-4.6] libs/armeabi/gdbserver
-</span><span class="line">Gdbsetup       : libs/armeabi/gdb.setup
-</span><span class="line">Compile thumb  : hello-jni &lt;= hello-jni.c
-</span><span class="line">SharedLibrary  : libhello-jni.so
-</span><span class="line">Install        : libhello-jni.so =&gt; libs/armeabi/libhello-jni.so</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>当系统提示生成*.so文件时，即代表编译成功。可以通过eclipse或者intellij idea导入该工程，运行查看效果。</p>
-
-<h2 id="section-1">其他</h2>
-<ul>
-  <li>如果你有android源码编译环境，你可以通过编写android.mk来编译app</li>
-  <li>如果你是在window下使用ndk，你需要安装cygwin，来模拟linux的环境，才能把ndk安装成功，其思想是一直的。参考：<a href="http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html">http://www.cnblogs.com/luxiaofeng54/archive/2011/08/13/2136982.html</a></li>
-  <li>ndk是一个开发工具包，你也可以查看它的源码、进行编译，具体参考：<a href="http://glandium.org/blog/?p=2146">http://glandium.org/blog/?p=2146</a></li>
-</ul>
-
-<h2 id="section-2">后续</h2>
-<p>接下来，我会写一篇介绍Jni的blog，希望能写的浅显易懂。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/29/lianjiatingsanbuqu/">李安家庭三部曲杂想</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-29T14:10:00+08:00" pubdate data-updated="true">Mar 29<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/03/29/lianjiatingsanbuqu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近少年PI的漂流很火，很少见的微博上一致的好评，可惜妹子正值考研的关键阶段，不好打扰。再加上自己经济上实在是拮据，也不想多给家里增添负担，只好作罢。至今为止有两部电影很想看却没看成，一部是它，另一部是阿凡达。当然，其中缘由大相径庭，谁叫生活变化这么快呢。</p>
-
-<p>写东西，对我来讲是自身思维的整理，把我想的虑的形成文字表达出来。一个是我觉得自己最近的思路混乱，经常无法将一个问题描述清楚，逻辑上缺乏锻炼，或者也有可能是自己对问题本身并没有一个成型的思路。所以最近想把内心的东西挖出来，写点东西理一理，再次加工。</p>
-
-<p>李安的电影我其实看的很少，小的是看过卧虎藏龙，后来读研的时候重新回顾了一遍。这个导演把每个镜头都拍的很美，很用心，在讲他想讲的东西，拍他想给我们看得东西，于是，整个片子中透露着一种美。真正的艺术家，不会去迎合大众，不会去矫揉造作，他应该做他自己，展现出他想展现的，不带名利的枷锁，这样的作品中自然透露着一种美。请允许我不断的用美这个词汇，因为我词穷。当一个艺术家在创作时不是往自己的内心挖掘，而开始在意外界的元素时，比如名利，就是他艺术消亡的开始。
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/29/lianjiatingsanbuqu/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1620,12 +1632,20 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 <section>
 	<h1>Categories</h1>
     	<ul id="categories">
-	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/maching'>maching</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
 	</ul>
 </section>
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/23/ipython-notebook-bring-to-me/">ipython notebook对机器学习工程师的价值</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
@@ -1637,14 +1657,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
     
       <li class="post">
         <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/windows-tips/">Windows tips</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/vim-tips/">Vim tips</a>
       </li>
     
   </ul>
