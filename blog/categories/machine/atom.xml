@@ -4,7 +4,7 @@
   <title><![CDATA[Category: machine | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/machine/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-11-30T14:59:49+08:00</updated>
+  <updated>2014-12-28T10:40:34+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -18,10 +18,35 @@
     <link href="http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me/"/>
     <updated>2014-11-23T16:17:00+08:00</updated>
     <id>http://whbzju.github.com/blog/2014/11/23/ipython-notebook-bring-to-me</id>
-    <content type="html"><![CDATA[<p>作为一个机器学习相关的工程师，永远有无数的dirty work要做。个人使用过matlab、R、python.</p>
+    <content type="html"><![CDATA[<p><strong>关键词</strong>：代码、数据、文档合一。</p>
 
-<p>to be continue…</p>
+<hr />
 
+<p>如果选一个关键词来描述机器学习工程师的工作，不断试错是我心中的number one。相对于软件工程师来讲，有大量琐碎的dirty需要做，通常会占据到80%左右的时间。一个好的工具能够极大的提高效率。</p>
+
+<p>总结需求如下：</p>
+
+<ol>
+  <li>可交互式的环境：比如预处理数据，有的时候数据比较大，比较耗时，希望能处理一次后就放在内存里面使用。</li>
+  <li>文档化，记录工作流。数据挖掘会有非常多的idea要去尝试，实现这些idea的代码会有微小的差异，需要一个工具能够统一追踪管理他们。且不同的实验会有不同的结果，整理这些结果形成文档太费时间，希望能够做完实验就生成文档。</li>
+  <li>经常会有一些片段代码要写，写在文件里有太零碎，写在交互式的shell里面有很难回溯，需要一个交互式和文档结合的工具。</li>
+  <li>支持可视化工具，兼容python画图</li>
+</ol>
+
+<h2 id="ipython-notebook">神奇的ipython notebook</h2>
+
+<h3 id="section">安装环境</h3>
+<p>非常简单，推荐：Anaconda, <a href="https://store.continuum.io/cshop/anaconda/">官网</a></p>
+
+<h3 id="ipython-notebook-1">ipython notebook入门</h3>
+<p>还是<a href="http://ipython.org/notebook.html">官网</a>, 一开始不适应的同学，多看几个example吧。</p>
+
+<h3 id="ipython-notebook-2">分享你的ipython notebook</h3>
+<p>一键分享：<a href="http://nbviewer.ipython.org/">A simple way to share Jupyter Notebooks</a></p>
+
+<h2 id="section-1">最后</h2>
+<p>附一张我的在kaggle上用ipython notebook做的一个入门题照：
+<img src="http://wujiarawsrc.qiniudn.com/sklearn-kaggle.png" alt="剧照" /></p>
 ]]></content>
   </entry>
   
