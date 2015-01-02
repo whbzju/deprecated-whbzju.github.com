@@ -9,7 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="这届R语言大会在杭师仓前校区举行，由阿里巴巴承办。邀请到了libsvm的作者林老师。但据同事说林教授演讲用的ppt都是一套（汗~~~）。上午是主会场，有四位嘉宾做了介绍，其他几位介绍的比较范，林稍微带点干货，特别提到数据没有到20T，不一定要上big data。下午是分会场，本人去听了： &hellip;">
+  <meta name="description" content="技术类 机器学习 Pattern Recognizition and Machine Learning. 目前完成前四章，还没有完全吸收，希望2015的成长能够顺利吸收这本书的知识。 推荐系统cookbook。感觉这本书有些落后于时代，大致翻了下。 推荐系统实践–项亮。入门好读物。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,182 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/02/2014-readlist/">2014读过的书和参加的公开课</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-02T10:45:00+08:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2015</time>
+        
+         | <a href="/blog/2015/01/02/2014-readlist/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2 id="section">技术类</h2>
+
+<h3 id="section-1">机器学习</h3>
+
+<ol>
+  <li>Pattern Recognizition and Machine Learning. 目前完成前四章，还没有完全吸收，希望2015的成长能够顺利吸收这本书的知识。</li>
+  <li>推荐系统cookbook。感觉这本书有些落后于时代，大致翻了下。</li>
+  <li>推荐系统实践–项亮。入门好读物。</li>
+  <li>Frontiers in Massive Data Analysis。综述型，推荐。</li>
+  <li>The Elements of Statistical Learning : Data Mining, Inference, andPrediction。当做工具书，还没有读多少，先把PRML搞定。</li>
+  <li>kaggle solution分享。</li>
+</ol>
+
+<h3 id="python">Python</h3>
+
+<ol>
+  <li>python cookbook. 非常推荐。</li>
+  <li>廖雪峰的python<a href="http://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000">教程</a>. 简洁概要，实战内容有难度，很适合提供自己编程水平。</li>
+  <li>python for data analysis。了解到pandas，数据分析利器。</li>
+  <li>sklearn官方文档。图文并茂，极力推荐。</li>
+  <li>pandas官方文档。例子丰富，入门先推荐10min那篇。</li>
+</ol>
+
+<h3 id="r">R</h3>
+<p>粗略看了写文档。</p>
+
+<h2 id="section-2">非技术类</h2>
+
+<ol>
+  <li>文明之光（上下），推荐，吴军博士的书质量一如既往。</li>
+  <li>女士品茶。概率论发展史及大牛八卦。</li>
+  <li>英语语法俱乐部–施元佑。大力推荐，介绍语法的来龙去脉。以前太不看重语法，阅读和写作的瓶颈。</li>
+  <li>金字塔原理。</li>
+  <li>思考的艺术</li>
+  <li>如何阅读一本书</li>
+  <li>数理统计简史</li>
+</ol>
+
+<h2 id="section-3">公开课</h2>
+
+<ol>
+  <li>Andrew Ng的Machine Learing。完成</li>
+  <li>台大的机器学习基石。完成</li>
+  <li>Functional Programming Principles in Scala。继续上</li>
+  <li>Mining Massive Datasets，正在上</li>
+  <li>機器學習技法 (Machine Learning Techniques)。正在上</li>
+</ol>
+
+<h2 id="section-4">互联网资讯</h2>
+
+<ol>
+  <li>咨询：依旧是知乎，目前没有看到什么能替代。</li>
+  <li>kaggle，非常好的机器学习学习平台</li>
+  <li>cousera，2015能学更多有价值的课程。</li>
+</ol>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/28/about-ml-fundation-course/">机器学习基石课程总结</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T11:07:00+08:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+        
+         | <a href="/blog/2014/12/28/about-ml-fundation-course/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>课程一开始，提了四个topic，what every machine learning user should know</p>
+
+<pre><code>* when can ml learn
+* why can ml learn
+* how can ml learn
+* how can ml learn better
+</code></pre>
+
+<h2 id="when-can-ml-learn">When can ml learn</h2>
+<p>首先，机器学习针对的场景，通过<em>A</em>对<em>D</em>和<em>H</em>学习一个g，用来描述最终的目标f，而这个事情无法简单的用规则搞定。其次，澄清各类细分ml场景的定义：</p>
+
+<pre><code>* 监督式
+* 非监督式
+* 增强学习
+* 推进系统
+* Activity学习，通过asking来学习
+* Streaming
+</code></pre>
+
+<h2 id="why-can-ml-learn">why can ml learn</h2>
+<pre><code>* shatter的概念
+* break point的概念
+* generation问题
+* VC维的概念
+</code></pre>
+
+<h2 id="how-can-ml-learn">how can ml learn</h2>
+<p>讲了一些基本的linear方法，比如logistic regression，顺便提了下nonlinear的问题，通过transform将nonlinear映射到linear可分的空间，有点类似核函数，需要进一步确认。</p>
+
+<h2 id="how-can-ml-learn-better">how can ml learn better</h2>
+<pre><code>* overfiting
+* regularition，这块数学不错。从拉格朗日的constraint说起，到L1和L2的直观意义。
+* cv
+* 三个重要的Principle。Occam's Razor， Sample Bias， Data Snooping.
+</code></pre>
+
+<h2 id="section">我对这门课的收获</h2>
+
+<pre><code>* 霍夫曼定理
+* VC维的理解，线性相关
+* 略微有点啰嗦，为了避免数学，导致描述的复杂度上升好几个级别
+</code></pre>
+
+<p>总体来讲，对工程人员帮助不是特别大，但有利于加深概念的理解。</p>
+
+<to be="" continue="">
+</to>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -668,226 +844,6 @@ a Brief Survey</li>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/03/30/introduction-to-android-adb/">Introduction to Android Adb</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-30T12:23:00+08:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time>
-        
-         | <a href="/blog/2014/03/30/introduction-to-android-adb/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently, I’m interesting how android adb works. If you are an Android programer, you certainly familiar with <code>adb shell</code>,<code>adb logcat</code>. Or maybe you only use eclipse, it is helpful to know behind DDMS there is adb.</p>
-
-<h1 id="adb-overview">ADB overview</h1>
-<p>We can find adb description from android developer website.
-&gt;Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
-
-<p>As introducted by google, it has three key components.</p>
-
-<blockquote>
-  <ul>
-    <li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
-    <li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
-    <li>A daemon, which runs as a background process on each emulator or device instance.</li>
-  </ul>
-</blockquote>
-
-<h1 id="basic-communication-model">Basic communication model</h1>
-<p>We can make it clear through this picture.
-<img src="/images/2014-03-25_adb_overview.png" alt="adb overview" /></p>
-
-<ul>
-  <li>
-    <p>Daemon: which named adbd is a service which is started when android init, and it will be restarted when it died for some reason.</p>
-  </li>
-  <li>Service: run background on host, it act as a proxy use for transport. Or you may know android use binder to communication.</li>
-  <li>Client: like <code>adb shell</code>, <code>adb logcat</code></li>
-</ul>
-
-<h1 id="command-detail">Command Detail</h1>
-<p>Please reference <a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
-
-<h1 id="how-can-i-connect-to-android-with-adb-over-tcp">How can I connect to Android with ADB over TCP?</h1>
-<p>At last, we have this topic. As we know from above, adb use tcp/usb, so it certainly can be connected with network. If it works, we can debug android without usb, and more we can connect one device with mutil adb client by many developers. And I find solution like this:
-###if your device is rooted
-According to a post on stackoverflow, you can enable ADB over Wi-Fi from the device with the commands:</p>
-
-<hr />
-<p><code>su</code></p>
-
-<p><code>setprop service.adb.tcp.port 5555</code></p>
-
-<p><code>stop adbd</code></p>
-
-<p><code>start adbd</code></p>
-
-<hr />
-<p>And you can disable it and return ADB to listening on USB with</p>
-
-<p><code>setprop service.adb.tcp.port -1</code> </p>
-
-<p><code>stop adbd</code></p>
-
-<p><code>start adbd</code></p>
-
-<h3 id="if-you-have-usb-access-already">if you have USB access already</h3>
-<p>It is even easier to switch to using Wi-Fi, if you already have USB. From a command line on the computer that has the device connected via USB, issue the commands</p>
-
-<p><code>adb tcpip 5555</code></p>
-
-<p><code>adb connect IP:5555</code></p>
-
-<h3 id="return-to-listening-over-usb">return to listening over USB</h3>
-<p>Apps to automate the process by:</p>
-
-<p><code>adb usb</code> </p>
-
-<h3 id="proctocol">proctocol</h3>
-<ul>
-  <li>server
-    <ul>
-      <li>success: OKAY</li>
-      <li>fail: FAIL</li>
-    </ul>
-  </li>
-  <li>client
-    <ul>
-      <li>Message component with head which is 4 bytes indicate length of message, and follow is content. </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="other">other</h3>
-<p>There are also several apps on Google Play that automate this process. </p>
-
-<h1 id="reference">Reference</h1>
-<p><a href="http://events.linuxfoundation.org/images/stories/pdf/lf_abs12_kobayashi.pdf">lf_abs12_kobayashi</a></p>
-
-<p><a href="http://developer.android.com/tools/help/adb.html">android developer</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/12/2013dushu/">2013年读过的书</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-12T23:09:00+08:00" pubdate data-updated="true">Jan 12<span>th</span>, 2014</time>
-        
-         | <a href="/blog/2014/01/12/2013dushu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2 id="section">技术类</h2>
-<p>###C++</p>
-
-<ol>
-  <li>esstianl c++，大学的时候读过，忘的差不多了。这次项目用到c++，为了快速上手，重读了一遍。评价五星。</li>
-  <li>c++ prime。至今还没有通读，处于当手册使用的阶段，书中的例子很赞，可以作为c++ cookbook。</li>
-  <li>effective c++。强烈推荐，不解释。</li>
-  <li>effective stl，因为effective c++才买的，看了感觉和上一本的级别差太多，不推荐。</li>
-</ol>
-
-<p>这里推荐c++ reference这个网站，有很多优秀例子代码，是很好的参考对象。同时，该网站支持在线编译运行，很赞。</p>
-
-<h3 id="c">C</h3>
-<ol>
-  <li>C专家编程。很赞，为它写了一篇简单的博客。</li>
-</ol>
-
-<h3 id="android">Android</h3>
-<ol>
-  <li>深入Android源码分析，卷一，邓平凡。强烈推荐，作者功力深厚，庖丁解牛。目前通读一遍，对JNI、Binder通信的理解加深许多。而像SurfaceFlinge这样的系统还没有很好的理解。</li>
-  <li>深入Android源码分析，卷二，同。</li>
-</ol>
-
-<h3 id="section-1">机器学习</h3>
-<ol>
-  <li>斯坦福大学机器学习课程及讲义。入门的好材料。</li>
-  <li>集体智慧编程。基于Python的机器学习常见算法教程。</li>
-</ol>
-
-<h3 id="section-2">代码质量、设计</h3>
-<ol>
-  <li>设计模式。GOF的，看一遍，感觉理解了，很快又会忘掉不少，每次做完项目重新看，都会有收获。</li>
-  <li>google开源编程规范。</li>
-</ol>
-
-<h3 id="section-3">其他</h3>
-<ol>
-  <li>自己动手实现操作系统。</li>
-  <li>深入理解C#</li>
-  <li>effective Java</li>
-</ol>
-
-<h2 id="section-4">非技术</h2>
-
-<ol>
-  <li>德川家康—长篇推荐，感慨日本人名字的神奇</li>
-  <li>冰与火之歌—魔龙狂舞，马丁爷爷一定要长命百岁</li>
-  <li>浪潮之巅—-推荐</li>
-  <li>活着活着就老了，冯唐</li>
-  <li>小通鉴，冯唐</li>
-  <li>人为什么活着，王小波</li>
-  <li>地久天长，王小波</li>
-  <li>走出软件磨坊</li>
-  <li>精益创业</li>
-  <li>创业四步法</li>
-</ol>
-
-<p>PS：今年上的最多的网站是知乎，感谢各位大牛热心分享知识。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -930,6 +886,14 @@ According to a post on stackoverflow, you can enable ADB over Wi-Fi from the dev
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/02/2014-readlist/">2014读过的书和参加的公开课</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/28/about-ml-fundation-course/">机器学习基石课程总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
       </li>
     
@@ -939,14 +903,6 @@ According to a post on stackoverflow, you can enable ADB over Wi-Fi from the dev
     
       <li class="post">
         <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
       </li>
     
   </ul>
@@ -979,7 +935,7 @@ MathJax.Hub.Config({
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
 
 <p>
-  Copyright &copy; 2014 - 阿波 -
+  Copyright &copy; 2015 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: machine | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/machine/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2014-12-28T10:40:34+08:00</updated>
+  <updated>2015-01-02T13:40:34+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[机器学习基石课程总结]]></title>
+    <link href="http://whbzju.github.com/blog/2014/12/28/about-ml-fundation-course/"/>
+    <updated>2014-12-28T11:07:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2014/12/28/about-ml-fundation-course</id>
+    <content type="html"><![CDATA[<p>课程一开始，提了四个topic，what every machine learning user should know</p>
+
+<pre><code>* when can ml learn
+* why can ml learn
+* how can ml learn
+* how can ml learn better
+</code></pre>
+
+<h2 id="when-can-ml-learn">When can ml learn</h2>
+<p>首先，机器学习针对的场景，通过<em>A</em>对<em>D</em>和<em>H</em>学习一个g，用来描述最终的目标f，而这个事情无法简单的用规则搞定。其次，澄清各类细分ml场景的定义：</p>
+
+<pre><code>* 监督式
+* 非监督式
+* 增强学习
+* 推进系统
+* Activity学习，通过asking来学习
+* Streaming
+</code></pre>
+
+<h2 id="why-can-ml-learn">why can ml learn</h2>
+<pre><code>* shatter的概念
+* break point的概念
+* generation问题
+* VC维的概念
+</code></pre>
+
+<h2 id="how-can-ml-learn">how can ml learn</h2>
+<p>讲了一些基本的linear方法，比如logistic regression，顺便提了下nonlinear的问题，通过transform将nonlinear映射到linear可分的空间，有点类似核函数，需要进一步确认。</p>
+
+<h2 id="how-can-ml-learn-better">how can ml learn better</h2>
+<pre><code>* overfiting
+* regularition，这块数学不错。从拉格朗日的constraint说起，到L1和L2的直观意义。
+* cv
+* 三个重要的Principle。Occam's Razor， Sample Bias， Data Snooping.
+</code></pre>
+
+<h2 id="section">我对这门课的收获</h2>
+
+<pre><code>* 霍夫曼定理
+* VC维的理解，线性相关
+* 略微有点啰嗦，为了避免数学，导致描述的复杂度上升好几个级别
+</code></pre>
+
+<p>总体来讲，对工程人员帮助不是特别大，但有利于加深概念的理解。</p>
+
+<to be="" continue="">
+</to>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ipython notebook对机器学习工程师的价值]]></title>

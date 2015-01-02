@@ -9,8 +9,7 @@
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="前言—JNI技术简介
-JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世界和Native世界的中介桥梁。其中Native世界一般指C/C++的世界。众所周知，Java是一种跨平台的语言，即Java编写的应用与平台无关。但是， &hellip;">
+  <meta name="description" content="最近的项目和一些图像处理有关，需要用C、C++实现，生成so文件，再通过JNI结合到Android的app中，有时候项目需要还会查看android的源码，做些调整，也会涉及到许多so文件，了解了一些JNI的技术。并且，正在读的一本书叫《深入理解Android》卷一，作者：邓平凡。该书是写的深入浅出 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +76,345 @@ JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/26/qianxi-jni/">浅析JNI(一)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-26T22:31:00+08:00" pubdate data-updated="true">Jun 26<span>th</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/26/qianxi-jni/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近的项目和一些图像处理有关，需要用C、C++实现，生成so文件，再通过JNI结合到Android的app中，有时候项目需要还会查看android的源码，做些调整，也会涉及到许多so文件，了解了一些JNI的技术。并且，正在读的一本书叫《深入理解Android》卷一，作者：邓平凡。该书是写的深入浅出，作者功力深厚，大力推荐购买。本文关于JNI的技术大部分参考该书第二章的内容，有兴趣的同学可以购买该书查看原文，这里作为我个人关于JNI的知识整理。</p>
+
+<p>在进入正题之前，需要读者了解一些预备知识，比如关于JNI环境的配置，第一个jni程序hello-jni实现，具体参考：<a href="http://whbzju.github.io/blog/2013/06/01/android-jni-config/">http://whbzju.github.io/blog/2013/06/01/android-jni-config/</a></p>
+
+<h1 id="section">内容概述</h1>
+<p>本文从以下4个部分进行：</p>
+
+<ol>
+  <li>Java层，声明、使用native方法</li>
+  <li>Java与Native如何关联，即注册的方式与实现</li>
+  <li>Java与Native方法通信，即如何互相调用</li>
+  <li>Java与Native的数据结构对应关系</li>
+</ol>
+
+<p>我相信，如果你弄懂了以上的问题，可以使用jni技术进行基本的开发。本文通过实现一个简单的demo，对以上的问题的进行解答。</p>
+
+<h1 id="java---native">Java层—声明、使用native方法</h1>
+<p>先看MediaScanner.java的代码</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>MediaScanner  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">jniActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="kd">private</span> <span class="n">TextView</span> <span class="n">tv</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">    <span class="cm">/**</span>
+</span><span class="line"><span class="cm">     * Called when the activity is first created.</span>
+</span><span class="line"><span class="cm">     */</span>
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">//setContentView(R.layout.main);</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class="line">        <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span> <span class="n">stringFromJNI</span><span class="o">()</span> <span class="o">);</span>
+</span><span class="line">        <span class="n">setContentView</span><span class="o">(</span><span class="n">tv</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// 这个方法采用静态注册，参考ndk自带的例子hello-jni的实现</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// 修改成动态注册</span>
+</span><span class="line">    <span class="c1">//public native String DynamicStringFromJNI();</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// 提供方法，让native层调用</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
+</span><span class="line">        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">&quot;Call from Native&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// 加载jni库</span>
+</span><span class="line">    <span class="kd">static</span><span class="o">{</span>
+</span><span class="line">       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>可以大致猜到，static块load了jni的库文件，有好几个带native声明的方法，这些方法都没有具体的实现，其实现应该在native层也就是c层。该方法对java来讲使用起来没什么不同。Java层需要做的事情就结束了，秘密应该就在这两个我们不熟悉的部分。总结下Java层的工作：</p>
+
+<ul>
+  <li>通过static块来加载对应的jni库</li>
+  <li>声明由关键字native修饰的方法</li>
+</ul>
+
+<p>看来Jni对Java程序员还是很友好的，使用起来很方便。</p>
+
+<h1 id="javanative---jni">Java与Native如何关联—注册JNI方法</h1>
+
+<p>首先，我们看下最简单的native方法实现，修改自ndk自带的sample：hello-jni的hellojni.c</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>learnjni  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">string</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+</span><span class="line"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">jni</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="cm">/* This is a trivial JNI example where we use a native method</span>
+</span><span class="line"><span class="cm"> * to return a new VM String. See the corresponding Java source</span>
+</span><span class="line"><span class="cm"> * file located at:</span>
+</span><span class="line"><span class="cm"> *</span>
+</span><span class="line"><span class="cm"> *   </span>
+</span><span class="line"><span class="cm"> */</span>
+</span><span class="line"><span class="n">jstring</span>
+</span><span class="line"><span class="nf">Java_com_example_learn_jni_jniActivity_stringFromJNI</span><span class="o">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="o">,</span>
+</span><span class="line">                                                  <span class="n">jobject</span> <span class="n">thiz</span> <span class="o">)</span>
+</span><span class="line"><span class="o">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="o">(*</span><span class="n">env</span><span class="o">)-&gt;</span><span class="n">NewStringUTF</span><span class="o">(</span><span class="n">env</span><span class="o">,</span> <span class="s">&quot;Hello from JNI !&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>明显，这里的函数名好奇怪，一大串。其实如果你有jni的基础，你会发现这个函数名和你知道的静态注册和动态注册都不一样，这里并没有使用包含方法签名的头文件，而是使用虚拟机默认的函数调用方式。</p>
+
+<p>注册这个概念不难理解，打个比方，java和c是两个世界的东西，若要将他们连接在一起，必须要有一个统一的沟通标准，注册就是将双方的方法函数用一个标准描述，通知对方。JNI里面有两种注册方式，分别是静态注册和动态注册。下面我们来详细介绍下这两种注册方式：</p>
+
+<h2 id="section-1">静态注册</h2>
+<p>静态注册比较简单，其步骤有二：</p>
+
+<ol>
+  <li>编译声明了native函数的java类，对每个生成的class用javah生成一个头文件，包含了native方法的签名。操作如下：<code>javah -o output package.classname</code>，这样会生成一个output.h的jni头文件，package.classname是java编译好的class文件。</li>
+  <li>在native层包含这个头文件，实现里面的函数声明。比如生成learnjni头文件的步骤如下：
+ 	1. 先生成class文件，由于learnjni是一个android工程，无法直接用javac生成class文件。此时有两种方式处理：一是通过android源码编译环境生成class；二是借助ice生成class，比如eclipse或者intellij idea，找到它们的输出路径。比如我的intellij idea输出路径是<code>IdeaProject/*/out</code>
+ 	2. <code>cd IdeaProject/*/out</code>
+ 	3. <code>javah -o output -classpath ~/IdeaProjects/Learn/learn-jni/src/ com.example.learn_jni.jniActivity</code>
+ 	4. 生成的output头文件如下：</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>output  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="cm">/* DO NOT EDIT THIS FILE - it is machine generated */</span>
+</span><span class="line"><span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">jni</span><span class="o">.</span><span class="na">h</span><span class="o">&gt;</span>
+</span><span class="line"><span class="cm">/* Header for class com_example_learn_jni_jniActivity */</span>
+</span><span class="line">
+</span><span class="line"><span class="err">#</span><span class="n">ifndef</span> <span class="n">_Included_com_example_learn_jni_jniActivity</span>
+</span><span class="line"><span class="err">#</span><span class="n">define</span> <span class="n">_Included_com_example_learn_jni_jniActivity</span>
+</span><span class="line"><span class="err">#</span><span class="n">ifdef</span> <span class="n">__cplusplus</span>
+</span><span class="line"><span class="n">extern</span> <span class="s">&quot;C&quot;</span> <span class="o">{</span>
+</span><span class="line"><span class="err">#</span><span class="n">endif</span>
+</span><span class="line"><span class="cm">/*</span>
+</span><span class="line"><span class="cm"> * Class:     com_example_learn_jni_jniActivity</span>
+</span><span class="line"><span class="cm"> * Method:    stringFromJNI</span>
+</span><span class="line"><span class="cm"> * Signature: ()Ljava/lang/String;</span>
+</span><span class="line"><span class="cm"> */</span>
+</span><span class="line"><span class="n">JNIEXPORT</span> <span class="n">jstring</span> <span class="n">JNICALL</span> <span class="nf">Java_com_example_learn_1jni_jniActivity_stringFromJNI</span>
+</span><span class="line">  <span class="o">(</span><span class="n">JNIEnv</span> <span class="o">*,</span> <span class="n">jobject</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="cm">/*</span>
+</span><span class="line"><span class="cm"> * Class:     com_example_learn_jni_jniActivity</span>
+</span><span class="line"><span class="cm"> * Method:    DynamicStringFromJNI</span>
+</span><span class="line"><span class="cm"> * Signature: ()Ljava/lang/String;</span>
+</span><span class="line"><span class="cm"> */</span>
+</span><span class="line"><span class="n">JNIEXPORT</span> <span class="n">jstring</span> <span class="n">JNICALL</span> <span class="nf">Java_com_example_learn_1jni_jniActivity_DynamicStringFromJNI</span>
+</span><span class="line">  <span class="o">(</span><span class="n">JNIEnv</span> <span class="o">*,</span> <span class="n">jobject</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="err">#</span><span class="n">ifdef</span> <span class="n">__cplusplus</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="err">#</span><span class="n">endif</span>
+</span><span class="line"><span class="err">#</span><span class="n">endif</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>需要解释下静态方法中native方法是如何和jni函数对应上。当Java层调用native方法，比如stringFromJNI时，它会从对应的JNI库中寻找 <code>Java_com_example_learn_1jni_jniActivity_stringFromJNI</code>，如果找不到就报错。如果找到，则为二者建立一个映射关系，其实是保存了jni层函数的函数指针。当然，这项工作由虚拟机完成。</p>
+
+<h2 id="section-2">小结</h2>
+<p>可以明显的看出，静态注册方法有不少弊端。</p>
+
+<ol>
+  <li>需要用javah对java类生成头文件，而且生成的jni层函数名字特别长，不方便书写。</li>
+  <li>若是将来函数名有改动，或者native函数数量有变化，都需要重新生成头文件，不易维护</li>
+  <li>初次调用native函数要根据函数名字搜索对应的jni层函数来建立关联关系，影响效率。</li>
+</ol>
+
+<h2 id="section-3">未完待续</h2>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/23/ruzhilianggeyuezongjie/">入职两月总结</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-23T09:01:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
+        
+         | <a href="/blog/2013/06/23/ruzhilianggeyuezongjie/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>好久没有写博客，一是工作后时间不是自己，每天很晚下班，回到家，洗洗差不多就要睡了。二是公司信息安全管的很严，资料带不出来，工作方面的积累不方便写到博客上，每次想起要重新写自己写过的东西，就很没有动力。</p>
+
+<p>本周过后，入职已经两个月了，公司的体制不想也没有资格评论，做的项目确是我很满意的，只能说塞翁失马焉知非福，找工作的时候千挑万选，也看不清进来后的项目，目前的情况还算幸运。现在的项目组涉及到的领域有Android开发、人脸识别、机器学习等，而且作为一个新的项目，我有幸可以从头开始接触整个项目。</p>
+
+<h2 id="section">成长</h2>
+
+<ul>
+  <li>Android源码环境调试app、系统组件</li>
+  <li>Android 4.0 人脸解锁app研究</li>
+  <li>Android JNI技术学习</li>
+  <li>人脸识别算法PCA、FDA、LBP学习</li>
+  <li>人脸检测HaarCascade学习</li>
+  <li>Opencv 人脸识别 Demo研究：Eigenface、fisherFaces、LBP。</li>
+  <li>机器学习LDA、贝叶斯学习</li>
+</ul>
+
+<h2 id="section-1">博客计划</h2>
+<p>后续博客将集中在三个领域</p>
+
+<ul>
+  <li>Android技术：分为源码和应用开发技术</li>
+  <li>人脸识别：集中于机器学习的方式实现</li>
+  <li>机器学习：未来重点</li>
+</ul>
+
+<p>计划中的blog：</p>
+
+<ul>
+  <li>Android JNI技术简介</li>
+  <li>Android调试小技巧</li>
+  <li>PCA之我的理解</li>
+  <li>fisherFaces之我的理解</li>
+  <li>Opencv人脸识别Demo</li>
+  <li>ADB的使用详解 </li>
+  <li>Haar分类器训练</li>
+</ul>
+
+<p>欠了好多，这些内容我在公司都有写过文档，可惜不能直接用，希望在整理的过程中有进一步的理解。</p>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -320,29 +658,37 @@ JNI是Java Native Interface的缩写，即“Java本地调用”，它是Java世
   <li>评论</li>
 </ul>
 
-<p>好在octopress的可定制性非常强，其核心配置文件叫 <code>_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：
-&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;div class="highlight"&gt;&lt;table&gt;&lt;tr&gt;&lt;td class="gutter"&gt;&lt;pre class="line-numbers"&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
-&lt;span class='line-number'&gt;2&lt;/span&gt;
-&lt;span class='line-number'&gt;3&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class=''&gt;&lt;span class='line'&gt;# Disqus Comments
-&lt;/span&gt;&lt;span class='line'&gt;disqus_short_name: 
-&lt;/span&gt;&lt;span class='line'&gt;disqus_show_comment_count:&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：
-&lt;div class='bogus-wrapper'&gt;&lt;notextile&gt;&lt;figure class='code'&gt;&lt;div class="highlight"&gt;&lt;table&gt;&lt;tr&gt;&lt;td class="gutter"&gt;&lt;pre class="line-numbers"&gt;&lt;span class='line-number'&gt;1&lt;/span&gt;
-&lt;span class='line-number'&gt;2&lt;/span&gt;
-&lt;span class='line-number'&gt;3&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code'&gt;&lt;pre&gt;&lt;code class=''&gt;&lt;span class='line'&gt;# list each of the sidebar modules you want to include, in the order you want them to appear.
-&lt;/span&gt;&lt;span class='line'&gt;# To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
-&lt;/span&gt;&lt;span class='line'&gt;default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-如注释中提到，asides的设置，关联的目录在</code>/source/_includes/custom/asides<code>。比如想要在右侧边栏中加入about me框，则需要在</code>/source/_includes/custom/asides/`中新建about.html。建议借用该目录下默认的about.html。
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<p>好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># Disqus Comments
+</span><span class="line">disqus_short_name: 
+</span><span class="line">disqus_show_comment_count:</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&lt;section&gt;
+</pre></td><td class="code"><pre><code class=""><span class="line">
+</span><span class="line"># list each of the sidebar modules you want to include, in the order you want them to appear.
+</span><span class="line"># To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
+</span><span class="line">default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>如注释中提到，asides的设置，关联的目录在<code>/source/\_includes/custom/asides</code>。比如想要在右侧边栏中加入about me框，则需要在<code>/source/\_includes/custom/asides/</code>中新建about.html。建议借用该目录下默认的about.html。</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&lt;section&gt;
 </span><span class="line">  &lt;h1&gt;About Me&lt;/h1&gt;
 </span><span class="line">  &lt;p&gt;A little something about me.&lt;/p&gt;
-</span><span class="line">&lt;/section&gt;</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+</span><span class="line">&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 </div>
   
   
@@ -618,59 +964,9 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/30/hello-octopress/">Hello Octopress</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-30T15:27:00+08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2013</time>
-        
-         | <a href="/blog/2013/01/30/hello-octopress/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1 id="hello-octopress">Hello Octopress</h1>
-
-<p>This is my first octopress blog, just for test.</p>
-
-<h2 id="section">中文</h2>
-<p>try chinese</p>
-
-<h2 id="code">code</h2>
-
-<h1 id="include-stdioh">include <stdio.h /></h1>
-<p>int main()
-{
-	printf(“Hello world\n”);
-	return 0;
-}</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -712,6 +1008,14 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/02/2014-readlist/">2014读过的书和参加的公开课</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/28/about-ml-fundation-course/">机器学习基石课程总结</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
       </li>
     
@@ -721,14 +1025,6 @@ Rake Ruby Make，顾名思义就是ruby写的make，他对应的Makefile是Rakef
     
       <li class="post">
         <a href="/blog/2014/11/22/ml-distance-measure/">聚类算法中常见的距离计算方法</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/13/machine-learning-at-coursera/">Coursera上Andrew Ng的机器学习课程评价</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/08/markdown-gramma/">Markdown_gramma(转)</a>
       </li>
     
   </ul>
@@ -761,7 +1057,7 @@ MathJax.Hub.Config({
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
 
 <p>
-  Copyright &copy; 2014 - 阿波 -
+  Copyright &copy; 2015 - 阿波 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
