@@ -15,25 +15,33 @@ categories: octopress
 * 评论
 
 好在octopress的可定制性非常强，其核心配置文件叫 `_config.yml,  基本上的配置都需要用到这个文件。它的逻辑比较简单，blog所有的配置都在这个文件，它的基本格式如下：
+
 ```
 # Disqus Comments
 disqus_short_name: 
 disqus_show_comment_count:
 ```
+
 这是一个第三方的评论插件，通过简单的设置即可实现blog中加入评论。注意，该文件是基于yaml语法，：后面的空格不能省略。该文件还有许多其他的参数可以配置，其中本文主要关注的是：
+
 ```
+
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
 default_asides: [asides/about.html, asides/weibo.html, asides/category_list.html, asides/recent_posts.html, asides/github.html, asides/twitter.html, asides/delicious.html, asides/pinboard.html, asides/googleplus.html]
+
 ```
 如注释中提到，asides的设置，关联的目录在`/source/\_includes/custom/asides`。比如想要在右侧边栏中加入about me框，则需要在`/source/\_includes/custom/asides/`中新建about.html。建议借用该目录下默认的about.html。
+
 ```
 <section>
   <h1>About Me</h1>
   <p>A little something about me.</p>
 </section>
+
 ```
 <!--more-->
+
 #配置方法
 博主的自定义主要参考网络上的几篇blog，在这里不再详述，实现的功能有:
 
