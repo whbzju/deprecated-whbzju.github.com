@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>机器学习技巧之feature_hashing - 知行录</title>
+  <meta name="author" content="阿波">
+
+  
+  <meta name="description" content="问题 最近在玩kaggle上的ctr比赛，其训练数据含大量categorical，无法直接用LR模型。举个例子，某个categorical数据集含[苹果，西瓜，梨，桃子]四个类别，一般的处理方法是将这些类别映射成[0,1,2,3]，放入模型中训练。其实这是不合理的，在categorical中， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://whbzju.github.com/blog/2015/02/10/feature-hashing/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="知行录" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<!--link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
+<!--link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" -->
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-16146431-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">知行录</a></h1>
+  
+    <h2>rethinking</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:whbzju.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博客主页</a></li>
+  <li><a href="/blog/archives">文章列表</a></li>
+  <li><a href="/about">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">机器学习技巧之feature_hashing</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-10T15:58:00+08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2015</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2 id="section">问题</h2>
+
+<p>最近在玩kaggle上的ctr比赛，其训练数据含大量categorical，无法直接用LR模型。举个例子，某个categorical数据集含[苹果，西瓜，梨，桃子]四个类别，一般的处理方法是将这些类别映射成[0,1,2,3]，放入模型中训练。其实这是不合理的，在categorical中，桃子和西瓜并不存在等级差，而变成[1,3]后会存在3&gt;1的问题。以Logistic Regression为代表的算法就无法对该特征学到合适的参数。因此，业界一般会对categorical数据集做onehotencoding，即向量化，还是以上面数据为例子，苹果对应的向量为[1,0,0,0]，桃子对应的为[0,0,0,1]。在sklearn中，可以通过OneHotEncoding或get_dummies实现。显而易见，数据会变得非常稀疏。同时，当categorical的类别变多，特征维度随之剧增，带来的内存存储问题。比如在这次的ctr中，如果采用OneHotEncoding，我60g内存的机器也会报Memory error。</p>
+
+<p>再次，ctr领域或者说高维大数据领域，数据集或多或少的存在稀疏问题。主流ML库都会实现一套稀疏矩阵，应对该问题。feature hashing又称feature trick，类似于kernel trick，在ML领域得到广泛应用的技巧。
+维基上的定义：</p>
+
+<blockquote>
+  <p>In machine learning, feature hashing, also known as the hashing trick[1] (by analogy to the kernel trick), is a fast and space-efficient way of vectorizing features, i.e. turning arbitrary features into indices in a vector or matrix. It works by applying a hash function to the features and using their hash values as indices directly, rather than looking the indices up in an associative array</p>
+</blockquote>
+
+<h2 id="section-1">解决方案</h2>
+
+<p>维基上关于Feature Hash的描述非常清晰，各位自己去看，不再累赘，这里多说一点hash的方法。常见的有以下两种实现：</p>
+
+<pre><code>function hashing_vectorizer(features : array of string, N : integer):
+ x := new vector[N]
+ for f in features:
+     h := hash(f)
+     x[h mod N] += 1
+ return x
+</code></pre>
+
+<p>另外还有一种：</p>
+
+<pre><code>function hashing_vectorizer(features : array of string, N : integer):
+ x := new vector[N]
+ for f in features:
+     h := hash(f)
+     idx := h mod N
+     if ξ(f) == 1:
+         x[idx] += 1
+     else:
+         x[idx] -= 1
+ return x
+</code></pre>
+
+<p>可以理解，既然是hash，必然要付出collision时的代价。实现方案一并没有考虑处理冲突，N越长，冲突的概率越低，然后存储的要求会变大。实现二，通过有符号的hash来解决冲突问题，即有很大概率在出现冲突时，该hash值为0，即不起作用，更详细的描述参考文献2.</p>
+
+<h2 id="sklearn-featurehasher">sklearn FeatureHasher的实现</h2>
+
+<p><code>class sklearn.feature_extraction.FeatureHasher(n_features=1048576, input_type='dict', dtype=&lt;type 'numpy.float64'&gt;, non_negative=False)</code>，该接口返回一个sparse类型的array。</p>
+
+<blockquote>
+  <p>The hash function employed is the signed 32-bit version of Murmurhash3.</p>
+</blockquote>
+
+<p>该接口需要注意的是数据入参，支持三种格式：pair、dict和string。可以参考官方的<a href="https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/feature_extraction/tests/test_feature_hasher.py">featurehasher test</a>。</p>
+
+<p>stackoverflow上也有一个比较好的例子：</p>
+
+<p>Q:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">I am using FeatureHasher in scikit-learn.
+</span><span class="line">
+</span><span class="line">Can anyone explain why I end up with 4 non zero data in the sparse matrix instead of 2 after the following:
+</span><span class="line">
+</span><span class="line">&gt;&gt;&gt; f = FeatureHasher(input_type='string')
+</span><span class="line">&gt;&gt;&gt; g = f.transform(('as','bs'))
+</span><span class="line">&lt;2x1048576 sparse matrix of type '&lt;type 'numpy.float64'&gt;'
+</span><span class="line">with 4 stored elements in Compressed Sparse Row format&gt;
+</span><span class="line">&gt;&gt;&gt; g=f.transform(('as','bs'))
+</span><span class="line">&gt;&gt;&gt; g.data
+</span><span class="line">array([-1.,  1., -1., -1.])
+</span><span class="line">&gt;&gt;&gt; g.nonzero()
+</span><span class="line">(array([0, 0, 1, 1], dtype=int32), array([341263, 354738,  98813, 341263], dtype=int32))
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>A:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">It appears is expecting a sequence of sequences. The outer sequence being for the observations, and the inner being features. With your input, the inner sequence are the characters of the string.
+</span><span class="line">
+</span><span class="line">Observation 0: 'a' -&gt; 354738, 's' -&gt; 341263
+</span><span class="line">
+</span><span class="line">Observation 1: 'b' -&gt; 98813, 's' -&gt; 341263
+</span><span class="line">
+</span><span class="line">Try this:
+</span><span class="line">
+</span><span class="line">g = f.transform([['as'],['bs']])
+</span><span class="line">For output:
+</span><span class="line">
+</span><span class="line">&gt;&gt;&gt; g.nonzero()
+</span><span class="line">(array([0, 1], dtype=int32), array([494108, 335425], dtype=int32))</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="section-2">参考文献</h2>
+
+<p>[1] <a href="http://en.wikipedia.org/wiki/Feature_hashing">Feature hashing From Wikipedia, the free encyclopedia</a></p>
+
+<p>[2] <a href="http://alex.smola.org/papers/2009/Weinbergeretal09.pdf">Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola and Josh Attenberg (2009). Feature hashing for large scale multitask learning. Proc. ICML.</a></p>
+
+<p>[3] <a href="http://scikit-learn.org/stable/modules/feature_extraction.html">sklearn feature hashing</a></p>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">阿波</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-10T15:58:00+08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2015</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/02/07/git-practices/" title="Previous Post: git 实践">&laquo; git 实践</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>ZJU CS小硕 爱读书 爱代码 相信移动互联网</p>
+</section>
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe 
+        width="100%" 
+        height="550" 
+        class="share_self" 
+        frameborder="0" 
+        scrolling="no" 
+        src="http://widget.weibo.com/weiboshow/index.php?width=0&height=550&ptype=1&speed=0&skin=&isTitle=0&noborder=1&isWeibo=1&isFans=&uid=1911447995&verifier=4e804b1d">
+      </iframe>
+    </li>
+  </ul>
+</section>
+
+<section>
+	<h1>Categories</h1>
+    	<ul id="categories">
+	        <li><a href='/blog/categories/c'>C</a></li><li><a href='/blog/categories/coding'>coding</a></li><li><a href='/blog/categories/git'>git</a></li><li><a href='/blog/categories/jni'>JNI</a></li><li><a href='/blog/categories/learning'>learning</a></li><li><a href='/blog/categories/mac'>Mac</a></li><li><a href='/blog/categories/machine'>machine</a></li><li><a href='/blog/categories/maching'>maching</a></li><li><a href='/blog/categories/octopress'>octopress</a></li><li><a href='/blog/categories/os'>OS</a></li><li><a href='/blog/categories/thoughts'>Thoughts</a></li><li><a href='/blog/categories/tryos'>TryOS</a></li><li><a href='/blog/categories/vim'>vim</a></li><li><a href='/blog/categories/公开课'>公开课</a></li><li><a href='/blog/categories/计步器'>计步器</a></li><li><a href='/blog/categories/读书'>读书</a></li>
+	</ul>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/02/10/feature-hashing/">机器学习技巧之feature_hashing</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/07/git-practices/">git 实践</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/01/02/2014-readlist/">2014读过的书和参加的公开课</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/28/about-ml-fundation-course/">机器学习基石课程总结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/30/r-language-conference/">记第七届R语言大会</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  jax: ["input/TeX", "output/HTML-CSS"],
+  tex2jax: {
+    inlineMath: [ ['$', '$'] ],
+    displayMath: [ ['$$', '$$']],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  messageStyle: "none",
+  "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+
+<p>
+  Copyright &copy; 2015 - 阿波 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'hbwu';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://whbzju.github.com/blog/2015/02/10/feature-hashing/';
+        var disqus_url = 'http://whbzju.github.com/blog/2015/02/10/feature-hashing/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

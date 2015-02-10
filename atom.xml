@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2015-01-02T13:40:34+08:00</updated>
+  <updated>2015-02-10T22:49:46+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,149 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[机器学习技巧之feature_hashing]]></title>
+    <link href="http://whbzju.github.com/blog/2015/02/10/feature-hashing/"/>
+    <updated>2015-02-10T15:58:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2015/02/10/feature-hashing</id>
+    <content type="html"><![CDATA[<h2 id="section">问题</h2>
+
+<p>最近在玩kaggle上的ctr比赛，其训练数据含大量categorical，无法直接用LR模型。举个例子，某个categorical数据集含[苹果，西瓜，梨，桃子]四个类别，一般的处理方法是将这些类别映射成[0,1,2,3]，放入模型中训练。其实这是不合理的，在categorical中，桃子和西瓜并不存在等级差，而变成[1,3]后会存在3&gt;1的问题。以Logistic Regression为代表的算法就无法对该特征学到合适的参数。因此，业界一般会对categorical数据集做onehotencoding，即向量化，还是以上面数据为例子，苹果对应的向量为[1,0,0,0]，桃子对应的为[0,0,0,1]。在sklearn中，可以通过OneHotEncoding或get_dummies实现。显而易见，数据会变得非常稀疏。同时，当categorical的类别变多，特征维度随之剧增，带来的内存存储问题。比如在这次的ctr中，如果采用OneHotEncoding，我60g内存的机器也会报Memory error。</p>
+
+<p>再次，ctr领域或者说高维大数据领域，数据集或多或少的存在稀疏问题。主流ML库都会实现一套稀疏矩阵，应对该问题。feature hashing又称feature trick，类似于kernel trick，在ML领域得到广泛应用的技巧。
+维基上的定义：</p>
+
+<blockquote>
+  <p>In machine learning, feature hashing, also known as the hashing trick[1] (by analogy to the kernel trick), is a fast and space-efficient way of vectorizing features, i.e. turning arbitrary features into indices in a vector or matrix. It works by applying a hash function to the features and using their hash values as indices directly, rather than looking the indices up in an associative array</p>
+</blockquote>
+
+<h2 id="section-1">解决方案</h2>
+
+<p>维基上关于Feature Hash的描述非常清晰，各位自己去看，不再累赘，这里多说一点hash的方法。常见的有以下两种实现：</p>
+
+<pre><code>function hashing_vectorizer(features : array of string, N : integer):
+ x := new vector[N]
+ for f in features:
+     h := hash(f)
+     x[h mod N] += 1
+ return x
+</code></pre>
+
+<p>另外还有一种：</p>
+
+<pre><code>function hashing_vectorizer(features : array of string, N : integer):
+ x := new vector[N]
+ for f in features:
+     h := hash(f)
+     idx := h mod N
+     if ξ(f) == 1:
+         x[idx] += 1
+     else:
+         x[idx] -= 1
+ return x
+</code></pre>
+
+<p>可以理解，既然是hash，必然要付出collision时的代价。实现方案一并没有考虑处理冲突，N越长，冲突的概率越低，然后存储的要求会变大。实现二，通过有符号的hash来解决冲突问题，即有很大概率在出现冲突时，该hash值为0，即不起作用，更详细的描述参考文献2.</p>
+
+<h2 id="sklearn-featurehasher">sklearn FeatureHasher的实现</h2>
+
+<p><code>class sklearn.feature_extraction.FeatureHasher(n_features=1048576, input_type='dict', dtype=&lt;type 'numpy.float64'&gt;, non_negative=False)</code>，该接口返回一个sparse类型的array。</p>
+
+<blockquote>
+  <p>The hash function employed is the signed 32-bit version of Murmurhash3.</p>
+</blockquote>
+
+<p>该接口需要注意的是数据入参，支持三种格式：pair、dict和string。可以参考官方的<a href="https://github.com/scikit-learn/scikit-learn/blob/master/sklearn/feature_extraction/tests/test_feature_hasher.py">featurehasher test</a>。</p>
+
+<p>stackoverflow上也有一个比较好的例子：</p>
+
+<p>Q:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">I am using FeatureHasher in scikit-learn.
+</span><span class="line">
+</span><span class="line">Can anyone explain why I end up with 4 non zero data in the sparse matrix instead of 2 after the following:
+</span><span class="line">
+</span><span class="line">&gt;&gt;&gt; f = FeatureHasher(input_type='string')
+</span><span class="line">&gt;&gt;&gt; g = f.transform(('as','bs'))
+</span><span class="line">&lt;2x1048576 sparse matrix of type '&lt;type 'numpy.float64'&gt;'
+</span><span class="line">with 4 stored elements in Compressed Sparse Row format&gt;
+</span><span class="line">&gt;&gt;&gt; g=f.transform(('as','bs'))
+</span><span class="line">&gt;&gt;&gt; g.data
+</span><span class="line">array([-1.,  1., -1., -1.])
+</span><span class="line">&gt;&gt;&gt; g.nonzero()
+</span><span class="line">(array([0, 0, 1, 1], dtype=int32), array([341263, 354738,  98813, 341263], dtype=int32))
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>A:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">It appears is expecting a sequence of sequences. The outer sequence being for the observations, and the inner being features. With your input, the inner sequence are the characters of the string.
+</span><span class="line">
+</span><span class="line">Observation 0: 'a' -&gt; 354738, 's' -&gt; 341263
+</span><span class="line">
+</span><span class="line">Observation 1: 'b' -&gt; 98813, 's' -&gt; 341263
+</span><span class="line">
+</span><span class="line">Try this:
+</span><span class="line">
+</span><span class="line">g = f.transform([['as'],['bs']])
+</span><span class="line">For output:
+</span><span class="line">
+</span><span class="line">&gt;&gt;&gt; g.nonzero()
+</span><span class="line">(array([0, 1], dtype=int32), array([494108, 335425], dtype=int32))</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="section-2">参考文献</h2>
+
+<p>[1] <a href="http://en.wikipedia.org/wiki/Feature_hashing">Feature hashing From Wikipedia, the free encyclopedia</a></p>
+
+<p>[2] <a href="http://alex.smola.org/papers/2009/Weinbergeretal09.pdf">Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola and Josh Attenberg (2009). Feature hashing for large scale multitask learning. Proc. ICML.</a></p>
+
+<p>[3] <a href="http://scikit-learn.org/stable/modules/feature_extraction.html">sklearn feature hashing</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[git 实践]]></title>
+    <link href="http://whbzju.github.com/blog/2015/02/07/git-practices/"/>
+    <updated>2015-02-07T08:54:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2015/02/07/git-practices</id>
+    <content type="html"><![CDATA[<h2 id="git-rebasegit-branch">git rebase和git branch</h2>
+<p>svn过来的同学一定会觉得git的分支管理好方便，但更应该了解的是git rebase。可以说，用不用git rebase是区分你熟不熟悉git的重要方式。</p>
+
+<h2 id="git-reset">git reset</h2>
+
+<h2 id="git-fetchgit-pull">git fetch和git pull</h2>
+
+<h2 id="git-commit--amend">git commit -amend</h2>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014读过的书和参加的公开课]]></title>
@@ -1941,437 +2084,6 @@ PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在�
 
 <h2 id="section-2">总结</h2>
 <p>JNI在实际开发中经常会碰到问题，由于其调试不方便，写起来还是蛮痛苦的。但由于其写法固定，比如函数注册等，写法很统一，常见的需求都有相应的套路，降低了开发难度。JNI部分的基础知识讲的差不多了，但是楼主还是不敢说对jni有多了解，这一个多月来，每次觉得掌握的差不多了，总又能碰到新的问题。所以只能在实际开发中不断积累经验。若后面有时间有心情，再写一篇JNI FQA吧。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[转：公开课点评（收藏用）]]></title>
-    <link href="http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian/"/>
-    <updated>2013-07-01T22:30:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2013/07/01/gongkaikedianpian</id>
-    <content type="html"><![CDATA[<h1 id="section">原文</h1>
-<p><strong><em><a href="http://www.ituring.com.cn/article/44222">!链接</a></em></strong></p>
-
-<p>今天在图灵Q群里聊到一些公开课心得。群友隋春宁建议我总结一下、发到社区。我也觉得这些信息可能对公开课同好有帮助，遂总结如下：</p>
-
-<p>我觉得比较好的课程：</p>
-
-<p>Algorithms: Design and Analysis, Part 1 和 Part2 都挺好的，算是理论和实践结合得很好、难度介于入门和专业之间的课程。</p>
-
-<p>Web Intelligence and Big Data 涉及的面比较广，但每个点讲得都不深。如果想对这个领域有个全面了解和认识，可以听一下。不过讲课人略带口音，听起来有点别扭。</p>
-
-<p>几门复杂网络（社交网络、经济网络分析等）课程都相当不错：Networked Life、Social Network Analysis、Social and Economic Networks: Models and Analysis，（还有一门 Networks: Friends, Money, and Bytes，我没听过，但据其他人评价应该不错），我从中学到了很多。而且我想，这里的概念和机器学习的联系也都是很紧密的。但复杂网络（其实大多是图论知识了）和机器学习的交叉，现在做的人还不太多，基本上物理和计算机两边还都是各做各的。这一块未来应该有不小发展空间。</p>
-
-<p>Image and video processing: From Mars to Hollywood with a stop at the hospital 和 Computational Photography 都是入门课，适合想对图像处理有所了解的人听。讲课这两位老师都是大牛，算是深入浅出吧。</p>
-
-<p>Functional Programming Principles in Scala，语言大师、Scala 创始人 Martin Odersky 亲授。我虽然没跟完，只听和做了前面三到四周的课和作业，但感觉很有收获。编程作业应该和 sicp 蛮相关的。能领会不少函数式编程的精神。</p>
-
-<p>Neural Networks for Machine Learning，这门课由神经网络和深度学习的宗师 Geoffrey Hinton 开设，也是覆盖面很广。如果先对神经网络有一些了解与实践，再来听可能收获会更大。我就是当时听的时候很多东西都没理解，现在仍然在反复看。</p>
-
-<p>Linear and Discrete Optimization 这门课不错，大多是 Papadimitriou 那本经典教材《Combinatorial Optimization》（有中文版《组合最优化：算法和复杂性》）的内容，建立了线性规划与组合优化之间的联系，对算法设计与分析也颇有帮助。看过之后，会明白图论很多经典算法是如何从线性规划角度推导出来的。</p>
-
-<p>Introduction to Finance 算是不错的金融学入门课，后几周对我来说有点难。我个人感觉金融思维属于和我当前思维完全不同的另一种思维方式，渐渐习惯之后，可能会对生活中的很多事物和现象有全新的认识。</p>
-
-<p>我觉得比较烂的课程：</p>
-
-<p>Game Theory 不推荐。。讲得很乱。问过周围的coursera学友，几乎都有这种感觉。尤其是后几周。</p>
-
-<p>Computational Investing, Part I 不推荐，老师讲得乱七八糟的。</p>
-
-<p>Heterogeneous Parallel Programming 不推荐。。同样是讲得乱七八糟。内容主要是 cuda 编程。想学这方面内容，可以去 udacity 学那门 Introduction to Parallel Programming。</p>
-
-<p>Computing for Data Analysis 这门课不推荐，讲R语言的，但感觉讲得很乱。反正我听完到现在是没什么印象了。</p>
-
-<p>暂时就这么多。还有一些课，比如：Control of Mobile Robots 、Introduction to Digital Sound Design 、Games without Chance: Combinatorial Game Theory 、Learn to Program: Crafting Quality Code 等，在我来说属于不好不坏的课程。有时间的话，听听亦无不可。</p>
-
-<p>欢迎讨论：）</p>
-
-<h1 id="section-1">讨论部分精华集合</h1>
-
-<ol>
-  <li>还有一门是刚刚结课的UW的Hardware/Software Interface，所讲的内容和用的教材就是CS：APP，讲课和作业也相当好，尤其是其中的几个Lab设计的都很精巧，起码学完后大大提升gdb调试功力。在课程的讨论版中也是多溢美之词。个人认为这门课是仅次于UW的Dan Grossman开的Programming Language的CS领域的第二好课</li>
-  <li>UW的Prof. Grossman有一个Programming Languages非常不错，今年二月份一直跟的，对FP的理论讲解比Scala那个要详细得多，强烈推荐哇。这门课主要通过ML，Racket和Ruby三门语言，向大家介绍Functional Programming里面的关键特性。ML部分是让大家熟悉基本的FP特性；Racket部分会让你独立用Racket写一个简单的子语言解释器，包括实现闭包和宏；Ruby部分详细对比FP和OOP的区别，会让大家写一个小游戏。最后会让大家用三门语言实现同一个跟计算几何相关的程序，来比较各种设计方法的优劣和其之间的权衡。</li>
-  <li>最经典的课当属Andrew Ng的machine learning和Keller的PGM。 
-我还看了NLP的两门课，都很不错。</li>
-</ol>
-
-<h1 id="section-2">感想</h1>
-<p>刚刚报名了Web Intelligence and Big Data，看自己什么时候能完成。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[浅析JNI（二）]]></title>
-    <link href="http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2/"/>
-    <updated>2013-06-30T09:55:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2013/06/30/qianxi-jni-2</id>
-    <content type="html"><![CDATA[<p>上文：<a href="http://whbzju.github.io/blog/2013/06/26/qianxi-jni/">浅析JNI</a>中提到，静态注册方法有不少弊端，和现在的链接方式方式分静态链接和动态链接相识，jni技术中还有动态注册，本文将详细介绍其实现机制和原理。</p>
-
-<h1 id="section">动态注册</h1>
-
-<h2 id="java">Java层</h2>
-<p>先看代码，为hello-jni的java层添加动态注册的native方法，与静态注册的native方法比较。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>jniActivity  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">jniActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">private</span> <span class="n">TextView</span> <span class="n">tv</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line">    <span class="cm">/**</span>
-</span><span class="line"><span class="cm">     * Called when the activity is first created.</span>
-</span><span class="line"><span class="cm">     */</span>
-</span><span class="line">    <span class="nd">@Override</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">        <span class="c1">//setContentView(R.layout.main);</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-</span><span class="line">        <span class="c1">//tv.setText( stringFromJNI() );</span>
-</span><span class="line">        <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">DynamicStringFromJNI</span><span class="o">());</span>
-</span><span class="line">        <span class="n">setContentView</span><span class="o">(</span><span class="n">tv</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 这个方法采用静态注册，参考ndk自带的例子hello-jni的实现</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 修改成动态注册</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">DynamicStringFromJNI</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 提供方法，让native层调用</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
-</span><span class="line">        <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">&quot;Call from Native&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 加载jni库</span>
-</span><span class="line">    <span class="kd">static</span><span class="o">{</span>
-</span><span class="line">       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>以上的代码很简单，stringFromJNI上上节中用来演示静态注册，testMethodForNativeCallJava是后面要用到，暂时不用关心。我们来看<code>public native String DynamicStringFromJNI()</code>。动态注册和静态注册对java层来说没有区别。</p>
-
-<h2 id="c">C层</h2>
-<p>同样，先看代码：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>learnjni  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-<span class="line-number">55</span>
-<span class="line-number">56</span>
-<span class="line-number">57</span>
-<span class="line-number">58</span>
-<span class="line-number">59</span>
-<span class="line-number">60</span>
-<span class="line-number">61</span>
-<span class="line-number">62</span>
-<span class="line-number">63</span>
-<span class="line-number">64</span>
-<span class="line-number">65</span>
-<span class="line-number">66</span>
-<span class="line-number">67</span>
-<span class="line-number">68</span>
-<span class="line-number">69</span>
-<span class="line-number">70</span>
-<span class="line-number">71</span>
-<span class="line-number">72</span>
-<span class="line-number">73</span>
-<span class="line-number">74</span>
-<span class="line-number">75</span>
-<span class="line-number">76</span>
-<span class="line-number">77</span>
-<span class="line-number">78</span>
-<span class="line-number">79</span>
-<span class="line-number">80</span>
-<span class="line-number">81</span>
-<span class="line-number">82</span>
-<span class="line-number">83</span>
-<span class="line-number">84</span>
-<span class="line-number">85</span>
-<span class="line-number">86</span>
-<span class="line-number">87</span>
-<span class="line-number">88</span>
-<span class="line-number">89</span>
-<span class="line-number">90</span>
-<span class="line-number">91</span>
-<span class="line-number">92</span>
-<span class="line-number">93</span>
-<span class="line-number">94</span>
-<span class="line-number">95</span>
-<span class="line-number">96</span>
-<span class="line-number">97</span>
-<span class="line-number">98</span>
-<span class="line-number">99</span>
-<span class="line-number">100</span>
-<span class="line-number">101</span>
-</pre></td><td class="code"><pre><code class="c"><span class="line"><span class="cp">#include &lt;string.h&gt;</span>
-</span><span class="line"><span class="cp">#include &lt;jni.h&gt;</span>
-</span><span class="line"><span class="cp">#include &lt;assert.h&gt;</span>
-</span><span class="line"><span class="cp">#include &lt;android/log.h&gt;</span>
-</span><span class="line">
-</span><span class="line">
-</span><span class="line"><span class="cp">#define TAG &quot;Learn-jni&quot;</span>
-</span><span class="line"><span class="cp">#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__))</span>
-</span><span class="line">
-</span><span class="line"><span class="cm">/* This is a trivial JNI example where we use a native method</span>
-</span><span class="line"><span class="cm"> * to return a new VM String. See the corresponding Java source</span>
-</span><span class="line"><span class="cm"> * file located at:</span>
-</span><span class="line"><span class="cm"> *</span>
-</span><span class="line"><span class="cm"> *   apps/samples/hello-jni/project/src/com/example/hellojni/HelloJni.java</span>
-</span><span class="line"><span class="cm"> */</span>
-</span><span class="line">
-</span><span class="line"><span class="n">jstring</span>
-</span><span class="line"><span class="nf">Java_com_example_learn_jni_jniActivity_stringFromJNI</span><span class="p">(</span> <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span>
-</span><span class="line">                                                  <span class="n">jobject</span> <span class="n">thiz</span> <span class="p">)</span>
-</span><span class="line"><span class="p">{</span>
-</span><span class="line">    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">&quot;Hello from JNI !&quot;</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line">
-</span><span class="line"><span class="n">jstring</span> <span class="nf">dynamicHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">&quot;Hello from Dynamic register&quot;</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="k">static</span> <span class="n">JNINativeMethod</span> <span class="n">gMethods</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class="line">    <span class="p">{</span>
-</span><span class="line">    <span class="s">&quot;DynamicStringFromJNI&quot;</span><span class="p">,</span>
-</span><span class="line">    <span class="s">&quot;()Ljava/lang/String;&quot;</span><span class="p">,</span>
-</span><span class="line">    <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="n">dynamicHello</span>
-</span><span class="line">    <span class="p">},</span>
-</span><span class="line">
-</span><span class="line"><span class="p">};</span>
-</span><span class="line">
-</span><span class="line"><span class="kt">int</span> <span class="nf">registerNativeMethods</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">){</span>
-</span><span class="line">    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">className</span> <span class="o">=</span> <span class="s">&quot;com/example/learn_jni/jniActivity&quot;</span><span class="p">;</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">jniRegisterNativeMethods</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">className</span><span class="p">,</span> <span class="n">gMethods</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">)</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">gMethods</span><span class="p">[</span><span class="mi">0</span><span class="p">]))){</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">JNI_FALSE</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jniRegisterReturn 0, registerNative return 1&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">JNI_TRUE</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kt">int</span> <span class="nf">jniRegisterNativeMethods</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">className</span><span class="p">,</span> <span class="k">const</span> <span class="n">JNINativeMethod</span><span class="o">*</span> <span class="n">gMethods</span><span class="p">,</span> <span class="kt">int</span> <span class="n">numMethods</span><span class="p">){</span>
-</span><span class="line">    <span class="n">jclass</span> <span class="n">clazz</span><span class="p">;</span>
-</span><span class="line">    <span class="n">clazz</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">FindClass</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">className</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;call jniRegisterNative&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">clazz</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
-</span><span class="line">        <span class="c1">//printf(&quot;clazz is null\n&quot;);</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;clazz is null&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">JNI_FALSE</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">RegisterNatives</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">clazz</span><span class="p">,</span> <span class="n">gMethods</span><span class="p">,</span> <span class="n">numMethods</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;RegisterNative failed&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jniRegister Return 0&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="n">jint</span> <span class="nf">JNI_OnLoad</span><span class="p">(</span><span class="n">JavaVM</span><span class="o">*</span> <span class="n">vm</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">reserved</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;call java jni_onload&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="c1">//printf(&quot;JNI OnLoad&quot;);</span>
-</span><span class="line">    <span class="n">assert</span><span class="p">(</span><span class="n">vm</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;vm ok&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class="line">    <span class="n">jint</span> <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">vm</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetEnv</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_4</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jni version failed&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad\n&quot;);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">assert</span><span class="p">(</span><span class="n">env</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;env ok&quot;</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">registerNativeMethods</span><span class="p">(</span><span class="n">env</span><span class="p">)){</span>
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;register failed&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">return</span> <span class="n">JNI_VERSION_1_4</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>代码有点长，其中类似<code>__android_log_print(ANDROID_LOG_DEBUG,"hello-jni","env ok");</code>是我用来调试用的，jni方法无法直接用ide调试，一般情况下可以用打log的方式调试，如上面的做法，还需要修改Android.mk，加入<code>LOCAL_LDLIBS :=-llog</code>，放在<code>include $(CLEAR_VARS)
-</code>后面。不过打log的方式有时候很低效，有另外一种调试方法是通过ndk-gdb来调试native的函数，当然这又是另外一个话题，针对它我还有一些疑问，哪天解决了再写一篇博客吧。</p>
-
-<h3 id="jni">JNI签名介绍</h3>
-<p>不要被上面的代码吓到，我们来理一理思路。既然是动态注册，那是不是应该有类似符号表的东西来保存java层和native层之间的对应关系呢？答案是肯定的，它叫JNINativeMethod，其定义如下：
-	typedef struct{
-		const char* name;
-		const char* signature;
-		void*       fnPtr;
-	} JNINativeMethod;</p>
-
-<p>30~37行的代码即做了这个事情，这个逻辑上很好理解，唯一奇怪的是里面的内容。这里和签名的格式有关，网上类似的介绍很多，简单来讲，JNI类型签名定义如下：
-	（参数1类型标示;参数2类型标示;…参数n类型标示）返回值类型标示
-其对应的类型标示可以参考jni.h中的定义，理解起来就是将java中的类型翻译成c中的类型：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>jni  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="c"><span class="line"><span class="cp"># include &lt;inttypes.h&gt;      </span><span class="cm">/* C99 */</span><span class="cp"></span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">uint8_t</span>         <span class="n">jboolean</span><span class="p">;</span>       <span class="cm">/* unsigned 8 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">int8_t</span>          <span class="n">jbyte</span><span class="p">;</span>          <span class="cm">/* signed 8 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">uint16_t</span>        <span class="n">jchar</span><span class="p">;</span>          <span class="cm">/* unsigned 16 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">int16_t</span>         <span class="n">jshort</span><span class="p">;</span>         <span class="cm">/* signed 16 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">int32_t</span>         <span class="n">jint</span><span class="p">;</span>           <span class="cm">/* signed 32 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">int64_t</span>         <span class="n">jlong</span><span class="p">;</span>          <span class="cm">/* signed 64 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">float</span>           <span class="n">jfloat</span><span class="p">;</span>         <span class="cm">/* 32-bit IEEE 754 */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">double</span>          <span class="n">jdouble</span><span class="p">;</span>        <span class="cm">/* 64-bit IEEE 754 */</span>
-</span><span class="line"><span class="cp">#else</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span>   <span class="n">jboolean</span><span class="p">;</span>       <span class="cm">/* unsigned 8 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">signed</span> <span class="kt">char</span>     <span class="n">jbyte</span><span class="p">;</span>          <span class="cm">/* signed 8 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">short</span>  <span class="n">jchar</span><span class="p">;</span>          <span class="cm">/* unsigned 16 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">short</span>           <span class="n">jshort</span><span class="p">;</span>         <span class="cm">/* signed 16 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">int</span>             <span class="n">jint</span><span class="p">;</span>           <span class="cm">/* signed 32 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">long</span> <span class="kt">long</span>       <span class="n">jlong</span><span class="p">;</span>          <span class="cm">/* signed 64 bits */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">float</span>           <span class="n">jfloat</span><span class="p">;</span>         <span class="cm">/* 32-bit IEEE 754 */</span>
-</span><span class="line"><span class="k">typedef</span> <span class="kt">double</span>          <span class="n">jdouble</span><span class="p">;</span>        <span class="cm">/* 64-bit IEEE 754 */</span>
-</span><span class="line"><span class="cp">#endif</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>更详细的对应关系请参考：<a href="http://blog.csdn.net/lizhiguo0532/article/details/7219357">http://blog.csdn.net/lizhiguo0532/article/details/7219357</a></p>
-
-<h3 id="section-1">注册</h3>
-<p>这里我实现了两个方法：<code>registerNativeMethods</code>和<code>jniRegisterNativeMethods</code>, 最终调用<code>RegisterNatives</code>完成注册。看起来好像很复杂，其实核心只有两个函数，总结如下：</p>
-
-<ul>
-  <li>jclass clazz = (*env)-&gt;FindClass(env, className);</li>
-  <li>(*env)-&gt;RegisterNatives(env, clazz, gMethods, numMethods)</li>
-</ul>
-
-<p><strong><em>PS:这里有个env，它是指向JNIEnv的一个结构体，它非常重要，后面会有针对它的讨论。</em></strong></p>
-
-<p>那么动态注册的函数在什么时候和什么地方被调用，引用《深入理解Android》卷一中的原文：
-&gt; 当Java层通过System.loadLibrary加载完JNI动态库后，紧接着会查找该库中一个叫JNI_Load的函数，如果有，就调用它，而动态注册的工作是在这里完成的。</p>
-
-<p>对照上面的代码中JNI_Load的实现，来理解这句话。</p>
-
-<p>到这里动态注册就完成了。结果如下
-<img src="images/androidscreen1.png" alt="运行截图" /></p>
-
-<h1 id="section-2">未完待续</h1>
 ]]></content>
   </entry>
   

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | 知行录]]></title>
+  <link href="http://whbzju.github.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://whbzju.github.com/"/>
+  <updated>2015-02-10T22:49:46+08:00</updated>
+  <id>http://whbzju.github.com/</id>
+  <author>
+    <name><![CDATA[阿波]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[git 实践]]></title>
+    <link href="http://whbzju.github.com/blog/2015/02/07/git-practices/"/>
+    <updated>2015-02-07T08:54:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2015/02/07/git-practices</id>
+    <content type="html"><![CDATA[<h2 id="git-rebasegit-branch">git rebase和git branch</h2>
+<p>svn过来的同学一定会觉得git的分支管理好方便，但更应该了解的是git rebase。可以说，用不用git rebase是区分你熟不熟悉git的重要方式。</p>
+
+<h2 id="git-reset">git reset</h2>
+
+<h2 id="git-fetchgit-pull">git fetch和git pull</h2>
+
+<h2 id="git-commit--amend">git commit -amend</h2>
+
+]]></content>
+  </entry>
+  
+</feed>
