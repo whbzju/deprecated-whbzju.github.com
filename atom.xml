@@ -4,7 +4,7 @@
   <title><![CDATA[知行录]]></title>
   <link href="http://whbzju.github.com/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2015-02-10T22:49:46+08:00</updated>
+  <updated>2015-02-16T20:40:02+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[random forest]]></title>
+    <link href="http://whbzju.github.com/blog/2015/02/16/random-forest/"/>
+    <updated>2015-02-16T15:09:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2015/02/16/random-forest</id>
+    <content type="html"><![CDATA[<h2 id="section">概述</h2>
+
+<h3 id="section-1">知识背景要求</h3>
+
+<p>本文要求读者对机器学习中的一些基本概念有一定了解，比如特征，交叉验证，generation等概念。随机森林基于决策树模型，读者事先最好对决策树有一定的了解，若完全不了解，请将文中的tree抽象成能告诉你对错的一个black box，则不会影响理解。</p>
+
+<h3 id="section-2">目录</h3>
+
+<ol>
+  <li>基本思想</li>
+  <li>理论保证</li>
+  <li>实践中常用的特性</li>
+  <li>实践效果验证</li>
+  <li>需要重点注意的</li>
+  <li>参考</li>
+</ol>
+
+<h2 id="section-3">基本思想</h2>
+
+<h3 id="ensemble-method">Ensemble method</h3>
+
+<p>ensemble是当前主流机器学习领域一个非常流行的概念。引用sklearn的文档：</p>
+
+<blockquote>
+  <p>The goal of ensemble methods is to combine the predictions of several base estimators built with a given learning algorithm in order to improve generalizability / robustness over a single estimator.</p>
+</blockquote>
+
+<p>其又分为两大类：averaging和boosting，分别以Random Forest和AdaBoost算法为代表。</p>
+
+<h3 id="random-forest">Random Forest</h3>
+
+<p>引用wiki的定义：</p>
+
+<blockquote>
+  <p>Random forests are an ensemble learning method for classification, regression and other tasks, that operate by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees. </p>
+</blockquote>
+
+<p>直白来讲，随机森林就是将一堆决策树聚在一起，形成一个森林，让每个决策树对测试目标投票，最后对结果求平均，得到最终结果。举个例子：今天你要预测中国队能不能进入世界杯，你找了一百个朋友，让他们每个人给个预测，最后对所有人的预测结果求平均，得到最后中国队能不能出线的结论。直观来理解，这个模型最终结果受到两个因素影响，这一百个朋友中每个人对足球的了解程度和这些人之间的差异程度。</p>
+
+<p>换个正式点的描述：首先，我们假设你了解如果构造一个决策树，随机森林构造了很多个决策树，对于一个数据集N，每次随机抽取n个数据和m个特征，构造一个完全生长的树（不用剪枝），将数据放回重复上述过程，直到生成M棵树。其中有放回的抽样称为bootstrap，是非常重要的概念，下文中让随机森林不用交叉验证的out-of-bag理论基于此。在最初的那篇论文，提到该模型的error受两个因素影响：</p>
+
+<pre><code>* 每个树之间的correction。correction增加，error增加。
+* 单独一颗树的strength（不知道怎么翻译，能力？）。strength增加，error下降。
+</code></pre>
+
+<p>随机选取m个特征是个关键的步骤，假设总特征有M个，m越小，correction和strength越小。m越大，correction和strength越大。一个合理的m很重要。</p>
+
+<h2 id="section-4">理论保证</h2>
+
+<p>写公式好累，大家去看参考文献吧。</p>
+
+<h2 id="section-5">常用特性</h2>
+
+<ul>
+  <li>oob </li>
+  <li>feature importance</li>
+  <li>聚类</li>
+</ul>
+
+<h3 id="the-out-of-bag-oob-error-estimate">The out-of-bag (oob) error estimate</h3>
+
+<p>前面提到过boostrap，这个抽样机制从理论上决定了每次抽样有近三分之一的数据不会被抽到，即可以直接拿来做为测试集，使random forest免去cross validation的过程，节省了时间，称为oob。</p>
+
+<h3 id="feature-importance">feature importance</h3>
+
+<p>random forest是个black box，feature importance特性有助于模型的可解释性。简单考虑下，就算在解释性很强的决策树模型中，如果树过于庞大，人类也很难解释它做出的结果。随机森林通常会有上百棵树组成，更加难以解释。好在我们可以找到那些特征是更加重要的，从而辅助我们解释模型。更加重要的是可以剔除一些不重要的特征，降低杂讯。比起pca降维后的结果，更具有人类的可理解性。</p>
+
+<p>feature importance有好几种方案实现，最常用的是基于一个思想：如果该特征非常的重要，那么稍微改变一点它的值，就会对模型造成很大的影响。再偷个懒，自己造数据太麻烦，可以直接在数据集对该维度的特征数据进行打乱，重新训练测试，打乱前的准确率减去打乱后的准确率就是该特征的重要度。该方法又叫permute。</p>
+
+<h3 id="unsupervised-learning-">Unsupervised learning 聚类</h3>
+
+<p>有点出乎意料，原来随机森林还可以做聚类。总所周知，聚类算法的关键是相识度计算，而随机森林能很好的做相识度计算。首先让我们了解下Proximities：</p>
+
+<blockquote>
+  <p>The proximities originally formed a NxN matrix. After a tree is grown, put all of the data, both training and oob, down the tree. If cases k and n are in the same terminal node increase their proximity by one. At the end, normalize the proximities by dividing by the number of trees.</p>
+</blockquote>
+
+<p>大致的意思是说，在随机森林模型生成时，统计case k和n在不在同一个叶子节点中，在就加1，最后在安装树的个数归一化。得到case之间的相似度。</p>
+
+<h2 id="section-6">实践效果验证</h2>
+
+<p>在工作中，随机森林被我用来做的最多的事情还是feature importance，验证自己的特征工程效果。另外，由于它的鲁棒性特别好，模型效果在各大模型中排中等，而且对数据预处理要求低，我经常会优先选择用它跑个benchmark。</p>
+
+<p>业余时间还会玩玩kaggle比赛，它就用的比较多，其实gbdt应该更适合比赛，但我个人还是偏好RF。下面放个kaggle的比赛总结，关于如何用它：<a href="https://www.kaggle.com/c/titanic-gettingStarted/details/getting-started-with-random-forests">Getting Started with Random Forests: Titanic Competition</a></p>
+
+<h2 id="section-7">需要重点注意的</h2>
+
+<p>以sklearn的RandomForestClassifier为例，有几个参数需要调下。</p>
+
+<ol>
+  <li>n_estimators。决定模型有几颗树，我在做Click-Through Rate Prediction比赛时，将它从default 10改到100，模型效果提升了很多。</li>
+  <li>criterion。默认有gini和entropy可选，到底哪个好现在还是有争论的。</li>
+  <li>max_features，这个和n_estimators会一起影响整体结果，上文已经提到，可以参数换几个参数试试。</li>
+</ol>
+
+<h2 id="section-8">下一步计划</h2>
+
+<p>研究下gradient boosting decision tree</p>
+
+<h2 id="section-9">参考</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/Random_forest">1 wiki RF</a></p>
+
+<p><a href="http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm#inter">2 Random Forests Leo Breiman and Adele Cutler</a></p>
+
+<p><a href="http://scikit-learn.org/stable/modules/ensemble.html">3 Ensemble methods</a></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[机器学习技巧之feature_hashing]]></title>
@@ -1773,317 +1888,6 @@ R. Lienhart and J. Maydt.  An Extended Set of Haar-like Features for Rapid Objec
 <h1 id="section-5">总结</h1>
 <p>Opencv是个好东西，有个直接能运行的demo，比光秃秃的理论好多了，依靠它搭个自娱自乐的小工程没问题。人脸识别的水很深，本文提到的算法是opencv里面就有的，还有很多算法待各位自己有兴趣去研究。</p>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[浅析JNI（三）]]></title>
-    <link href="http://whbzju.github.com/blog/2013/07/27/qianxi-jni-3/"/>
-    <updated>2013-07-27T22:41:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2013/07/27/qianxi-jni-3</id>
-    <content type="html"><![CDATA[<p>没想到这个话题写到第三篇博客，写blog真费时，我的周末没了。接上文继续：
-PS更新:这篇blog一拖就是一个月，主要是我太懒了。其次是在公司写的东西不能带出来，每次要写这方面的资料，必须重写一些demo进行说明，重复劳动，没有动力。</p>
-
-<h1 id="section">内容概述</h1>
-<ul>
-  <li>JNI数据类型</li>
-  <li>JNIEnv介绍</li>
-</ul>
-
-<h2 id="jni">JNI数据类型介绍</h2>
-<ol>
-  <li>基本数据类型
-先来看一张图：
-<img src="http://whbzju.github.com/images/jni_base_type.png" alt="JNI基本数据类型" /></li>
-</ol>
-
-<p>可以明显的看出JNI的数据类型只是比java的基本数据类型多了个j。</p>
-
-<ol>
-  <li>引用数据类型
-同样看图：
-<img src="http://whbzju.github.com/images/jni_ref_type.png" alt="JNI引用数据类型图" /></li>
-</ol>
-
-<p>可以看出所有的引用类型都是jobject，和java类似。不过jni里面对jstring单独做了处理，就叫jstring类型，估计是用的频率太高，如果也是jobject会涉及到大量的“装箱拆箱“吧。</p>
-
-<h2 id="jnienv">JNIEnv介绍</h2>
-<p>JNIEnv是jni中举足轻重的一个角色，env可以理解成window中的句柄，线程中的线程描述符，或者简单理解成当前的上下文环境变量。在java VM中，它是一个局部引用，因此无法作为全局引用保存下来，每次在jni调用时，都要重新获取下env，因为env有可能会发生变化。</p>
-
-<h2 id="jnijava">实例讲解–Jni回调java</h2>
-<p>在工作中，我们使用jni时，常常会碰到需要从native回调java的需求，比如java通过jni调用native的一些函数，如果这些函数较为耗时，经常会起一个线程来完成任务，那么当任务完成时，必然要告诉java层。通常的做法是java层通过jni设置回调函数，native通过jni回调java。先看代码：</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>jniActivity  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">jniActivity</span> <span class="kd">extends</span> <span class="n">Activity</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">private</span> <span class="n">TextView</span> <span class="n">tv</span><span class="o">;</span>
-</span><span class="line">    <span class="c1">//private String test;</span>
-</span><span class="line">    <span class="cm">/**</span>
-</span><span class="line"><span class="cm">     * Called when the activity is first created.</span>
-</span><span class="line"><span class="cm">     */</span>
-</span><span class="line">    <span class="nd">@Override</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
-</span><span class="line">
-</span><span class="line">        <span class="c1">//setContentView(R.layout.main);</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">TextView</span>  <span class="n">tv</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextView</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-</span><span class="line">        <span class="n">SetJniCallBack</span><span class="o">();</span>
-</span><span class="line">        <span class="c1">//tv.setText( stringFromJNI() );</span>
-</span><span class="line">        <span class="n">tv</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">DynamicStringFromJNI</span><span class="o">());</span>
-</span><span class="line">        <span class="n">setContentView</span><span class="o">(</span><span class="n">tv</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 这个方法采用静态注册，参考ndk自带的例子hello-jni的实现</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span>  <span class="nf">stringFromJNI</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 修改成动态注册</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">DynamicStringFromJNI</span><span class="o">();</span>
-</span><span class="line">	
-</span><span class="line">	<span class="c1">// Java通过该方法设置回调方法</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">native</span> <span class="kt">void</span> <span class="nf">SetJniCallBack</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 提供方法，让native层调用</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMethodForNativeCallJava</span><span class="o">(){</span>
-</span><span class="line">       <span class="n">Toast</span><span class="o">.</span><span class="na">makeText</span><span class="o">(</span><span class="n">getApplicationContext</span><span class="o">(),</span> <span class="s">&quot;Call from Native&quot;</span><span class="o">,</span> <span class="n">Toast</span><span class="o">.</span><span class="na">LENGTH_SHORT</span><span class="o">).</span><span class="na">show</span><span class="o">();</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// 加载jni库</span>
-</span><span class="line">    <span class="kd">static</span><span class="o">{</span>
-</span><span class="line">       <span class="n">System</span><span class="o">.</span><span class="na">loadLibrary</span><span class="o">(</span><span class="s">&quot;learn-jni&quot;</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>C的代码和前面两篇类似，我只贴出增加的代码。</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>learn-jni  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-<span class="line-number">55</span>
-<span class="line-number">56</span>
-<span class="line-number">57</span>
-<span class="line-number">58</span>
-<span class="line-number">59</span>
-<span class="line-number">60</span>
-<span class="line-number">61</span>
-<span class="line-number">62</span>
-<span class="line-number">63</span>
-<span class="line-number">64</span>
-<span class="line-number">65</span>
-<span class="line-number">66</span>
-<span class="line-number">67</span>
-<span class="line-number">68</span>
-<span class="line-number">69</span>
-<span class="line-number">70</span>
-<span class="line-number">71</span>
-<span class="line-number">72</span>
-<span class="line-number">73</span>
-<span class="line-number">74</span>
-<span class="line-number">75</span>
-<span class="line-number">76</span>
-<span class="line-number">77</span>
-<span class="line-number">78</span>
-<span class="line-number">79</span>
-<span class="line-number">80</span>
-<span class="line-number">81</span>
-<span class="line-number">82</span>
-<span class="line-number">83</span>
-<span class="line-number">84</span>
-<span class="line-number">85</span>
-<span class="line-number">86</span>
-<span class="line-number">87</span>
-<span class="line-number">88</span>
-<span class="line-number">89</span>
-<span class="line-number">90</span>
-</pre></td><td class="code"><pre><code class="c"><span class="line"><span class="n">JavaVM</span><span class="o">*</span> <span class="n">g_javaVm</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class="line"><span class="n">jobject</span> <span class="n">g_object</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="c1">// jni中真正回调java的函数</span>
-</span><span class="line"><span class="kt">void</span> <span class="nf">CallBack</span><span class="p">()</span>
-</span><span class="line"><span class="p">{</span>
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback enter&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class="line">    <span class="kt">int</span> <span class="n">isAttach</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class="line">    <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">g_javaVm</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetEnv</span><span class="p">(</span><span class="n">g_javaVm</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_4</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">){</span>
-</span><span class="line">        <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">g_javaVm</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">AttachCurrentThread</span><span class="p">(</span><span class="n">g_javaVm</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class="line">        <span class="k">if</span><span class="p">(</span><span class="n">result</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class="line">            <span class="k">return</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">isAttach</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback getEnv sucess&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="n">jclass</span> <span class="n">jclazz</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetObjectClass</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">g_object</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">jclazz</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback jclazz is NULL&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">jmethodID</span> <span class="n">methodID</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetMethodID</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">jclazz</span><span class="p">,</span> <span class="s">&quot;testMethodForNativeCallJava&quot;</span><span class="p">,</span> <span class="s">&quot;()V&quot;</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">methodID</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback methodID is null&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback getMethod sucess&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">CallVoidMethod</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">g_object</span><span class="p">,</span> <span class="n">methodID</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">isAttach</span><span class="p">)</span>
-</span><span class="line">        <span class="p">(</span><span class="o">*</span><span class="n">g_javaVm</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">DetachCurrentThread</span><span class="p">(</span><span class="n">g_javaVm</span><span class="p">);</span>
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;callback leave&quot;</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="c1">// 为了演示方便，在这里调用callback，现实中应该是由jni再回调native完成。</span>
-</span><span class="line"><span class="n">jstring</span> <span class="nf">dynamicHello</span><span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">CallBack</span><span class="p">();</span>
-</span><span class="line">    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewStringUTF</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="s">&quot;Hello from Dynamic register&quot;</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="c1">// java通过该函数设置回调，主要是保存一些参数，正常做法是还有一些参数，比如保存注册回调的函数名，我这里为了方便简单实现了。</span>
-</span><span class="line"><span class="kt">void</span> <span class="nf">JavaSetCallBack</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jobject</span> <span class="n">thiz</span><span class="p">)</span>
-</span><span class="line"><span class="p">{</span>
-</span><span class="line">    <span class="n">g_object</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">NewGlobalRef</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">thiz</span><span class="p">);</span>
-</span><span class="line">    <span class="c1">//JNIEnv *env = NULL;</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="n">jint</span> <span class="nf">JNI_OnLoad</span><span class="p">(</span><span class="n">JavaVM</span><span class="o">*</span> <span class="n">vm</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">reserved</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;call java jni_onload&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="c1">//printf(&quot;JNI OnLoad&quot;);</span>
-</span><span class="line">    <span class="n">assert</span><span class="p">(</span><span class="n">vm</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">	<span class="c1">// 保存java虚拟机</span>
-</span><span class="line">    <span class="n">g_javaVm</span> <span class="o">=</span> <span class="n">vm</span><span class="p">;</span>
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;vm ok&quot;</span><span class="p">);</span>
-</span><span class="line">    <span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class="line">    <span class="n">jint</span> <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad start\n&quot;);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">((</span><span class="o">*</span><span class="n">vm</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">GetEnv</span><span class="p">(</span><span class="n">vm</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">env</span><span class="p">,</span> <span class="n">JNI_VERSION_1_4</span><span class="p">)</span> <span class="o">!=</span> <span class="n">JNI_OK</span><span class="p">){</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;jni version failed&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">//printf(&quot;JNI ONLoad\n&quot;);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">assert</span><span class="p">(</span><span class="n">env</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;env ok&quot;</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">registerNativeMethods</span><span class="p">(</span><span class="n">env</span><span class="p">)){</span>
-</span><span class="line">        <span class="n">__android_log_print</span><span class="p">(</span><span class="n">ANDROID_LOG_DEBUG</span><span class="p">,</span><span class="s">&quot;hello-jni&quot;</span><span class="p">,</span><span class="s">&quot;register failed&quot;</span><span class="p">);</span>
-</span><span class="line">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">return</span> <span class="n">JNI_VERSION_1_4</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h2 id="section-1">分析</h2>
-<p>从上面代码中可以看到，我在OnLoad中保存了java虚拟机的指针，后续的一系列参数从该指针中获取。在JavaSetCallBack中将java对象保存下来，由于我的回调函数不是静态的，需要java的实例才能调用，所以这里需要保存java的object，又由于在java虚拟机中，jobject是一个局部引用，因此需要主动new一个全局引用作为保存。在CallBack中通过g_object重新找到类的定义，相对于c，可以理解成找到符号表。最后通过callVoidMethod调用java的方法。</p>
-
-<h2 id="section-2">总结</h2>
-<p>JNI在实际开发中经常会碰到问题，由于其调试不方便，写起来还是蛮痛苦的。但由于其写法固定，比如函数注册等，写法很统一，常见的需求都有相应的套路，降低了开发难度。JNI部分的基础知识讲的差不多了，但是楼主还是不敢说对jni有多了解，这一个多月来，每次觉得掌握的差不多了，总又能碰到新的问题。所以只能在实际开发中不断积累经验。若后面有时间有心情，再写一篇JNI FQA吧。</p>
 ]]></content>
   </entry>
   
