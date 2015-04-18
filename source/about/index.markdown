@@ -9,4 +9,4 @@ footer: true
 ##我
 <img src="/assets/images/profile.jpg" alt="头像" width="200">
 
-热爱码代码，却还不是一个好的程序员。
+技能树: 机器学习、python、pandas、spark、scala
