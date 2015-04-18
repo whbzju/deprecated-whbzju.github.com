@@ -4,7 +4,7 @@
   <title><![CDATA[Category: learning | 知行录]]></title>
   <link href="http://whbzju.github.com/blog/categories/learning/atom.xml" rel="self"/>
   <link href="http://whbzju.github.com/"/>
-  <updated>2015-02-16T20:40:02+08:00</updated>
+  <updated>2015-04-18T20:50:51+08:00</updated>
   <id>http://whbzju.github.com/</id>
   <author>
     <name><![CDATA[阿波]]></name>
@@ -12,6 +12,84 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Kaggle入门总结]]></title>
+    <link href="http://whbzju.github.com/blog/2015/04/18/kaggle-bike/"/>
+    <updated>2015-04-18T20:38:00+08:00</updated>
+    <id>http://whbzju.github.com/blog/2015/04/18/kaggle-bike</id>
+    <content type="html"><![CDATA[<p>在知乎上看过一个答案，大意是有个地方叫kaggle，推荐搞机器学习的同学多上去撸一撸，实践出真知。同时还建议先把101系列的题目撸完，再选个感兴趣的比赛做。该答案详情见参考文献。</p>
+
+<h2 id="section">工具</h2>
+<p>有工程背景的同学，建议python，拥有不输给R的生态。主要用到以下工具：</p>
+
+<pre><code>ipython notebook + pandas + sklearn
+</code></pre>
+
+<p>在面对特别大的数据集，使用了公司的spark。</p>
+
+<ul>
+  <li>ipython notebook，神器，请参考我的另一篇blog <a href="http://www.wujiame.com/blog/2014/11/23/ipython-notebook-bring-to-me/">Ipython Notebook对机器学习工程师的价值</a></li>
+  <li>pandas: 从工程过来的同学，首先请放弃循环之类的代码实现方式，拥抱dataframe。</li>
+  <li>sklearn：在github上非常活跃的项目，请多读官方文档。</li>
+  <li>spark：一般kaggle上比赛的数据量级是没有必要用它，但是最近有个比赛train的数据上百g了，所以试了下它。</li>
+</ul>
+
+<h2 id="section-1">比赛选择</h2>
+
+<p>首先，请从101系列中选几个做做，该系列一般有详细的教程，熟悉kaggle。接着选几个正在进行的比赛练手。一开始别贪心，注意下数据集的大小，当数据集大于几个g后，工程相关的工作会增加很多，同时对单机的性能有一定的要求，不利于初学者。但是，数据量大更符合真实的情况，比如做过一个ctr预估的比赛，无论是特征工程和模型训练都要更小心谨慎，每次试错的成本很高，随便训练一个模型都需要3-4小时，相应的这个比赛让我意思到sample的重要性，以及一个非常重要的特征处理方法<a href="http://www.wujiame.com/blog/2015/02/10/feature-hashing/">featrue hashing</a>.</p>
+
+<p>本文将重点总结我在做自行车出租数量预测这个比赛的情况。该比赛介绍如下：</p>
+
+<blockquote>
+  <p>You are provided hourly rental data spanning two years. For this competition, the training set is comprised of the first 19 days of each month, while the test set is the 20th to the end of the month. You must predict the total count of bikes rented during each hour covered by the test set, using only information available prior to the rental period.</p>
+</blockquote>
+
+<p>该比赛的好处是符合kaggle的特点。</p>
+
+<ol>
+  <li>feature engineering是第一要素。</li>
+  <li>ensemble大法好。bagging、averaging一起上，比如到最后我喜欢用random forest + gbdt组合再搞一把，总能给我惊喜。</li>
+  <li>时刻小心过拟合。</li>
+</ol>
+
+<h2 id="section-2">特征工程</h2>
+
+<ol>
+  <li>异常值处理，nan，outlier等。hist和box是两个常用的图形工具。</li>
+  <li>数据分布倾斜。 log变化、正负样本重新抽样等。</li>
+  <li>特征交叉组合 </li>
+  <li>pca或random forest的特征重要性选择。</li>
+  <li>特征之间的相关系数。</li>
+  <li>特征onehotencoding</li>
+</ol>
+
+<h2 id="section-3">模型选择</h2>
+
+<ol>
+  <li>Logistic regression</li>
+  <li>Random Forest </li>
+  <li>gbdt和gbrt</li>
+  <li>Factorization Machines</li>
+</ol>
+
+<p>LR对特征要求更高，比如很多categorical的特征要作binary编码。我个人倾斜于RF和gbdt，都是属于ensemble思想下的算法。具体RF算法可以参考以前写的一篇blog：<a href="http://www.wujiame.com/blog/2015/02/16/random-forest/">random forest</a></p>
+
+<p>Factorization Machines这个算法好多人用它做ctr预估，后续可以研究下。</p>
+
+<h2 id="section-4">代码分享</h2>
+
+<p>具体代码实现请看我的notebook：
+<a href="http://nbviewer.ipython.org/gist/whbzju/ff06fce9fd738dcf8096">kaggle上的自行车出租数量预测</a></p>
+
+<h2 id="section-5">参考文献</h2>
+
+<p>[1] 知乎答案<a href="http://www.zhihu.com/question/23987009">Kaggle如何入门</a></p>
+
+<p>[2] 知乎答案<a href="http://www.zhihu.com/question/24533374">参加kaggle竞赛是怎样一种体验？</a></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[random forest]]></title>
@@ -255,123 +333,6 @@
 <h2 id="section-1">最后</h2>
 <p>附一张我的在kaggle上用ipython notebook做的一个入门题照：
 <img src="http://wujiarawsrc.qiniudn.com/sklearn-kaggle.png" alt="剧照" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[聚类算法中常见的距离计算方法]]></title>
-    <link href="http://whbzju.github.com/blog/2014/11/22/ml-distance-measure/"/>
-    <updated>2014-11-22T22:01:00+08:00</updated>
-    <id>http://whbzju.github.com/blog/2014/11/22/ml-distance-measure</id>
-    <content type="html"><![CDATA[<h2 id="section">概述</h2>
-<p>在面对聚类问题时，选择何种距离计算方法求相似度是一个basic question。文献[1]中提到了N多计算方法，从大类来看有以下几种：</p>
-
-<ul>
-  <li>$L_p$ Minkowski家族</li>
-  <li>$ L_1 $ 家族</li>
-  <li>Intersection 家族</li>
-  <li>Inner Product家族</li>
-  <li>etl
-简单算一下大概有40+个计算方法，其中有好多没有听过。好在工业界一般只涉及到几个，本文将按自己理解大致介绍下这些方法及应用情况。</li>
-</ul>
-
-<h2 id="section-1">距离的类型和尺度</h2>
-<p>类型：</p>
-
-<ul>
-  <li>二进制（binary）</li>
-  <li>离散值（Discrete）</li>
-  <li>连续值(Continuous)</li>
-</ul>
-
-<p>尺度：</p>
-
-<ul>
-  <li>定性：比如同义：red、green、black，比如顺序：高、中、低</li>
-  <li>定量：
-  a) interval
-  b) ratio
-距离的类型和尺度非常重要，影响后续聚类算法的选择。</li>
-</ul>
-
-<h2 id="section-2">距离计算方法定义</h2>
-<p>严谨的定义参考[4]，通俗来讲，在一个空间内，距离计算方法满足以下4个公理。</p>
-
-<ol>
-  <li>$d(x,y) ≥ 0$</li>
-  <li>$ d(x,y)=0$ if $x=y$</li>
-  <li>$ d(x, y) = d(y, x)$ (distance is symmetric)</li>
-  <li>$d(x, y) ≤ d(x, z) + d(z, y)$ (the triangle inequality).</li>
-</ol>
-
-<p>在欧式空间，第四个公理可以直观理解为两点之间距离最短。在其他情况需要一些证明才能推导。</p>
-
-<h2 id="section-3">常见的距离计算方法</h2>
-
-<h3 id="lr-norm">Lr norm</h3>
-<p>在n维空间，其计算公式如下：</p>
-
-<p>$d(x,y)=(\sum_{k=1}^{n} |x_k-y_k| ^r)^{1/r}$</p>
-
-<ul>
-  <li>
-    <p>欧式距离
-当r=2，这就是我们熟悉的欧式距离，其聚类形状在二维空间是一个圆。归属于$L_2$ norm</p>
-  </li>
-  <li>
-    <p>曼哈顿距离
-r=1，归属于$L_1$ norm，其名字的来源与该距离计算过程有关。该距离类似在x和y的每个维度上沿grid line上travel，类似曼哈顿的街道。</p>
-  </li>
-  <li>
-    <p>$L_∞$ norm
-当r不断变大，该式中只有max $|x_i-y_i|$项起作用，故又称L_max norm</p>
-  </li>
-</ul>
-
-<h3 id="jaccard-distance">Jaccard Distance</h3>
-<p>类似于相识度，x和y每个维度上相同的值的个数/总的维度。</p>
-
-<p>The comparison of two binary vectors, p and q, leads to four quantities: </p>
-
-<ul>
-  <li>M01 = the number of positions where p was 0 and q was 1 </li>
-  <li>M10 = the number of positions where p was 1 and q was 0 </li>
-  <li>M00 = the number of positions where p was 0 and q was 0 </li>
-  <li>M11 = the number of positions where p was 1 and q was 1 </li>
-</ul>
-
-<p>The simplest similarity coefficient is the simple matching coefficient </p>
-
-<p>$ J = (M11) / (M01 + M10 + M11) $ </p>
-
-<p>如：</p>
-
-<ul>
-  <li>a = 1 0 0 0 0 0 0 0 0 0</li>
-  <li>b = 0 0 0 0 0 0 1 0 0 1
-J = 0</li>
-</ul>
-
-<h3 id="cosine-distance">cosine Distance</h3>
-<p>即余弦公式。求x和y两个特征向量的夹角。
-cos( d1, d2 ) = (d1 • d2) / ||d1|| ||d2|| </p>
-
-<h3 id="edit-distance">Edit Distance</h3>
-<p>一般适用于String point。通过不断的删除和添加单个字符来计算两个string之间的距离。</p>
-
-<h3 id="hamming-distance">Hamming Distance</h3>
-<p>pass</p>
-
-<h2 id="section-4">参考</h2>
-
-<ul>
-  <li>[1] Comprehensive survey on distance/similarity measures between probability density functions. SH Cha
-City, 2007 - csis.pace.edu</li>
-  <li>[2] An Introduction to Cluster Analysis for Data Mining</li>
-  <li>[3] Unsupervised and Semi-supervised Clustering:
-a Brief Survey</li>
-  <li>[4] Mining of Massive Datasets - chapter 3</li>
-</ul>
 ]]></content>
   </entry>
   

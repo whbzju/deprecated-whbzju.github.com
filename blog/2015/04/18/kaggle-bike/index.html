@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>入职两月总结 - 知行录</title>
+  <title>Kaggle入门总结 - 知行录</title>
   <meta name="author" content="阿波">
 
   
-  <meta name="description" content="好久没有写博客，一是工作后时间不是自己，每天很晚下班，回到家，洗洗差不多就要睡了。二是公司信息安全管的很严，资料带不出来，工作方面的积累不方便写到博客上，每次想起要重新写自己写过的东西，就很没有动力。 本周过后，入职已经两个月了，公司的体制不想也没有资格评论，做的项目确是我很满意的， &hellip;">
+  <meta name="description" content="在知乎上看过一个答案，大意是有个地方叫kaggle，推荐搞机器学习的同学多上去撸一撸，实践出真知。同时还建议先把101系列的题目撸完，再选个感兴趣的比赛做。该答案详情见参考文献。 工具
+有工程背景的同学，建议python，拥有不输给R的生态。主要用到以下工具： ipython notebook &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/">
+  <link rel="canonical" href="http://whbzju.github.com/blog/2015/04/18/kaggle-bike/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">入职两月总结</h1>
+      <h1 class="entry-title">Kaggle入门总结</h1>
     
     
       <p class="meta">
@@ -95,7 +96,7 @@
   
 
 
-<time datetime="2013-06-23T09:01:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
+<time datetime="2015-04-18T20:38:00+08:00" pubdate data-updated="true">Apr 18<span>th</span>, 2015</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -104,44 +105,75 @@
   </header>
 
 
-<div class="entry-content"><p>好久没有写博客，一是工作后时间不是自己，每天很晚下班，回到家，洗洗差不多就要睡了。二是公司信息安全管的很严，资料带不出来，工作方面的积累不方便写到博客上，每次想起要重新写自己写过的东西，就很没有动力。</p>
+<div class="entry-content"><p>在知乎上看过一个答案，大意是有个地方叫kaggle，推荐搞机器学习的同学多上去撸一撸，实践出真知。同时还建议先把101系列的题目撸完，再选个感兴趣的比赛做。该答案详情见参考文献。</p>
 
-<p>本周过后，入职已经两个月了，公司的体制不想也没有资格评论，做的项目确是我很满意的，只能说塞翁失马焉知非福，找工作的时候千挑万选，也看不清进来后的项目，目前的情况还算幸运。现在的项目组涉及到的领域有Android开发、人脸识别、机器学习等，而且作为一个新的项目，我有幸可以从头开始接触整个项目。</p>
+<h2 id="section">工具</h2>
+<p>有工程背景的同学，建议python，拥有不输给R的生态。主要用到以下工具：</p>
 
-<h2 id="section">成长</h2>
+<pre><code>ipython notebook + pandas + sklearn
+</code></pre>
 
-<ul>
-  <li>Android源码环境调试app、系统组件</li>
-  <li>Android 4.0 人脸解锁app研究</li>
-  <li>Android JNI技术学习</li>
-  <li>人脸识别算法PCA、FDA、LBP学习</li>
-  <li>人脸检测HaarCascade学习</li>
-  <li>Opencv 人脸识别 Demo研究：Eigenface、fisherFaces、LBP。</li>
-  <li>机器学习LDA、贝叶斯学习</li>
-</ul>
-
-<h2 id="section-1">博客计划</h2>
-<p>后续博客将集中在三个领域</p>
+<p>在面对特别大的数据集，使用了公司的spark。</p>
 
 <ul>
-  <li>Android技术：分为源码和应用开发技术</li>
-  <li>人脸识别：集中于机器学习的方式实现</li>
-  <li>机器学习：未来重点</li>
+  <li>ipython notebook，神器，请参考我的另一篇blog <a href="http://www.wujiame.com/blog/2014/11/23/ipython-notebook-bring-to-me/">Ipython Notebook对机器学习工程师的价值</a></li>
+  <li>pandas: 从工程过来的同学，首先请放弃循环之类的代码实现方式，拥抱dataframe。</li>
+  <li>sklearn：在github上非常活跃的项目，请多读官方文档。</li>
+  <li>spark：一般kaggle上比赛的数据量级是没有必要用它，但是最近有个比赛train的数据上百g了，所以试了下它。</li>
 </ul>
 
-<p>计划中的blog：</p>
+<h2 id="section-1">比赛选择</h2>
 
-<ul>
-  <li>Android JNI技术简介</li>
-  <li>Android调试小技巧</li>
-  <li>PCA之我的理解</li>
-  <li>fisherFaces之我的理解</li>
-  <li>Opencv人脸识别Demo</li>
-  <li>ADB的使用详解 </li>
-  <li>Haar分类器训练</li>
-</ul>
+<p>首先，请从101系列中选几个做做，该系列一般有详细的教程，熟悉kaggle。接着选几个正在进行的比赛练手。一开始别贪心，注意下数据集的大小，当数据集大于几个g后，工程相关的工作会增加很多，同时对单机的性能有一定的要求，不利于初学者。但是，数据量大更符合真实的情况，比如做过一个ctr预估的比赛，无论是特征工程和模型训练都要更小心谨慎，每次试错的成本很高，随便训练一个模型都需要3-4小时，相应的这个比赛让我意思到sample的重要性，以及一个非常重要的特征处理方法<a href="http://www.wujiame.com/blog/2015/02/10/feature-hashing/">featrue hashing</a>.</p>
 
-<p>欠了好多，这些内容我在公司都有写过文档，可惜不能直接用，希望在整理的过程中有进一步的理解。</p>
+<p>本文将重点总结我在做自行车出租数量预测这个比赛的情况。该比赛介绍如下：</p>
+
+<blockquote>
+  <p>You are provided hourly rental data spanning two years. For this competition, the training set is comprised of the first 19 days of each month, while the test set is the 20th to the end of the month. You must predict the total count of bikes rented during each hour covered by the test set, using only information available prior to the rental period.</p>
+</blockquote>
+
+<p>该比赛的好处是符合kaggle的特点。</p>
+
+<ol>
+  <li>feature engineering是第一要素。</li>
+  <li>ensemble大法好。bagging、averaging一起上，比如到最后我喜欢用random forest + gbdt组合再搞一把，总能给我惊喜。</li>
+  <li>时刻小心过拟合。</li>
+</ol>
+
+<h2 id="section-2">特征工程</h2>
+
+<ol>
+  <li>异常值处理，nan，outlier等。hist和box是两个常用的图形工具。</li>
+  <li>数据分布倾斜。 log变化、正负样本重新抽样等。</li>
+  <li>特征交叉组合 </li>
+  <li>pca或random forest的特征重要性选择。</li>
+  <li>特征之间的相关系数。</li>
+  <li>特征onehotencoding</li>
+</ol>
+
+<h2 id="section-3">模型选择</h2>
+
+<ol>
+  <li>Logistic regression</li>
+  <li>Random Forest </li>
+  <li>gbdt和gbrt</li>
+  <li>Factorization Machines</li>
+</ol>
+
+<p>LR对特征要求更高，比如很多categorical的特征要作binary编码。我个人倾斜于RF和gbdt，都是属于ensemble思想下的算法。具体RF算法可以参考以前写的一篇blog：<a href="http://www.wujiame.com/blog/2015/02/16/random-forest/">random forest</a></p>
+
+<p>Factorization Machines这个算法好多人用它做ctr预估，后续可以研究下。</p>
+
+<h2 id="section-4">代码分享</h2>
+
+<p>具体代码实现请看我的notebook：
+<a href="http://nbviewer.ipython.org/gist/whbzju/ff06fce9fd738dcf8096">kaggle上的自行车出租数量预测</a></p>
+
+<h2 id="section-5">参考文献</h2>
+
+<p>[1] 知乎答案<a href="http://www.zhihu.com/question/23987009">Kaggle如何入门</a></p>
+
+<p>[2] 知乎答案<a href="http://www.zhihu.com/question/24533374">参加kaggle竞赛是怎样一种体验？</a></p>
 
 </div>
 
@@ -165,8 +197,14 @@
   
 
 
-<time datetime="2013-06-23T09:01:00+08:00" pubdate data-updated="true">Jun 23<span>rd</span>, 2013</time>
+<time datetime="2015-04-18T20:38:00+08:00" pubdate data-updated="true">Apr 18<span>th</span>, 2015</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/learning/'>learning</a>, <a class='category' href='/blog/categories/machine/'>machine</a>
+  
+</span>
 
 
     </p>
@@ -180,10 +218,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/01/android-jni-config/" title="Previous Post: Android JNI MAC OS环境配置">&laquo; Android JNI MAC OS环境配置</a>
+        <a class="basic-alignment left" href="/blog/2015/02/16/random-forest/" title="Previous Post: random forest">&laquo; random forest</a>
       
       
-        <a class="basic-alignment right" href="/blog/2013/06/26/qianxi-jni/" title="Next Post: 浅析JNI(一)">浅析JNI(一) &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2015/04/18/think-about-weidian-bussiness/" title="Next Post: 微店引发的互联网模式思考">微店引发的互联网模式思考 &raquo;</a>
       
     </p>
   </footer>
@@ -293,8 +331,8 @@ MathJax.Hub.Config({
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/';
-        var disqus_url = 'http://whbzju.github.com/blog/2013/06/23/ruzhilianggeyuezongjie/';
+        var disqus_identifier = 'http://whbzju.github.com/blog/2015/04/18/kaggle-bike/';
+        var disqus_url = 'http://whbzju.github.com/blog/2015/04/18/kaggle-bike/';
         var disqus_script = 'embed.js';
       
     (function () {
